@@ -1,1 +1,32 @@
 //adam 
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Language Selection
+    link(rel="stylesheet" href="styles.css") // Link to CSS for styling
+    script(src="script.js" defer) // Link to JS for interactivity
+  body
+    header
+      h1 Language Selection Page
+      nav
+        ul
+          li: button(onclick="changeLanguage('en')") English
+          li: button(onclick="changeLanguage('es')") Español
+          li: button(onclick="changeLanguage('fr')") Français
+          li: button(onclick="changeLanguage('it')") Italiano
+          li: button(onclick="changeLanguage('tr')") Türkçe
+
+    section#content
+      h2 Welcome Message
+      p(data-lang="en") Welcome to our platform!
+      p(data-lang="es" style="display: none;") ¡Bienvenido a nuestra plataforma!
+      p(data-lang="fr" style="display: none;") Bienvenue sur notre plateforme !
+      p(data-lang="it" style="display: none;") Benvenuto sulla nostra piattaforma!
+      p(data-lang="tr" style="display: none;") Platformumuza hoş geldiniz!
+
+    footer
+      p &copy; 2025 Dualinguists
+
