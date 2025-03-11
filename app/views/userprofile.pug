@@ -1,1 +1,15 @@
-// sawsan profile page of all users 
+//sawsan 
+extends layout 
+
+block head 
+  link(rel='stylesheet', href='/userprofile-list.css')
+
+block content  
+  h1 User Profile
+  if user.profile_picture
+    img(src=`/uploads/${user.profile_picture}`, alt="Profile Picture", width="150")
+  p Name: #{user.name}
+  p Email: #{user.email}
+  p Joined: #{user.created_at}
+
+  a(href="/users") Back to Users List
