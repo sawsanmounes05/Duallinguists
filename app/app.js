@@ -19,6 +19,22 @@ app.get("/", function(req, res) {
     res.send("Hello world!");
 });
 
+// Create a route for root - /categories
+app.get("/categories", function(req, res) {
+    res.send("Baris needs to input the query");
+});
+
+// Create a route for root - /languages - listing page
+app.get("/languages", function(req, res) {
+    res.send("Baris needs to input the query");
+});
+
+// Create a route for root - /home page 
+app.get("/homepage", function(req, res) {
+    res.send("Baris needs to input the query");
+});
+
+
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
     // Assumes a table called test_table exists in your database
