@@ -29,12 +29,12 @@ app.get("/detail", function(req, res) {
     res.send("Baris needs to input the query");
 });
 // Create a route for root - /languages - listing page
-app.get("/languages", function(req, res) {
+app.get("/Languages", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
 // Create a route for root - /home page 
-app.get("/homepage", function(req, res) {
+app.get("/Homepage", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
