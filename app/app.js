@@ -24,6 +24,10 @@ app.get("/categories", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
+// Create a route for root - /detail
+app.get("/detail", function(req, res) {
+    res.send("Baris needs to input the query");
+});
 // Create a route for root - /languages - listing page
 app.get("/languages", function(req, res) {
     res.send("Baris needs to input the query");
@@ -31,6 +35,16 @@ app.get("/languages", function(req, res) {
 
 // Create a route for root - /home page 
 app.get("/homepage", function(req, res) {
+    res.send("Baris needs to input the query");
+});
+
+// Create a route for root - /userprofile
+app.get("/userprofile", function(req, res) {
+    res.send("Baris needs to input the query");
+});
+
+// Create a route for root - /users-listpage
+app.get("/users-listpage", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
