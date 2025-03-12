@@ -3,7 +3,21 @@
 extends layout 
 
 block head 
-    link (rel="stylesheets" , href="/categories.css")
+    link(rel="stylesheet", href="/categories.css")
+
 
 block content 
+    section#categories
+        h2 levels
+        div.levels-container
+            div.level
+                h3 Regular
+                p Level: 1
+                button(onclick="selectCategory('regular')") Choose
+            div.level
+                h3 Student
+                p Level: 2
+                button(onclick="selectCategory('student')") Choose
+    p.choose-text pick a category ✨
     
+    script(src="/categories.js" defer)
