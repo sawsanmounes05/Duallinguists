@@ -1,1 +1,22 @@
-//adam create the selection page from the wire frame 
+extends layout
+
+block content
+  h1 Selection List
+  
+  form(action='/select', method='post')
+    fieldset
+      legend Choose an Option
+      
+      label(for='quiz') Quiz
+      input(type='radio', id='quiz', name='selection', value='quiz')
+      
+      label(for='assessment') Assessment
+      input(type='radio', id='assessment', name='selection', value='assessment')
+      
+      label(for='progress') Progress Status
+      input(type='radio', id='progress', name='selection', value='progress')
+      
+      label(for='cultural') Cultural Insight
+      input(type='radio', id='cultural', name='selection', value='cultural')
+    
+    button(type='submit') Submit Selection
