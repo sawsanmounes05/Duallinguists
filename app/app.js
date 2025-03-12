@@ -38,15 +38,51 @@ app.get("/Homepage", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
-// Create a route for root - /userprofile
-app.get("/userprofile", function(req, res) {
-    res.send("Baris needs to input the query");
+
+app.get("/userprofile/:id", async function(req, res) {
+    try {
+        const sql = `
+            SELECT UserID, ProfilePicture AS profile_picture, Name AS name, 
+                   Email AS email, PhoneNumber AS phone_number, Bio AS bio, 
+                   CreatedAt AS created_at, LearningLanguage AS learning_language
+            FROM Users WHERE UserID = ? LIMIT 1
+        `;
+
+        const users = await db.query(sql, [req.params.id]);
+
+        if (!users || users.length === 0) {
+            return res.status(404).send("User Not Found");
+        }
+
+        console.log("Fetched User Profile:", users[0]); // Debugging
+        res.render("userprofile", { user: users[0] });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send("Database query failed: " + err.message);
+    }
 });
 
-// Create a route for root - /users-list
-app.get("/users-list", function(req, res) {
-    res.send("Baris needs to input the query");
+app.get("/users-list", async function(req, res) {
+    try {
+        const users = await db.query(
+            `SELECT DISTINCT UserID, ProfilePicture AS profile_picture, Name AS name, 
+            Email AS email, PhoneNumber AS phone_number, Bio AS bio, 
+            CreatedAt AS created_at, LearningLanguage AS learning_language 
+            FROM Users`
+        );
+
+        if (!users || users.length === 0) {
+            return res.status(404).send("No users found in database.");
+        }
+
+        console.log("Fetched Users:", users);
+        res.render('users-list', { users });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
 });
+
 
 
 // Create a route for testing the db

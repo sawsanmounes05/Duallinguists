@@ -1,10 +1,8 @@
-extends layout
-
-block head 
-  link(rel='stylesheet', href='/users-list.css')
+extends layout 
 
 block content  
   h1 Users List
+  - console.log(users) // Debugging
   table(border='1')
     thead
       tr
