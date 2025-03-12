@@ -1,9 +1,51 @@
-// safa dont touch 
+// Safa 
 
-extends layout 
+extends layout
 
 block head 
-    link (rel="stylesheets" , href="/Homepage.css")
+    link(rel="stylesheet", href="/styles.css") // Link to external stylesheet 
 
 block content 
+
+    // Authentication links for user actions (Sign up / Log in) at the top
     
+    section.auth-links 
+        a(href="/signup") Sign up
+        a(href="/login") Log in
+
+    // Hero section with the main slogan 
+
+    section.hero 
+        div.hero-text 
+            h2 "Breaking Barriers, Building Bridges – One Language at a Time."
+
+    // Mission section explaining the purpose of the platform
+
+    section.mission 
+        div.container 
+            div.mission-left
+                div.mission-title
+                    h2 our
+                    h2 mission
+                p At Dualinguists, we believe that language is more than just words—it's the key to understanding, connection, and opportunity. 
+                p Our mission is to empower learners of all backgrounds to bridge cultures, break barriers, and embrace the global community.
+
+            // List of core values and principles 
+
+            div.mission-right 
+                h3 We Stand For 
+                ul 
+                    li Accessibility for All – Inclusive, engaging, and intuitive language learning for everyone.
+                    li Cultural Understanding – Celebrating diversity through language and meaningful connections. 
+                    li Innovative Learning – Blending technology with proven methods for an effective experience. 
+                    li Ethical & Inclusive Education – Fair, respectful, and culturally sensitive learning for all.
+                    li Global Opportunities – Empowering learners for travel, careers, and personal growth.
+
+    // Movement section encouraging users to join the platform
+    section.movement 
+        div.container 
+            h3 Join the Movement 
+            p Language is a superpower—it unites people and opens new opportunities.
+            p At Dualinguists, we're not just teaching words; we're creating a world where communication has no limits. 
+            p Be a part of the change. Speak. Learn. Connect. 🌍✨
+            h3 Sign up today!
