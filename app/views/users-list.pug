@@ -1,14 +1,21 @@
-//sawsan 
+extends layout
 
-extends layout 
+block head 
+  link(rel='stylesheet', href='/users-list.css')
 
-doctype html
-html
-  head
-    title Users List
-  body
-    h1 Users
-    ul
+block content  
+  h1 Users List
+  table(border='1')
+    thead
+      tr
+        th Profile Picture
+        th Name
+        th Bio
+        th Learning Language
+    tbody
       each user in users
-        li
-          a(href=`/users/${user.id}`) #{user.name}
+        tr
+          td: img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture', width='50')
+          td #{user.name}
+          td #{user.bio}
+          td #{user.learning_language}

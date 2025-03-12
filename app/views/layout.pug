@@ -1,1 +1,23 @@
 //adam  layout for all the pages 
+doctype html
+html
+  head
+    title #{title}
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='/styles.css')
+  body
+    header
+      h1 Dualinguists
+      nav
+        ul
+          li: a(href='/') Home
+          li: a(href='/users') Users List
+          li: a(href='/language-list') Languages
+          li: a(href='/categories') Categories
+          if user  // Ensures the user is logged in
+            li: a(href=`/users/${user.UserID}`) Profile
+    main
+      block content
+    footer
+      p &copy; 2025 Dualinguists. All rights reserved.
