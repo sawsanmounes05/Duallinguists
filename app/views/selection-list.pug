@@ -2,13 +2,18 @@ extends layout
 
 block content
   h1 Selection List
-  
+  p Selected Language: <strong id="selectedLanguage">Loading...</strong>
+  p Selected Category: <strong id="selectedCategory">Loading...</strong>
+
   form(action='/select', method='post')
+    input(type="hidden" name="languageID" id="languageID")
+    input(type="hidden" name="categoryID" id="categoryID")
+
     fieldset
       legend Choose an Option
-      
+
       label(for='quiz') Quiz
-      input(type='radio', id='quiz', name='selection', value='quiz')
+      input(type='radio', id='quiz', name='selection', value='quiz', required)
       
       label(for='assessment') Assessment
       input(type='radio', id='assessment', name='selection', value='assessment')
@@ -19,4 +24,11 @@ block content
       label(for='cultural') Cultural Insight
       input(type='radio', id='cultural', name='selection', value='cultural')
     
-    button(type='submit') Submit Selection
+    button(type='submit') Continue
+
+  script.
+      document.getElementById("selectedLanguage").innerText = localStorage.getItem("selectedLanguageName") || "None";
+      document.getElementById("selectedCategory").innerText = localStorage.getItem("selectedCategoryID") === "1" ? "Regular Quiz" : "Student Quiz";
+      
+      document.getElementById("languageID").value = localStorage.getItem("selectedLanguageID");
+      document.getElementById("categoryID").value = localStorage.getItem("selectedCategoryID");

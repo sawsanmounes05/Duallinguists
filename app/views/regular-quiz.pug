@@ -1,20 +1,16 @@
 extends layout
 
 block content
-    h1 Regular Quiz
-
+    h2 Regular Quiz
     if questions.length
-        form(action="/submit-quiz" method="POST")
-            each question in questions
-                .question
-                    h2 #{question.QuestionText}
-                    ul
-                        each answer in question.answers
-                            li
-                                label
-                                    input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
-                                    | #{answer.AnswerText}
-
-            button(type="submit") Submit Regular Quiz
+        each question in questions
+            .question
+                h3= question.QuestionText
+                ul
+                    each answer in question.answers
+                        li
+                            label
+                                input(type="radio", name=`question-${question.QuestionID}`, value=answer.AnswerID)
+                                = answer.AnswerText
     else
-        p No questions available for this quiz.
+        p No questions available for the regular quiz.

@@ -1,0 +1,85 @@
+/* ========== General Layout ========== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ========== Welcome Section ========== */
+section#welcome {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+section#welcome h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+section#welcome p {
+    font-size: 1.1rem;
+}
+
+/* ========== Language Selection Section ========== */
+section#language-selection {
+    margin: 2rem 0;
+}
+
+/*
+  Force all languages to be in ONE horizontal row
+*/
+.languages-container {
+    display: flex;            /* Flex layout for horizontal alignment */
+    flex-direction: row;      /* Lay items side by side */
+    flex-wrap: nowrap;        /* Prevents wrapping to a new line */
+    justify-content: center;  /* Center them horizontally */
+    align-items: center;      /* Center them vertically within the container */
+    gap: 1rem;                /* Spacing between each language option */
+}
+
+/* Each language 'card'/option */
+.language-option {
+    display: inline-block;
+}
+
+/* ========== Language Button ========== */
+.language-button {
+    display: flex;            /* Layout icon & text side by side */
+    flex-direction: row;      /* Place icon (img) to the left, text (p) to the right */
+    align-items: center;      /* Vertically center icon & text */
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+.language-button:hover {
+    transform: scale(1.05);
+}
+
+/* Image and text inside the button */
+.language-button img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.language-button p {
+    margin-left: 0.5rem; /* Space between the image and text */
+    margin-top: 0;       /* Remove extra top margin */
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* ========== Footer ========== */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+}
+
+footer p {
+    color: #666;
+    font-size: 0.9rem;
+}
