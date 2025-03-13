@@ -1,37 +1,29 @@
-// Safa 
+extends layout 
 
-extends layout
-
-block head 
-    link(rel="stylesheet", href="/styles.css") // Link to external stylesheet 
 
 block content 
 
     // Authentication links for user actions (Sign up / Log in) at the top
-    
     section.auth-links 
         a(href="/signup") Sign up
         a(href="/login") Log in
 
-    // Hero section with the main slogan 
-
+    // Hero section with the main slogan
     section.hero 
         div.hero-text 
-            h2 "Breaking Barriers, Building Bridges – One Language at a Time."
+            h2 Breaking Barriers, Building Bridges – One Language at a Time.
 
     // Mission section explaining the purpose of the platform
-
     section.mission 
         div.container 
             div.mission-left
                 div.mission-title
-                    h2 our
-                    h2 mission
+                    h2 Our
+                    h2 Mission
                 p At Dualinguists, we believe that language is more than just words—it's the key to understanding, connection, and opportunity. 
                 p Our mission is to empower learners of all backgrounds to bridge cultures, break barriers, and embrace the global community.
 
-            // List of core values and principles 
-
+            // List of core values and principles
             div.mission-right 
                 h3 We Stand For 
                 ul 
