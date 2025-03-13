@@ -1,38 +1,21 @@
-// SAFA
-
 extends layout
 
-block head
-    link(rel="stylesheet", href="/styles.css")
-
 block content
-    header
-        h1 Language List
-        nav
-            ul
-                li: button(onclick="changeLanguage('en')") English
+    section#welcome
+        h1 Welcome back, #{user ? user.Name : "User"}!
+        p Please select a language below
 
-                li: button(onclick="changeLanguage('es')") Español
+    section#language-selection
+        div.languages-container
+            - var seenLanguages = []
+            each language in languages
+                - if (!seenLanguages.includes(language.LanguageName))
+                    - seenLanguages.push(language.LanguageName)
+                    div.language-option
+                        button.language-button(onclick=`changeLanguage('${language.LanguageID}')`)
+                            img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
+                            p #{language.LanguageName}
 
-                li: button(onclick="changeLanguage('fr')") Français
-
-                li: button(onclick="changeLanguage('it')") Italiano
-
-                li: button(onclick="changeLanguage('tr')") Türkçe
-    
-    section#content
-        h2 Welcome Message
-        div.language-messages
-            p(data-lang="en") Welcome to our platform!
-            p(data-lang="es" style="display: none;") ¡Bienvenido a nuestra plataforma!
-            p(data-lang="fr" style="display: none;") Bienvenue sur notre plateforme !
-            p(data-lang="it" style="display: none;") Benvenuto sulla nostra piattaforma!
-            p(data-lang="tr" style="display: none;") Platformumuza hoş geldiniz!
-    
-    section#instructions
-        h2 How to Use
-        p Select a language to change the welcome message displayed above.
-    
     footer
         p &copy; 2025 Dualinguists
     
