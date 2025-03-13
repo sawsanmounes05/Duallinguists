@@ -1,22 +1,73 @@
-extends layout
-
-block content
-  h1 Selection List
-  
-  form(action='/select', method='post')
-    fieldset
-      legend Choose an Option
-      
-      label(for='quiz') Quiz
-      input(type='radio', id='quiz', name='selection', value='quiz')
-      
-      label(for='assessment') Assessment
-      input(type='radio', id='assessment', name='selection', value='assessment')
-      
-      label(for='progress') Progress Status
-      input(type='radio', id='progress', name='selection', value='progress')
-      
-      label(for='cultural') Cultural Insight
-      input(type='radio', id='cultural', name='selection', value='cultural')
+//adam create the selection page from the wire frame 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .cultural-insight {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            background: lightgray;
+            border-radius: 50%;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">*Hello in the language they chose*</div>
+        <div class="cultural-insight">*cultural insight*</div>
+        <div class="button-container">
+            <button class="button" onclick="navigateTo('quiz')">Quiz</button>
+            <button class="button" onclick="navigateTo('assessment')">Assessment</button>
+            <button class="button" onclick="navigateTo('progress')">Progress Status</button>
+        </div>
+    </div>
     
-    button(type='submit') Submit Selection
+    <script>
+        function navigateTo(page) {
+            alert("Navigating to " + page);
+        }
+    </script>
+</body>
+</html>
