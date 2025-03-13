@@ -1,20 +1,20 @@
-//adam create the quiz page for each lamnguage the details not the buttons 
 extends layout
 
 block content
-  if questions.length
-    form(action="/submit-quiz" method="POST")
-      each question in questions
-        .question
-          h2 #{question.QuestionText}
-          ul
-            each answer in question.answers
-              li
-                label
-                  input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
-                  | #{answer.AnswerText}
+    h1 Student Quiz
 
-      button(type="submit") Submit Student Quiz
-  else
-    p No questions available for this quiz.
+    if questions.length
+        form(action="/submit-quiz" method="POST")
+            each question in questions
+                .question
+                    h2 #{question.QuestionText}
+                    ul
+                        each answer in question.answers
+                            li
+                                label
+                                    input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
+                                    | #{answer.AnswerText}
 
+            button(type="submit") Submit Student Quiz
+    else
+        p No questions available for this quiz.
