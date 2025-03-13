@@ -24,10 +24,6 @@ app.get("/categories", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
-// Create a route for root - /Language-detail
-app.get("/Language-detail", function(req, res) {
-    res.send("Baris needs to input the query");
-});
 
 app.get("/quizcategories", async (req, res) => {
     try {
