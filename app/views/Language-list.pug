@@ -1,8 +1,6 @@
 extends layout
 
 block content
-
-link(rel='stylesheet', href='/Language-list.css')
     section#welcome
         h1 Welcome back, #{user ? user.Name : "User"}!
         p Please select a language below
@@ -47,4 +45,5 @@ block content
         function selectLanguage(languageID) {
             window.location.href = "/selection-list?lang=" + languageID;
         }
+
 
