@@ -1,23 +1,26 @@
 doctype html
 html
   head
-    title #{title}
+    title Dualinguist
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/styles.css')
   body
     header
-      h1 Dualinguists
+      h1 Dualinguist
       nav
         ul
           li: a(href='/') Home
           li: a(href='/users-list') Users List
           li: a(href='/language-list') Languages
           li: a(href='/categories') Categories
-          //- Ensures the user is logged in
           if user
-            li: a(href=`/users/${user.UserID}`) Profile
+            li: a(href=`/userprofile/${user.UserID}`) Profile
+            li: a(href='/logout') Logout
+          else
+            li: a(href='/login') Login
+            li: a(href='/signup') Signup
     main
       block content
     footer
-      p &copy; 2025 Dualinguists. All rights reserved.
+      p &copy; 2025 Dualinguist. All rights reserved.

@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1 Sign Up
+  form(action='/signup', method='POST')
+    label(for='name') Name:
+    input(type='text', name='name', required)
+
+    label(for='email') Email:
+    input(type='email', name='email', required)
+
+    label(for='password') Password:
+    input(type='password', name='password', required)
+
+    label(for='phone_number') Phone Number:
+    input(type='text', name='phone_number')
+
+    label(for='bio') Bio:
+    textarea(name='bio')
+
+    button(type='submit') Sign Up
+    p Already have an account? 
+      a(href='/login') Log in here
