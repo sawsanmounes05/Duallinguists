@@ -1,20 +1,20 @@
 //adam create the quiz page for each lamnguage the details not the buttons 
 extends layout
 
-doctype html
-html
-  head
-    title Quiz
-    meta(charset='utf-8')uyfuyfuyfyufyu
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='/styles.css')
-  body
-    header
-      a(href='/language-selection') ← Back
-      h1 Quiz
-    main
-      section.quiz-options
-        a(href='/quiz/regular') Regular Quiz
-        a(href='/quiz/students') Student Quiz
-    footer
-      p &copy; 2025 Dualinguists. All rights reserved.
+block content
+  if questions.length
+    form(action="/submit-quiz" method="POST")
+      each question in questions
+        .question
+          h2 #{question.QuestionText}
+          ul
+            each answer in question.answers
+              li
+                label
+                  input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
+                  | #{answer.AnswerText}
+
+      button(type="submit") Submit Student Quiz
+  else
+    p No questions available for this quiz.
+
