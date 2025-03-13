@@ -4,7 +4,10 @@ html
     title Dualinguist
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
+
+    // ✅ Ensuring correct CSS linking
     link(rel='stylesheet', href='/styles.css')
+
   body
     header
       h1 Dualinguist
@@ -20,7 +23,9 @@ html
           else
             li: a(href='/login') Login
             li: a(href='/signup') Signup
+
     main
       block content
+
     footer
       p &copy; 2025 Dualinguist. All rights reserved.
