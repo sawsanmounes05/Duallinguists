@@ -1,16 +1,48 @@
 extends layout
 
 block content
-    h2 Regular Quiz
+    h1 Regular Quiz - Language: #{languageID}
+
     if questions.length
-        each question in questions
-            .question
-                h3= question.QuestionText
-                ul
-                    each answer in question.answers
-                        li
-                            label
-                                input(type="radio", name=`question-${question.QuestionID}`, value=answer.AnswerID)
-                                = answer.AnswerText
+        form(action="/submit-quiz" method="POST")
+            each question in questions
+                .question
+                    h2 #{question.QuestionText}
+                    ul
+                        each answer in question.answers
+                            li
+                                label
+                                    input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
+                                    | #{answer.AnswerText}
+
+            button(type="submit") Submit Regular Quiz
     else
-        p No questions available for the regular quiz.
+        p No questions available for this language.
+
+form(action="/regular-quiz", method="GET")
+    input(type="hidden", name="languageID", value=languageID)
+    button(type="submit") Regular Quiz
+extends layout
+
+block content
+    h1 Regular Quiz - Language: #{languageID}
+
+    if questions.length
+        form(action="/submit-quiz" method="POST")
+            each question in questions
+                .question
+                    h2 #{question.QuestionText}
+                    ul
+                        each answer in question.answers
+                            li
+                                label
+                                    input(type="radio" name="question-#{question.QuestionID}" value="#{answer.AnswerID}" required)
+                                    | #{answer.AnswerText}
+
+            button(type="submit") Submit Regular Quiz
+    else
+        p No questions available for this language.
+
+form(action="/regular-quiz", method="GET")
+    input(type="hidden", name="languageID", value=languageID)
+    button(type="submit") Regular Quiz
