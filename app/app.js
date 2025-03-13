@@ -19,10 +19,10 @@ app.get("/", function(req, res) {
     res.send("Hello world!");
 });
 
-// Create a route for root - /categories
-app.get("/categories", function(req, res) {
-    res.send("Baris needs to input the query");
+app.get("/Homepage", (req, res) => {
+    res.render("homepage");
 });
+
 
 app.get("/quizcategories", async (req, res) => {
     try {
