@@ -189,67 +189,32 @@ app.get("/logout", (req, res) => {
     });
 });
 
-// Route for Student Quiz
-app.get("/student-quiz", async (req, res) => {
+// Function to fetch quiz questions
+async function fetchQuizQuestions(categoryID) {
     try {
-        const [questions] = await db.query(
-            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
+        const rows = await db.query(
+            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText, a.IsCorrect
              FROM QuizQuestions q 
              JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
              JOIN QuizDetails d ON q.QuizID = d.QuizID 
-             WHERE d.CategoryID = 2`
+             WHERE d.CategoryID = ?`, 
+            [categoryID]
         );
 
-        const formattedQuestions = formatQuestions(questions);
-        res.render("student-quiz", { questions: formattedQuestions });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error retrieving student quiz questions.");
-    }
-});
-
-app.get("/regular-quiz", async (req, res) => {
-    try {
-        const query = `
-            SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
-            FROM QuizQuestions q 
-            JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
-            JOIN QuizDetails d ON q.QuizID = d.QuizID 
-            WHERE d.CategoryID = 1
-        `;
-
-        console.log("Executing SQL Query:", query);
-
-        const [questions] = await db.query(query);
-
-        if (!questions || questions.length === 0) {
-            console.log("No questions found for regular quiz.");
-            return res.render("regular-quiz", { questions: [] });
+        if (!rows.length) {
+            console.log(`No questions found for category: ${categoryID}`);
+            return [];
         }
 
-        console.log("Fetched Questions:", JSON.stringify(questions, null, 2));
-
-        // Format questions correctly
-        const formattedQuestions = formatQuestions(questions);
-
-        console.log("Formatted Questions for Template:", JSON.stringify(formattedQuestions, null, 2));
-
-        res.render("regular-quiz", { questions: formattedQuestions });
+        return formatQuestions(rows);
     } catch (error) {
-        console.error("Database Error:", error);
-        res.status(500).send("Error retrieving regular quiz questions.");
+        console.error("Error fetching quiz questions:", error);
+        return [];
     }
-});
+}
 
-
-
-
+// Format questions into a structured format
 function formatQuestions(rows) {
-    if (!Array.isArray(rows)) {
-        console.error("formatQuestions received an invalid data type. Converting to array...");
-        rows = Object.values(JSON.parse(JSON.stringify(rows)));  // Convert BinaryRow to normal array
-    }
-
     const questions = {};
 
     rows.forEach(row => {
@@ -262,12 +227,61 @@ function formatQuestions(rows) {
         }
         questions[row.QuestionID].answers.push({
             AnswerID: row.AnswerID,
-            AnswerText: row.AnswerText
+            AnswerText: row.AnswerText,
+            IsCorrect: row.IsCorrect
         });
     });
 
     return Object.values(questions);
 }
+
+// Regular Quiz Route
+app.get("/regular-quiz", async (req, res) => {
+    try {
+        const questions = await fetchQuizQuestions(1);
+        res.render("regular-quiz", { questions });
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).send("Error retrieving regular quiz questions.");
+    }
+});
+
+// Student Quiz Route
+app.get("/student-quiz", async (req, res) => {
+    try {
+        const questions = await fetchQuizQuestions(2);
+        res.render("student-quiz", { questions });
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).send("Error retrieving student quiz questions.");
+    }
+});
+
+// Handle Quiz Submission
+app.post("/submit-quiz", async (req, res) => {
+    try {
+        const userAnswers = req.body;
+        let score = 0;
+        let results = [];
+
+        for (let key in userAnswers) {
+            const answerID = userAnswers[key];
+            const correctAnswer = await db.query("SELECT IsCorrect FROM QuizAnswers WHERE AnswerID = ?", [answerID]);
+
+            if (correctAnswer.length && correctAnswer[0].IsCorrect === 1) {
+                score++;
+                results.push({ question: key, isCorrect: true });
+            } else {
+                results.push({ question: key, isCorrect: false });
+            }
+        }
+
+        res.render("quiz-results", { score, results });
+    } catch (error) {
+        console.error("Error processing quiz submission:", error);
+        res.status(500).send("Error processing quiz results.");
+    }
+});
 
 
 
