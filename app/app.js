@@ -28,38 +28,6 @@ app.get("/categories", function(req, res) {
 app.get("/Language-detail", function(req, res) {
     res.send("Baris needs to input the query");
 });
-// Create a route for root - /languages - listing page
-app.get("/Language-list", function(req, res) {
-    res.send("Baris needs to input the query");
-});
-
-app.get("/languagelist", async function(req, res) {
-    try {
-        const sql = `
-            SELECT 
-                u.UserID, 
-                u.ProfilePicture AS profile_picture, 
-                u.Name AS name,   
-                l.LanguageName AS learning_language
-            FROM Users u
-            LEFT JOIN LanguageList l ON u.LearningLanguage = l.LanguageID
-            WHERE u.UserID = ? 
-            LIMIT 1
-        `; 
-
-        const users = await db.query(sql, [req.params.id]);
-
-        if (!users || users.length === 0) {
-            return res.status(404).send("User Not Found");
-        }
-
-        console.log("Fetched User Profile:", users[0]); // Debugging
-        res.render("userprofile", { user: users[0] });
-    } catch (err) {
-        console.error("Database Error:", err);
-        res.status(500).send("Database query failed: " + err.message);
-    }
-});
 
 app.get("/quizcategories", async (req, res) => {
     try {
@@ -79,10 +47,6 @@ app.get("/quizcategories", async (req, res) => {
 });
 
 
-// Language detail route
-app.get("/Language-detail", (req, res) => {
-    res.send("Baris needs to input the query");
-});
 app.get("/language-list", async (req, res) => {
     try {
         // Fetch all languages dynamically from the LanguageList table
