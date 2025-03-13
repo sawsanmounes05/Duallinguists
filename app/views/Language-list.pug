@@ -9,16 +9,42 @@ link(rel='stylesheet', href='/Language-list.css')
 
     section#language-selection
         div.languages-container
-            - var seenLanguages = []
             each language in languages
-                - if (!seenLanguages.includes(language.LanguageName))
-                    - seenLanguages.push(language.LanguageName)
-                    div.language-option
-                        button.language-button(onclick=`changeLanguage('${language.LanguageID}')`)
-                            img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
-                            p #{language.LanguageName}
+                div.language-option
+                    button.language-button(onclick=`selectLanguage('${language.LanguageID}')`)
+                        img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
+                        p #{language.LanguageName}
 
     footer
         p &copy; 2025 Dualinguists
     
-    script(src="/script.js" defer)
+    // JavaScript to handle language selection and redirection
+    script.
+        function selectLanguage(languageID) {
+            window.location.href = "/selection-list?lang=" + languageID;
+        }
+
+extends layout
+
+block content
+    section#welcome
+        h1 Welcome back, #{user ? user.Name : "User"}!
+        p Please select a language below
+
+    section#language-selection
+        div.languages-container
+            each language in languages
+                div.language-option
+                    button.language-button(onclick=`selectLanguage('${language.LanguageID}')`)
+                        img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
+                        p #{language.LanguageName}
+
+    footer
+        p &copy; 2025 Dualinguists
+    
+    // JavaScript to handle language selection and redirection
+    script.
+        function selectLanguage(languageID) {
+            window.location.href = "/selection-list?lang=" + languageID;
+        }
+
