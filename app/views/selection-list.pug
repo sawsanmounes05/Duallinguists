@@ -3,32 +3,38 @@ extends layout
 block content
   h1 Selection List
   p Selected Language: <strong id="selectedLanguage">Loading...</strong>
-  p Selected Category: <strong id="selectedCategory">Loading...</strong>
 
   form(action='/select', method='post')
-    input(type="hidden" name="languageID" id="languageID")
-    input(type="hidden" name="categoryID" id="categoryID")
+    input(type="hidden", name="languageID", id="languageID")
 
     fieldset
       legend Choose an Option
 
       label(for='quiz') Quiz
       input(type='radio', id='quiz', name='selection', value='quiz', required)
-      
+
       label(for='assessment') Assessment
       input(type='radio', id='assessment', name='selection', value='assessment')
-      
+
       label(for='progress') Progress Status
       input(type='radio', id='progress', name='selection', value='progress')
-      
+
       label(for='cultural') Cultural Insight
       input(type='radio', id='cultural', name='selection', value='cultural')
-    
-    button(type='submit') Continue
+
+    button(type='submit', id="continueBtn", disabled) Continue
 
   script.
-      document.getElementById("selectedLanguage").innerText = localStorage.getItem("selectedLanguageName") || "None";
-      document.getElementById("selectedCategory").innerText = localStorage.getItem("selectedCategoryID") === "1" ? "Regular Quiz" : "Student Quiz";
-      
-      document.getElementById("languageID").value = localStorage.getItem("selectedLanguageID");
-      document.getElementById("categoryID").value = localStorage.getItem("selectedCategoryID");
+      const selectedLanguageID = localStorage.getItem("selectedLanguageID");
+      const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
+
+      // Ensure languageID is set correctly in the form
+      document.getElementById("selectedLanguage").innerText = selectedLanguageName;
+      document.getElementById("languageID").value = selectedLanguageID;
+
+      // Enable "Continue" button only when an option is selected
+      document.querySelectorAll('input[name="selection"]').forEach(radio => {
+          radio.addEventListener("change", () => {
+              document.getElementById("continueBtn").disabled = false;
+          });
+      });
