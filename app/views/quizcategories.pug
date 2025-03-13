@@ -1,27 +1,4 @@
-	extends layout 
-
-block head 
-    link(rel="stylesheet", href="/categories.css")
-
-block content 
-    section#categories
-        h2 Quiz Categories
-        div.levels-container
-            each category in categories
-                div.level
-                    h3 #{category.CategoryName}
-                    p Category ID: #{category.CategoryID}
-                    button(onclick=`selectCategory('${category.CategoryID}')`) Choose
-    p.choose-text Pick a quiz category ✨
-    
-    script(src="/categories.js" defer)
-
-
-Safa Abdiasis Bashir Yusuf:
-	http://127.0.0.1:3000/language-list
-
-+44 7539 176868:
-	extends layout 
+extends layout 
 
 block content
     section#welcome
