@@ -63,36 +63,17 @@ app.get("/languagelist", async function(req, res) {
 
 
 
-app.get("/userprofile/:id", async function(req, res) {
-    try {
-        const sql = `
-            SELECT UserID, ProfilePicture AS profile_picture, Name AS name, 
-                   Email AS email, PhoneNumber AS phone_number, Bio AS bio, 
-                   CreatedAt AS created_at, LearningLanguage AS learning_language
-            FROM Users WHERE UserID = ? LIMIT 1
-        `;
-
-        const users = await db.query(sql, [req.params.id]);
-
-        if (!users || users.length === 0) {
-            return res.status(404).send("User Not Found");
-        }
-
-        console.log("Fetched User Profile:", users[0]); // Debugging
-        res.render("userprofile", { user: users[0] });
-    } catch (err) {
-        console.error("Database Error:", err);
-        res.status(500).send("Database query failed: " + err.message);
-    }
-});
-
-app.get("/users-list", async function(req, res) {
+app.get("/users-list", async (req, res) => {
     try {
         const users = await db.query(
-            `SELECT DISTINCT UserID, ProfilePicture AS profile_picture, Name AS name, 
-            Email AS email, PhoneNumber AS phone_number, Bio AS bio, 
-            CreatedAt AS created_at, LearningLanguage AS learning_language 
-            FROM Users`
+            `SELECT u.UserID, u.ProfilePicture AS profile_picture, u.Name AS name, 
+                    u.Email AS email, u.PhoneNumber AS phone_number, u.Bio AS bio, 
+                    u.CreatedAt AS created_at, 
+                    COALESCE(l.Description, 'Not specified') AS language_description, 
+                    COALESCE(l.Region, 'Unknown') AS language_region
+             FROM Users u
+             LEFT JOIN LanguageDetail l ON u.UserID = l.DetailID
+             ORDER BY u.CreatedAt DESC`
         );
 
         if (!users || users.length === 0) {
@@ -107,6 +88,98 @@ app.get("/users-list", async function(req, res) {
     }
 });
 
+
+app.get("/userprofile/:id", async (req, res) => {
+    try {
+        const sql = `
+            SELECT u.UserID, u.ProfilePicture AS profile_picture, u.Name AS name, 
+                   u.Email AS email, u.PhoneNumber AS phone_number, u.Bio AS bio, 
+                   u.CreatedAt AS created_at, 
+                   COALESCE(l.Description, 'Not specified') AS language_description, 
+                   COALESCE(l.Region, 'Unknown') AS language_region
+            FROM Users u
+            LEFT JOIN LanguageDetail l ON u.UserID = l.DetailID
+            WHERE u.UserID = ? LIMIT 1
+        `;
+
+        const users = await db.query(sql, [req.params.id]);
+
+        if (!users || users.length === 0) {
+            return res.status(404).send("User Not Found");
+        }
+
+        console.log("Fetched User Profile:", users[0]);
+        res.render("userprofile", { user: users[0] });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send("Database query failed: " + err.message);
+    }
+});
+
+// Login page
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+// Handle login
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const users = await db.query('SELECT * FROM Users WHERE Email = ? AND Password = ?', [email, password]);
+
+        if (users.length === 0) {
+            return res.status(400).send("Invalid email or password.");
+        }
+
+        req.session.user = users[0]; // Store user in session
+        res.redirect(`/userprofile/${users[0].UserID}`); // Redirect to user profile
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+
+// Signup page
+app.get("/signup", (req, res) => {
+    res.render("signup");
+});
+
+// Handle signup (Saves user to database)
+app.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password, phone_number, bio } = req.body;
+
+        // Check if email already exists
+        const existingUser = await db.query('SELECT * FROM Users WHERE Email = ?', [email]);
+        if (existingUser.length > 0) {
+            return res.status(400).send("Email already registered. Please log in.");
+        }
+
+        // Generate a unique UserID
+        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
+
+        // Insert new user into the database
+        await db.query(
+            `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
+             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+            [userId, name, email, password, phone_number, bio]
+        );
+
+        console.log(`User ${name} registered successfully.`);
+        res.redirect("/login"); // Redirect to login after signup
+    } catch (err) {
+        console.error("Signup error:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+// Handle logout
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
 
 
 // Create a route for testing the db
