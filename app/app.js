@@ -26,33 +26,25 @@ app.get("/Homepage", (req, res) => {
 
 app.get("/quizcategories", async (req, res) => {
     try {
-        // Fetch BOTH Regular Quiz and Student Quiz
+        // Fetch the Category Name and Description for Regular and Student quizzes
         const categories = await db.query(
-            "SELECT CategoryID, CategoryName, Description FROM QuizCategories WHERE CategoryID IN (1, 2)"
+            "SELECT CategoryName, Description FROM QuizCategories WHERE CategoryID IN (1, 2)"
         );
 
         if (!categories || categories.length === 0) {
-            return res.status(404).send("No quiz categories found in the database.");
+            return res.status(404).send("No quiz categories found.");
         }
 
         console.log("Fetched Quiz Categories:", JSON.stringify(categories, null, 2));
 
-        // JavaScript function injected directly
-        const script = `
-            <script>
-                function selectCategory(categoryId) {
-                    console.log("Selected Quiz Category ID:", categoryId);
-                    alert("You selected quiz category: " + categoryId);
-                }
-            </script>
-        `;
-
-        res.render("quizcategories", { categories, script });
+        // Render the categories in the view
+        res.render("quizcategories", { categories });
     } catch (err) {
         console.error("Database Error:", err);
         res.status(500).send(`Database query failed: ${err.message}`);
     }
 });
+
 
 
 

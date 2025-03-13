@@ -17,9 +17,8 @@ html
       nav
         ul
           li: a(href='/homepage') Home
-          li: a(href='/users-list') Users List
           li: a(href='/language-list') Languages
-          li: a(href='/categories') Categories
+          li: a(href='/quizcategories') Categories
           if user
             li: a(href=`/userprofile/${user.UserID}`) Profile
             li: a(href='/logout') Logout

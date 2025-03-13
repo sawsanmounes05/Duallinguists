@@ -1,6 +1,9 @@
+
 extends layout 
 
 block content
+    link(rel='stylesheet', href='/quizcategories.css')
+
     section#welcome
         h1 Welcome back, #{user ? user.Name : "User"}!
         p Please select a quiz category below
@@ -10,29 +13,7 @@ block content
             each category in categories
                 div.category-option
                     button.category-button(onclick=`selectCategory('${category.CategoryID}')`)
-                        img(src=`/images/${category.CategoryID}.png`, alt=`${category.CategoryName}`)
-                        h3 #{category.CategoryName}
-                        p #{category.Description}
-
-    footer
-        p &copy; 2025 Dualinguists
-
-    // Insert JavaScript function from the route
-    != script
-
-extends layout 
-
-block content
-    section#welcome
-        h1 Welcome back, #{user ? user.Name : "User"}!
-        p Please select a quiz category below
-
-    section#quiz-selection
-        div.categories-container
-            each category in categories
-                div.category-option
-                    button.category-button(onclick=`selectCategory('${category.CategoryID}')`)
-                        img(src=`/images/${category.CategoryID}.png`, alt=`${category.CategoryName}`)
+                        // img(src=`/images/${category.CategoryID}.png`, alt=`${category.CategoryName}`)
                         h3 #{category.CategoryName}
                         p #{category.Description}
 
