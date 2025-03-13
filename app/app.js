@@ -198,75 +198,61 @@ app.get("/logout", (req, res) => {
 });
 
 // Route for Student Quiz
-router.get('/student-quiz', async (req, res) => {
+app.get("/student-quiz", async (req, res) => {
     try {
-      const questions = await db.query(
-        `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
-         FROM QuizQuestions q 
-         JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
-         JOIN QuizDetails d ON q.QuizID = d.QuizID 
-         WHERE d.CategoryID = 2`
-      );
-      
-      const formattedQuestions = formatQuestions(questions);
-      res.render('student-quiz', { questions: formattedQuestions });
+        const [questions] = await db.query(
+            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
+             FROM QuizQuestions q 
+             JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
+             JOIN QuizDetails d ON q.QuizID = d.QuizID 
+             WHERE d.CategoryID = 2`
+        );
+
+        const formattedQuestions = formatQuestions(questions);
+        res.render("student-quiz", { questions: formattedQuestions });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error retrieving student quiz questions');
+        console.error(error);
+        res.status(500).send("Error retrieving student quiz questions.");
     }
-  });
-  
-  // Route for Regular Quiz
-  router.get('/regular-quiz', async (req, res) => {
+});
+
+// Route for Regular Quiz
+app.get("/regular-quiz", async (req, res) => {
     try {
-      const questions = await db.query(
-        `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
-         FROM QuizQuestions q 
-         JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
-         JOIN QuizDetails d ON q.QuizID = d.QuizID 
-         WHERE d.CategoryID = 1`
-      );
-      
-      const formattedQuestions = formatQuestions(questions);
-      res.render('regular-quiz', { questions: formattedQuestions });
+        const [questions] = await db.query(
+            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
+             FROM QuizQuestions q 
+             JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
+             JOIN QuizDetails d ON q.QuizID = d.QuizID 
+             WHERE d.CategoryID = 1`
+        );
+
+        const formattedQuestions = formatQuestions(questions);
+        res.render("regular-quiz", { questions: formattedQuestions });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error retrieving regular quiz questions');
+        console.error(error);
+        res.status(500).send("Error retrieving regular quiz questions.");
     }
-  });
-  
-  // Route to handle quiz submission
-  router.post('/submit-quiz', async (req, res) => {
-    try {
-      const answers = req.body;
-      console.log('User Answers:', answers);
-      res.send('Quiz submitted successfully!');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error submitting quiz');
-    }
-  });
-  
-  // Function to format questions properly
-  function formatQuestions(rows) {
+});
+
+// Function to format questions properly
+function formatQuestions(rows) {
     const questions = {};
     rows.forEach(row => {
-      if (!questions[row.QuestionID]) {
-        questions[row.QuestionID] = { 
-          QuestionID: row.QuestionID, 
-          QuestionText: row.QuestionText, 
-          answers: [] 
-        };
-      }
-      questions[row.QuestionID].answers.push({
-        AnswerID: row.AnswerID,
-        AnswerText: row.AnswerText
-      });
+        if (!questions[row.QuestionID]) {
+            questions[row.QuestionID] = {
+                QuestionID: row.QuestionID,
+                QuestionText: row.QuestionText,
+                answers: []
+            };
+        }
+        questions[row.QuestionID].answers.push({
+            AnswerID: row.AnswerID,
+            AnswerText: row.AnswerText
+        });
     });
     return Object.values(questions);
-  }
-  
-
+}
 
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
