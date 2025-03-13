@@ -33,7 +33,7 @@ app.get("/Language-list", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
-app.get("/welcomepage", async function(req, res) {
+app.get("/languagelist", async function(req, res) {
     try {
         const sql = `
             SELECT 
