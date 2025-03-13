@@ -1,0 +1,123 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+    background-color: #F4F4F4; /* Light grey for easy readability */
+    color: #222; /* Dark grey text for contrast */
+}
+
+/* Authentication Links */
+.auth-links {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.auth-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #D1D1D1; /* Soft contrast */
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.hero-text h2 {
+    font-size: 24px;
+    font-style: italic;
+    color: #111; /* Strong contrast */
+}
+
+/* Mission Section */
+.mission {
+    background: #E8E8E8; /* Subtle tone for readability */
+    padding: 50px 20px;
+}
+
+.container {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.mission-left {
+    flex: 1;
+    padding: 20px;
+}
+
+.mission-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.mission-title h2 {
+    font-size: 40px;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.mission-left p {
+    font-size: 18px;
+    margin-top: 15px;
+    color: #444;
+}
+
+/* Mission Right */
+.mission-right {
+    flex: 1;
+    padding: 20px;
+}
+
+.mission-right h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.mission-right ul {
+    list-style: none;
+}
+
+.mission-right ul li {
+    font-size: 18px;
+    padding: 8px 0;
+    color: #444;
+}
+
+/* Movement Section */
+.movement {
+    background: #D9D9D9; /* Accessible contrast */
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.movement h3 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.movement p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
