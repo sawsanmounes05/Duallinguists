@@ -61,6 +61,47 @@ app.get("/languagelist", async function(req, res) {
     }
 });
 
+app.get("/quizcategories", async (req, res) => {
+    try {
+        // Fetch all quiz categories using correct column names
+        const categories = await db.query("SELECT CategoryID, CategoryName, Description FROM QuizCategories");
+
+        if (!categories || categories.length === 0) {
+            return res.status(404).send("No quiz categories found in database.");
+        }
+
+        console.log("Fetched Quiz Categories:", categories);
+        res.render("quizcategories", { categories });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+
+// Language detail route
+app.get("/Language-detail", (req, res) => {
+    res.send("Baris needs to input the query");
+});
+app.get("/language-list", async (req, res) => {
+    try {
+        // Fetch all languages dynamically from the LanguageList table
+        const languages = await db.query("SELECT LanguageID, LanguageName FROM LanguageList");
+
+        if (!languages || languages.length === 0) {
+            return res.status(404).send("No languages found in database.");
+        }
+
+        console.log("Fetched Languages:", languages);
+        res.render("language-list", { languages });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+
+
 
 
 app.get("/users-list", async (req, res) => {
