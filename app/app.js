@@ -24,11 +24,10 @@ app.get("/categories", function(req, res) {
     res.send("Baris needs to input the query");
 });
 
-
 app.get("/quizcategories", async (req, res) => {
     try {
-        // Fetch all quiz categories using correct column names
-        const categories = await db.query("SELECT CategoryID, CategoryName, Description FROM QuizCategories");
+        // Fetch all quiz categories from the QuizCategories table
+        const categories = await db.query("SELECT CategoryID, CategoryName FROM QuizCategories");
 
         if (!categories || categories.length === 0) {
             return res.status(404).send("No quiz categories found in database.");
