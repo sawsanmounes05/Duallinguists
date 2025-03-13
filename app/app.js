@@ -216,28 +216,50 @@ app.get("/student-quiz", async (req, res) => {
     }
 });
 
-// Route for Regular Quiz
 app.get("/regular-quiz", async (req, res) => {
     try {
-        const [questions] = await db.query(
-            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
-             FROM QuizQuestions q 
-             JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
-             JOIN QuizDetails d ON q.QuizID = d.QuizID 
-             WHERE d.CategoryID = 1`
-        );
+        const query = `
+            SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText 
+            FROM QuizQuestions q 
+            JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
+            JOIN QuizDetails d ON q.QuizID = d.QuizID 
+            WHERE d.CategoryID = 1
+        `;
 
+        console.log("Executing SQL Query:", query);
+
+        const [questions] = await db.query(query);
+
+        if (!questions || questions.length === 0) {
+            console.log("No questions found for regular quiz.");
+            return res.render("regular-quiz", { questions: [] });
+        }
+
+        console.log("Fetched Questions:", JSON.stringify(questions, null, 2));
+
+        // Format questions correctly
         const formattedQuestions = formatQuestions(questions);
+
+        console.log("Formatted Questions for Template:", JSON.stringify(formattedQuestions, null, 2));
+
         res.render("regular-quiz", { questions: formattedQuestions });
     } catch (error) {
-        console.error(error);
+        console.error("Database Error:", error);
         res.status(500).send("Error retrieving regular quiz questions.");
     }
 });
 
-// Function to format questions properly
+
+
+
 function formatQuestions(rows) {
+    if (!Array.isArray(rows)) {
+        console.error("formatQuestions received an invalid data type. Converting to array...");
+        rows = Object.values(JSON.parse(JSON.stringify(rows)));  // Convert BinaryRow to normal array
+    }
+
     const questions = {};
+
     rows.forEach(row => {
         if (!questions[row.QuestionID]) {
             questions[row.QuestionID] = {
@@ -251,8 +273,11 @@ function formatQuestions(rows) {
             AnswerText: row.AnswerText
         });
     });
+
     return Object.values(questions);
 }
+
+
 
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
