@@ -1,4 +1,3 @@
-
 extends layout 
 
 block content
@@ -12,14 +11,15 @@ block content
         div.categories-container
             each category in categories
                 div.category-option
-                    button.category-button(onclick=`selectCategory('${category.CategoryID}')`)
-                        // img(src=`/images/${category.CategoryID}.png`, alt=`${category.CategoryName}`)
+                    button.category-button(onclick=`selectCategory('${category.CategoryID}', '${languageID}')`)
                         h3 #{category.CategoryName}
                         p #{category.Description}
 
     footer
         p &copy; 2025 Dualinguists
 
-    // Insert JavaScript function from the route
-    != script
+    script.
+        function selectCategory(categoryID, languageID) {
+            window.location.href = categoryID === '1' ? "/regular-quiz?languageID=" + languageID : "/student-quiz?languageID=" + languageID;
+        }
 
