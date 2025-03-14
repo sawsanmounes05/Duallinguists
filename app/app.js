@@ -29,6 +29,72 @@ app.get("/", function (req, res) {
 app.get("/Homepage", (req, res) => {
     res.render("homepage");
 });
+// Login page
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+// Handle login
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const users = await db.query('SELECT * FROM Users WHERE Email = ? AND Password = ?', [email, password]);
+
+        if (users.length === 0) {
+            return res.status(400).send("Invalid email or password.");
+        }
+
+        req.session.user = users[0]; // Store user in session
+        res.redirect("/language-list"); // Redirect to language list after login
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+// Signup page
+app.get("/signup", (req, res) => {
+    res.render("signup");
+});
+
+// Handle signup (Saves user to database)
+app.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password, phone_number, bio } = req.body;
+
+        // Check if email already exists
+        const existingUser = await db.query('SELECT * FROM Users WHERE Email = ?', [email]);
+        if (existingUser.length > 0) {
+            return res.status(400).send("Email already registered. Please log in.");
+        }
+
+        // Generate a unique UserID
+        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
+
+        // Insert new user into the database
+        await db.query(
+            `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
+             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+            [userId, name, email, password, phone_number, bio]
+        );
+
+        console.log(`User ${name} registered successfully.`);
+        res.redirect("/login"); // Redirect to login after signup
+    } catch (err) {
+        console.error("Signup error:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+// Handle logout
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
+
+
+
 
 // -------------------- LANGUAGE SELECTION -------------------- //
 
