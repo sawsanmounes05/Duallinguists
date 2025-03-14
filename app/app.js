@@ -17,7 +17,6 @@ const db = require('./services/db');
 app.use(express.urlencoded({ extended: true })); // Ensure form data is parsed
 app.use(express.json()); // Ensure JSON data is parsed
 
-
 // -------------------- ROUTES -------------------- //
 
 // Root Route
@@ -236,6 +235,7 @@ app.post("/select", async (req, res) => {
 });
 
 
+
 // -------------------- QUIZ CATEGORY SELECTION -------------------- //
 
 app.get("/quizcategories", async (req, res) => {
@@ -263,38 +263,61 @@ app.get("/quizcategories", async (req, res) => {
     }
 });
 
+
 // -------------------- QUIZ PAGES -------------------- //
 
 async function fetchQuizQuestions(categoryID, languageID) {
     console.log("🔍 Fetching questions for Category:", categoryID, "Language:", languageID);
 
-    if (!languageID) {
-        console.log("❌ Error: Missing languageID in fetchQuizQuestions.");
+    if (!languageID || !categoryID) {
+        console.log("❌ Error: Missing languageID or categoryID in fetchQuizQuestions.");
         return [];
     }
 
     try {
         const rows = await db.query(
             `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText, a.IsCorrect
-             FROM QuizQuestions q 
-             JOIN QuizAnswers a ON q.QuestionID = a.QuestionID 
-             JOIN QuizDetails d ON q.QuizID = d.QuizID 
-             WHERE d.CategoryID = ? AND d.LanguageID = ?`, 
-            [categoryID, languageID]
+             FROM QuizQuestions q
+             LEFT JOIN QuizAnswers a ON q.QuestionID = a.QuestionID
+             WHERE q.LanguageID = ? AND q.CategoryID = ?
+             ORDER BY q.QuestionID, a.AnswerID`,
+            [languageID, categoryID]
         );
 
         if (!rows.length) {
-            console.log(`❌ No questions found for category ${categoryID} and language ${languageID}`);
+            console.log(`❌ No questions found for Category ${categoryID} and Language ${languageID}`);
             return [];
         }
 
-        console.log("✅ Quiz Questions Found:", rows.length);
-        return rows;
+        console.log("✅ Raw Data Fetched from Database:", rows);
+
+        // Format questions so that each question has a list of answers
+        const formattedQuestions = {};
+        rows.forEach(row => {
+            if (!formattedQuestions[row.QuestionID]) {
+                formattedQuestions[row.QuestionID] = {
+                    QuestionID: row.QuestionID,
+                    QuestionText: row.QuestionText,
+                    answers: []
+                };
+            }
+            formattedQuestions[row.QuestionID].answers.push({
+                AnswerID: row.AnswerID,
+                AnswerText: row.AnswerText,
+                IsCorrect: row.IsCorrect
+            });
+        });
+
+        console.log("✅ Formatted Questions:", Object.values(formattedQuestions));
+        return Object.values(formattedQuestions);
     } catch (error) {
         console.error("❌ Error fetching quiz questions:", error);
         return [];
     }
 }
+
+
+
 
 app.get("/regular-quiz", async (req, res) => {
     const languageID = req.query.languageID;
@@ -305,14 +328,73 @@ app.get("/regular-quiz", async (req, res) => {
     }
 
     try {
-        console.log("🔍 Fetching questions for Language ID:", languageID);
+        const languageData = await db.query(
+            "SELECT LanguageName FROM LanguageList WHERE LanguageID = ?",
+            [languageID]
+        );
+
+        if (!languageData.length) {
+            console.log("❌ No language found for ID:", languageID);
+            return res.status(404).send("Language not found.");
+        }
+
+        const languageName = languageData[0].LanguageName;
+        console.log(`✅ Language Retrieved: ${languageName}`);
+
+        // Fetch quiz questions for Regular Quiz (Category 1)
         const questions = await fetchQuizQuestions(1, languageID);
-        res.render("regular-quiz", { questions, languageID });
+        console.log("✅ Questions Sent to Pug:", questions);
+
+        res.render("regular-quiz", { questions, languageID, languageName });
     } catch (error) {
         console.error("❌ Database Error:", error);
         res.status(500).send("Error retrieving regular quiz questions.");
     }
 });
+app.post("/submit-quiz", async (req, res) => {
+    try {
+        const userAnswers = req.body; // User's submitted answers
+        let score = 0;
+        let results = [];
+
+        console.log("🔹 User Quiz Submission:", userAnswers);
+
+        // Iterate over each question the user answered
+        for (let questionID in userAnswers) {
+            const answerID = userAnswers[questionID];
+
+            // Fetch correct answer from the database
+            const correctAnswer = await db.query(
+                "SELECT AnswerID, AnswerText, IsCorrect FROM QuizAnswers WHERE QuestionID = ? AND IsCorrect = 1",
+                [questionID]
+            );
+
+            if (correctAnswer.length > 0) {
+                const isCorrect = correctAnswer[0].AnswerID == answerID;
+                if (isCorrect) score++;
+
+                results.push({
+                    questionID: questionID,
+                    userAnswerID: answerID,
+                    userAnswerText: await db.query("SELECT AnswerText FROM QuizAnswers WHERE AnswerID = ?", [answerID]),
+                    correctAnswerID: correctAnswer[0].AnswerID,
+                    correctAnswerText: correctAnswer[0].AnswerText,
+                    isCorrect: isCorrect
+                });
+            }
+        }
+
+        console.log(`✅ User scored ${score} correct answers.`);
+        console.log("📌 Answer Results:", results);
+
+        res.render("quiz-results", { score, results });
+    } catch (error) {
+        console.error("❌ Error processing quiz submission:", error);
+        res.status(500).send("Error processing quiz results.");
+    }
+});
+
+
 
 app.get("/student-quiz", async (req, res) => {
     const languageID = req.query.languageID;
@@ -323,18 +405,32 @@ app.get("/student-quiz", async (req, res) => {
     }
 
     try {
-        console.log("🔍 Fetching questions for Language ID:", languageID);
+        const languageData = await db.query(
+            "SELECT LanguageName FROM LanguageList WHERE LanguageID = ?",
+            [languageID]
+        );
+
+        if (!languageData.length) {
+            console.log("❌ No language found for ID:", languageID);
+            return res.status(404).send("Language not found.");
+        }
+
+        const languageName = languageData[0].LanguageName;
+        console.log(`✅ Language Retrieved: ${languageName}`);
+
+        // Fetch quiz questions for Student Quiz (Category 2)
         const questions = await fetchQuizQuestions(2, languageID);
-        res.render("student-quiz", { questions, languageID });
+        console.log("✅ Questions Sent to Pug:", questions);
+
+        res.render("student-quiz", { questions, languageID, languageName });
     } catch (error) {
         console.error("❌ Database Error:", error);
         res.status(500).send("Error retrieving student quiz questions.");
     }
 });
 
-// -------------------- SERVER START -------------------- //
 
+// -------------------- SERVER START -------------------- //
 app.listen(3000, function () {
     console.log(`🚀 Server running at http://127.0.0.1:3000/`);
 });
-

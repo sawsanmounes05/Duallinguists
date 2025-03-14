@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1 Quiz Results
+
+  p You scored #{score} points!
+
+  each result in results
+    div.result-card
+      h3 Question #{result.questionID}
+      p Your Answer: 
+        span(style={color: result.isCorrect ? 'green' : 'red'}) #{result.userAnswerText[0].AnswerText}
+      if !result.isCorrect
+        p(style="color: blue") Correct Answer: #{result.correctAnswerText}
+      hr
+
+  a(href="/quizcategories") Back to Quiz Categories
+
+
