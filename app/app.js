@@ -29,16 +29,8 @@ app.get("/", function (req, res) {
 app.get("/Homepage", (req, res) => {
     res.render("homepage");
 });
-// Root Route
-app.get("/", function (req, res) {
-    res.send("Hello world!");
-});
 
-// Homepage
-app.get("/Homepage", (req, res) => {
-    res.render("homepage");
-});
-
+// -------------------- LANGUAGE SELECTION -------------------- //
 // Fetch User Profile Data
 app.get("/userprofile/:id", async (req, res) => {
     try {
@@ -65,7 +57,6 @@ app.get("/userprofile/:id", async (req, res) => {
         res.status(500).send("Database query failed: " + err.message);
     }
 });
-
 
 // -------------------- LOGIN -------------------- //
 app.get("/login", (req, res) => {
@@ -346,3 +337,4 @@ app.get("/student-quiz", async (req, res) => {
 app.listen(3000, function () {
     console.log(`🚀 Server running at http://127.0.0.1:3000/`);
 });
+

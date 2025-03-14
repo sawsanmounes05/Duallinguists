@@ -25,14 +25,22 @@ block content
     button(type='submit', id="continueBtn", disabled) Continue
 
   script.
-      const selectedLanguageID = localStorage.getItem("selectedLanguageID");
-      const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
+      document.addEventListener("DOMContentLoaded", function() {
+          const selectedLanguageID = localStorage.getItem("selectedLanguageID");
+          const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
 
-      // Ensure languageID is set correctly in the form
-      document.getElementById("selectedLanguage").innerText = selectedLanguageName;
-      document.getElementById("languageID").value = selectedLanguageID;
+          if (!selectedLanguageID) {
+              alert("⚠ No language selected! Redirecting...");
+              window.location.href = "/language-list";
+              return;
+          }
 
-      // Enable "Continue" button only when an option is selected
+          console.log("🔹 Language Loaded:", selectedLanguageName, `(ID: ${selectedLanguageID})`);
+
+          document.getElementById("selectedLanguage").innerText = selectedLanguageName;
+          document.getElementById("languageID").value = selectedLanguageID;
+      });
+
       document.querySelectorAll('input[name="selection"]').forEach(radio => {
           radio.addEventListener("change", () => {
               document.getElementById("continueBtn").disabled = false;

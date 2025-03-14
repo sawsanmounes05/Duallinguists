@@ -9,15 +9,29 @@ block content
         div.languages-container
             each language in languages
                 div.language-option
-                    button.language-button(onclick=`selectLanguage('${language.LanguageID}')`)
+                    button.language-button(data-language-id=language.LanguageID data-language-name=language.LanguageName onclick="selectLanguage(this)")
                         img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
                         p #{language.LanguageName}
 
     footer
         p &copy; 2025 Dualinguists
-    
-    // JavaScript to handle language selection and redirection
+
     script.
-        function selectLanguage(languageID) {
+        function selectLanguage(button) {
+            const languageID = button.getAttribute("data-language-id");
+            const languageName = button.getAttribute("data-language-name");
+
+            if (!languageID) {
+                alert("Error: No language selected.");
+                return;
+            }
+
+            console.log("✅ Language Selected:", languageName, `(ID: ${languageID})`);
+
+            // Store in localStorage
+            localStorage.setItem("selectedLanguageID", languageID);
+            localStorage.setItem("selectedLanguageName", languageName);
+
+            // Redirect to selection list
             window.location.href = "/selection-list?languageID=" + languageID;
         }
