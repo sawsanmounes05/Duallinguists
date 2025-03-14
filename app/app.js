@@ -29,42 +29,88 @@ app.get("/", function (req, res) {
 app.get("/Homepage", (req, res) => {
     res.render("homepage");
 });
-// Login page
+// Root Route
+app.get("/", function (req, res) {
+    res.send("Hello world!");
+});
+
+// Homepage
+app.get("/Homepage", (req, res) => {
+    res.render("homepage");
+});
+
+// Fetch User Profile Data
+app.get("/userprofile/:id", async (req, res) => {
+    try {
+        const sql = `
+            SELECT u.UserID, u.Name AS name, u.Email AS email, 
+                   u.PhoneNumber AS phone_number, u.Bio AS bio, 
+                   u.ProfilePicture AS profile_picture, u.CreatedAt AS created_at,
+                   COALESCE(l.Description, 'Not specified') AS learning_language
+            FROM Users u
+            LEFT JOIN LanguageDetail l ON u.UserID = l.DetailID
+            WHERE u.UserID = ? LIMIT 1
+        `;
+
+        const users = await db.query(sql, [req.params.id]);
+
+        if (!users || users.length === 0) {
+            return res.status(404).send("User Not Found");
+        }
+
+        console.log("✅ Fetched User Profile:", users[0]);
+        res.render("userprofile", { user: users[0] });
+    } catch (err) {
+        console.error("❌ Database Error:", err);
+        res.status(500).send("Database query failed: " + err.message);
+    }
+});
+
+
+// -------------------- LOGIN -------------------- //
 app.get("/login", (req, res) => {
     res.render("login");
 });
 
-// Handle login
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const users = await db.query('SELECT * FROM Users WHERE Email = ? AND Password = ?', [email, password]);
+        console.log("🔹 Login Attempt:", email);
+
+        // Fetch user from database
+        const users = await db.query(
+            "SELECT * FROM Users WHERE Email = ? AND Password = ?",
+            [email, password]
+        );
 
         if (users.length === 0) {
+            console.log("❌ Error: Invalid email or password.");
             return res.status(400).send("Invalid email or password.");
         }
 
-        req.session.user = users[0]; // Store user in session
-        res.redirect("/language-list"); // Redirect to language list after login
+        const user = users[0];
+        console.log(`✅ Login successful. Redirecting to /userprofile/${user.UserID}`);
+        res.redirect(`/userprofile/${user.UserID}`); // Redirect to user profile
     } catch (err) {
-        console.error("Login error:", err);
-        res.status(500).send("Server error");
+        console.error("❌ Login error:", err);
+        res.status(500).send("Server error.");
     }
 });
 
-// Signup page
+// -------------------- SIGNUP -------------------- //
 app.get("/signup", (req, res) => {
     res.render("signup");
 });
 
-// Handle signup (Saves user to database)
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password, phone_number, bio } = req.body;
+        console.log("🔹 Signup Attempt:", email);
 
         // Check if email already exists
-        const existingUser = await db.query('SELECT * FROM Users WHERE Email = ?', [email]);
+        const existingUser = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
         if (existingUser.length > 0) {
+            console.log("❌ Error: Email already registered.");
             return res.status(400).send("Email already registered. Please log in.");
         }
 
@@ -78,23 +124,18 @@ app.post("/signup", async (req, res) => {
             [userId, name, email, password, phone_number, bio]
         );
 
-        console.log(`User ${name} registered successfully.`);
+        console.log(`✅ User ${name} registered successfully.`);
         res.redirect("/login"); // Redirect to login after signup
     } catch (err) {
-        console.error("Signup error:", err);
-        res.status(500).send("Server error");
+        console.error("❌ Signup error:", err);
+        res.status(500).send("Server error.");
     }
 });
 
-// Handle logout
+// -------------------- LOGOUT -------------------- //
 app.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
+    res.redirect("/login");
 });
-
-
-
 
 // -------------------- LANGUAGE SELECTION -------------------- //
 
