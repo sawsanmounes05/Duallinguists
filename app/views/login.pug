@@ -1,21 +1,48 @@
 extends layout
 
 block content
-  h1 Login
-  form(action='/login', method='POST', onsubmit="storeUserID(event)")
-    label(for='email') Email:
-    input(type='email', name='email', required)
+  link(rel='stylesheet', href='/login.css')
 
-    label(for='password') Password:
-    input(type='password', name='password', required)
+  // ✅ Full-width header banner matching homepage
+  section.hero
+    h1 WELCOME, #{user ? user.Name : "USER"}! 
+    p Glad to see you again. Log in to continue your journey.
 
-    button(type='submit') Log In
-    p Don't have an account? 
-      a(href='/signup') Sign up here
+  section#login-container
+    div.login-box
+      h2 LOGIN
+
+      div#username-step
+        button#startLogin(type='button') Enter Username
+
+      form#login-form(action='/login', method='POST', onsubmit="storeUserID(event)", style="display: none;")
+        div#username-field(style="display: none;")
+          label(for='email') Email:
+          input(type='email', name='email', id="email-input", required)
+          button(type='button', id="nextStep") Next
+
+        div#password-field(style="display: none;")
+          label(for='password') Password:
+          input(type='password', name='password', required)
+          button(type='submit') Log In
+
+      p Don't have an account? 
+        a(href='/signup') Sign up here
 
   script.
+      document.getElementById("startLogin").addEventListener("click", function() {
+          document.getElementById("username-step").style.display = "none";
+          document.getElementById("login-form").style.display = "block";
+          document.getElementById("username-field").style.display = "block";
+      });
+
+      document.getElementById("nextStep").addEventListener("click", function() {
+          document.getElementById("username-field").style.display = "none";
+          document.getElementById("password-field").style.display = "block";
+      });
+
       function storeUserID(event) {
-          event.preventDefault(); // Prevent default form submission
+          event.preventDefault();
 
           const form = event.target;
           fetch(form.action, {
@@ -25,7 +52,7 @@ block content
           })
           .then(response => {
               if (response.redirected) {
-                  window.location.href = response.url; // Handle redirect properly
+                  window.location.href = response.url;
               } else {
                   return response.text().then(text => { throw new Error(text); });
               }

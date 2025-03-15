@@ -1,22 +1,39 @@
 extends layout
 
 block content
-    section#welcome
-        h1 Welcome back, #{user ? user.Name : "User"}!
-        p Please select a language below
+    link(rel='stylesheet', href='/language-list.css')
 
+    // Welcome Section
+    section#welcome
+        h1 Please select a language below, #{user ? user.Name : "User"}!
+
+    // Language Selection Section
     section#language-selection
         div.languages-container
-            each language in languages
-                div.language-option
-                    button.language-button(data-language-id=language.LanguageID data-language-name=language.LanguageName onclick="selectLanguage(this)")
-                        img(src=`/images/${language.LanguageID}.png`, alt=`${language.LanguageName}`)
-                        p #{language.LanguageName}
-
-    footer
-        p &copy; 2025 Dualinguists
+            each language, index in languages
+                div.language-option(style=`animation-delay: ${(index * 0.2)}s`)
+                    button.language-button(
+                        data-language-id=language.LanguageID 
+                        data-language-name=language.LanguageName 
+                        onclick="selectLanguage(this)"
+                    )
+                        div.language-circle
+                            img(src=`/images/${language.LanguageID}.png`, alt=language.LanguageName)
+                        p.language-name= language.LanguageName
 
     script.
+        document.addEventListener("DOMContentLoaded", function () {
+            const languageOptions = document.querySelectorAll(".language-option");
+            languageOptions.forEach((option, index) => {
+                option.style.opacity = "0";
+                option.style.transform = "translateY(50px) scale(0.9)";
+                setTimeout(() => {
+                    option.style.opacity = "1";
+                    option.style.transform = "translateY(0) scale(1)";
+                }, index * 300); // Adds delay for each language
+            });
+        });
+
         function selectLanguage(button) {
             const languageID = button.getAttribute("data-language-id");
             const languageName = button.getAttribute("data-language-name");
@@ -33,5 +50,5 @@ block content
             localStorage.setItem("selectedLanguageName", languageName);
 
             // Redirect to selection list
-            window.location.href = "/selection-list?languageID=" + languageID;
+            window.location.href = "/selection-list?languageID=" + encodeURIComponent(languageID);
         }

@@ -1,19 +1,18 @@
 extends layout
 
 block content
-  h1 Quiz Results
+    link(rel='stylesheet', href='/quiz-results.css')
 
-  p You scored #{score} points!
+    section#results-container
+        h1 Quiz Results
+        p You scored #{score} points!
 
-  each result in results
-    div.result-card
-      h3 Question #{result.questionID}
-      p Your Answer: 
-        span(style={color: result.isCorrect ? 'green' : 'red'}) #{result.userAnswerText[0].AnswerText}
-      if !result.isCorrect
-        p(style="color: blue") Correct Answer: #{result.correctAnswerText}
-      hr
+        each result in results
+            div.result-card
+                h3 Question #{result.questionID}
+                p Your Answer: 
+                    span(class=result.isCorrect ? 'correct' : 'incorrect') #{result.userAnswerText[0].AnswerText}
+                if !result.isCorrect
+                    p.correct-answer Correct Answer: #{result.correctAnswerText}
 
-  a(href="/quizcategories") Back to Quiz Categories
-
-
+        a(href="/quizcategories") Back to Quiz Categories

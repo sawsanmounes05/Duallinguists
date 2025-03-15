@@ -1,18 +1,23 @@
 extends layout
 
 block content
-  h1= `Student Quiz - Language: ${languageName}`
+    link(rel='stylesheet', href='/student-quiz.css')
 
-  if questions.length === 0
-    p No questions available for this language.
+    section#quiz-container
+        h1 Student Quiz - Language: #{languageName}
 
-  form(action='/submit-quiz', method='POST')
-    each question in questions
-      div.question
-        h2= question.QuestionText
-        each answer in question.answers
-          label
-            input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
-            = answer.AnswerText
-          
-    button(type='submit') Submit Quiz
+        if questions.length === 0
+            p No questions available for this language.
+
+        else
+            form(action='/submit-quiz', method='POST')
+                each question in questions
+                    div.question
+                        h2 #{question.QuestionText}
+                        div.answers
+                            each answer in question.answers
+                                label.answer-option
+                                    input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
+                                    span.answer-text #{answer.AnswerText}
+
+                button#submit-quiz(type='submit') Submit Quiz

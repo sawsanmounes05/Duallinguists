@@ -1,29 +1,29 @@
 extends layout
 
 block content  
-  h1 User Profile
-  
-  if user.profile_picture
-    img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture', width='150')
-  
-  table(border='1', class='user-profile-table')
-    tr
-      th Name:
-      td #{user.name}
-    tr
-      th Email:
-      td #{user.email}
-    tr
-      th Phone:
-      td #{user.phone_number}
-    tr
-      th Bio:
-      td #{user.bio}
-    tr
-      th Learning Language:
-      td #{user.learning_language}
-    tr
-      th Joined:
-      td #{user.created_at}
-  
-  a(href='/') Back to Homepage
+    link(rel='stylesheet', href='/userprofile.css')
+
+    section#profile-container
+        h1 User Profile
+        
+        if user.profile_picture
+            img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture')
+
+        table(class='user-profile-table')
+            tr
+                th Name:
+                td #{user.name}
+            tr
+                th Email:
+                td #{user.email}
+            tr
+                th Phone:
+                td #{user.phone_number}
+            tr
+                th Bio:
+                td #{user.bio}
+            tr
+                th Joined:
+                td #{user.created_at}
+
+        a(href='/') Back to Homepage

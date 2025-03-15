@@ -1,48 +1,62 @@
 extends layout
 
 block content
-  h1 Selection List
-  p Selected Language: <strong id="selectedLanguage">Loading...</strong>
+    link(rel='stylesheet', href='/selection-list.css')
 
-  form(action='/select', method='post')
-    input(type="hidden", name="languageID", id="languageID")
+    section#selection-container
+        h1 Selection List
+        p Selected Language: <strong id="selectedLanguage">Loading...</strong>
 
-    fieldset
-      legend Choose an Option
+        form(action='/select', method='post')
+            input(type="hidden", name="languageID", id="languageID")
 
-      label(for='quiz') Quiz
-      input(type='radio', id='quiz', name='selection', value='quiz', required)
+            section#options-container
+                div.option-card.quiz
+                    input(type='radio', id='quiz', name='selection', value='quiz', required)
+                    label(for='quiz')
+                        span.icon 🎯
+                        span.option-text Quiz
+                
+                div.option-card.assessment
+                    input(type='radio', id='assessment', name='selection', value='assessment')
+                    label(for='assessment')
+                        span.icon 📑
+                        span.option-text Assessment
+                
+                div.option-card.progress
+                    input(type='radio', id='progress', name='selection', value='progress')
+                    label(for='progress')
+                        span.icon 📊
+                        span.option-text Progress Status
+                
+                div.option-card.cultural
+                    input(type='radio', id='cultural', name='selection', value='cultural')
+                    label(for='cultural')
+                        span.icon 🌍
+                        span.option-text Cultural Insight
 
-      label(for='assessment') Assessment
-      input(type='radio', id='assessment', name='selection', value='assessment')
+            div.button-container
+                button(type='submit', id="continueBtn", disabled) Continue
 
-      label(for='progress') Progress Status
-      input(type='radio', id='progress', name='selection', value='progress')
+    script.
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedLanguageID = localStorage.getItem("selectedLanguageID");
+            const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
 
-      label(for='cultural') Cultural Insight
-      input(type='radio', id='cultural', name='selection', value='cultural')
+            if (!selectedLanguageID) {
+                alert("⚠ No language selected! Redirecting...");
+                window.location.href = "/language-list";
+                return;
+            }
 
-    button(type='submit', id="continueBtn", disabled) Continue
+            console.log("🔹 Language Loaded:", selectedLanguageName, `(ID: ${selectedLanguageID})`);
 
-  script.
-      document.addEventListener("DOMContentLoaded", function() {
-          const selectedLanguageID = localStorage.getItem("selectedLanguageID");
-          const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
+            document.getElementById("selectedLanguage").innerText = selectedLanguageName;
+            document.getElementById("languageID").value = selectedLanguageID;
+        });
 
-          if (!selectedLanguageID) {
-              alert("⚠ No language selected! Redirecting...");
-              window.location.href = "/language-list";
-              return;
-          }
-
-          console.log("🔹 Language Loaded:", selectedLanguageName, `(ID: ${selectedLanguageID})`);
-
-          document.getElementById("selectedLanguage").innerText = selectedLanguageName;
-          document.getElementById("languageID").value = selectedLanguageID;
-      });
-
-      document.querySelectorAll('input[name="selection"]').forEach(radio => {
-          radio.addEventListener("change", () => {
-              document.getElementById("continueBtn").disabled = false;
-          });
-      });
+        document.querySelectorAll('input[name="selection"]').forEach(radio => {
+            radio.addEventListener("change", () => {
+                document.getElementById("continueBtn").disabled = false;
+            });
+        });

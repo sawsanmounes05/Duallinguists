@@ -1,19 +1,22 @@
 extends layout
 
 block content
-  h1= `Regular Quiz - Language: ${languageName}`
-  
-  if questions.length === 0
-    p No questions available for this language.
+    link(rel='stylesheet', href='/regular-quiz.css')
 
-  form(action='/submit-quiz', method='POST')
-    each question in questions
-      div.question
-        h2= question.QuestionText
-        each answer in question.answers
-          label
-            input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
-            = answer.AnswerText
-          
-    button(type='submit') Submit Quiz
+    section#quiz-container
+        h1 Regular Quiz - Language: #{languageName}
 
+        if questions.length === 0
+            p No questions available for this language.
+
+        form(action='/submit-quiz', method='POST')
+            each question in questions
+                div.question
+                    h2= question.QuestionText
+                    div.answers
+                        each answer in question.answers
+                            label.answer-option
+                                input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
+                                span.answer-text= answer.AnswerText
+
+            button(type='submit' id='submit-quiz') Submit Quiz

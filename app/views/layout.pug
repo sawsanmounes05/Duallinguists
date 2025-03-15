@@ -1,7 +1,5 @@
 doctype html
 
-link(rel='stylesheet', href='/layout.css')
-
 html
   head
     title Dualinguist
@@ -9,25 +7,27 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
 
     // ✅ Ensuring correct CSS linking
+    link(rel='stylesheet', href='/layout.css')
     link(rel='stylesheet', href='/styles.css')
 
   body
     header
-      h1 Dualinguist
-      nav
-        ul
-          li: a(href='/homepage') Home
-          li: a(href='/language-list') Languages
-          li: a(href='/quizcategories') Categories
-          if user
-            li: a(href=`/userprofile/${user.UserID}`) Profile
-            li: a(href='/logout') Logout
-          else
-            li: a(href='/login') Login
-            li: a(href='/signup') Signup
+      div.container
+        h1 Dualinguist
+        nav
+          ul
+            li: a(href='/homepage') Home
+            li: a(href='/language-list') Languages
+            if user
+              li: a(href=`/userprofile/${user.UserID}`) Profile
+              li: a(href='/logout') Logout
+            else
+              li: a(href='/login') Login
+              li: a(href='/signup') Signup
 
     main
       block content
 
     footer
       p &copy; 2025 Dualinguist. All rights reserved.
+

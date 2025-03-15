@@ -1,0 +1,133 @@
+/* ========== Global Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #F5F1E7; /* Beige background */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px; /* Space for logo */
+}
+
+/* ========== Quiz Container - Smaller for Logo Visibility ========== */
+#quiz-container {
+    background: #D9E4CC; /* Green background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    width: 85%; /* Smaller width */
+    max-width: 900px;
+    min-height: 75vh; /* Reduced height */
+    text-align: center;
+}
+
+/* ========== Quiz Title ========== */
+h1 {
+    font-size: 2rem;
+    color: #2E4B33; /* Dark green */
+    margin-bottom: 20px;
+}
+
+/* ========== Question Styling ========== */
+.question {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+h2 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2E4B33;
+    margin-bottom: 10px;
+}
+
+/* ========== Answer Options ========== */
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 2px solid #C4C4C4;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.answer-option:hover {
+    background: #D3E0B5;
+}
+
+.answer-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* ========== Radio Buttons Styling ========== */
+input[type='radio'] {
+    transform: scale(1.2);
+    accent-color: #4A6D45; /* Green selection */
+}
+
+/* ========== Submit Button ========== */
+#submit-quiz {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4A6D45, #2E4B33);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+#submit-quiz:hover {
+    background: linear-gradient(135deg, #3D5B35, #243A24);
+    transform: scale(1.05);
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 800px) {
+    #quiz-container {
+        padding: 20px;
+        width: 95%;
+        min-height: 70vh;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    .answer-option {
+        font-size: 0.9rem;
+    }
+
+    #submit-quiz {
+        font-size: 1rem;
+    }
+}
