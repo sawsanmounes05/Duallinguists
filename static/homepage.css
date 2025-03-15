@@ -7,30 +7,55 @@
 }
 
 body {
-    background-color: #F8F1E4; /* Soft Beige */
-    color: #2E2E2E; /* Elegant Deep Grey */
+    background-color: #ffffff;
+    color: #2E2E2E;
 }
 
 /* ========== Hero Section ========== */
 .hero {
-    background: linear-gradient(135deg, #EADBC8, #F3E8D5); /* Luxurious Beige Gradient */
+    background: linear-gradient(135deg, #0072b2, #005a8c);
     text-align: center;
-    padding: 80px 20px;
-    color: #1C1C1C;
+    padding: 120px 20px;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 50px;
+    font-weight: bold;
 }
 
 .hero h2 {
-    font-size: 48px;
-    font-weight: 700;
-    color: #C89D56; /* Gold Accent */
-    text-transform: uppercase;
+    font-size: 30px;
+    margin-top: 10px;
+    color: #cce7ff;
 }
 
 .hero p {
     font-size: 22px;
-    font-style: italic;
-    color: #555;
-    margin-top: 10px;
+    margin-top: 15px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero .btn {
+    display: inline-block;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: white;
+    color: #0072b2;
+    border-radius: 50px;
+    margin-top: 25px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.hero .btn:hover {
+    background: #cce7ff;
+    color: #005a8c;
+    transform: translateY(-3px);
 }
 
 /* ========== Mission Section ========== */
@@ -38,19 +63,19 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 60px 10%;
-    background-color: #FAF3E0; /* Lighter Beige */
+    padding: 100px 10%;
+    background-color: #e0f0f6;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 .mission-left {
     flex: 1;
-    padding-right: 40px;
+    padding-right: 50px;
 }
 
 .mission-left h2 {
-    font-size: 36px;
+    font-size: 38px;
     font-weight: bold;
     color: #1E1E1E;
 }
@@ -63,76 +88,107 @@ body {
 
 .mission-right {
     flex: 1;
-    background: white;
-    padding: 30px;
+    text-align: center;
+}
+
+.mission-right img {
+    max-width: 100%;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.mission-right h3 {
-    font-size: 24px;
+/* ========== We Stand For Section ========== */
+.values {
+    text-align: center;
+    padding: 80px 10%;
+    background-color: white;
+}
+
+.values h3 {
+    font-size: 36px;
     font-weight: bold;
-    color: #C89D56;
+    color: #0072b2;
 }
 
-.mission-right ul {
-    list-style: none;
-    margin-top: 15px;
+.values-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
 }
 
-.mission-right li {
-    font-size: 18px;
-    padding: 8px 0;
+.value-card {
+    background: #e0f0f6;
+    padding: 25px;
+    border-radius: 10px;
+    width: 18%;
+    min-width: 180px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.value-card h4 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #0072b2;
+}
+
+.value-card p {
+    font-size: 16px;
     color: #555;
 }
 
-/* ========== Movement Section ========== */
-.movement {
+.value-card:hover {
+    background: #0072b2;
+    color: white;
+    transform: translateY(-5px);
+}
+
+.value-card:hover h4 {
+    color: white;
+}
+
+/* ========== Sign Up Today Section ========== */
+.cta {
     text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(135deg, #FDF7E3, #F4E4C3);
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #0072b2, #005a8c);
+    color: white;
 }
 
-.movement h3 {
-    font-size: 32px;
+.cta h3 {
+    font-size: 38px;
     font-weight: bold;
-    color: #2E2E2E;
 }
 
-.movement p {
-    font-size: 20px;
-    color: #4A4A4A;
+.cta p {
+    font-size: 22px;
     margin-top: 15px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* ========== Buttons ========== */
-.btn {
+.cta .btn {
     display: inline-block;
-    padding: 14px 28px;
-    font-size: 18px;
+    padding: 16px 32px;
+    font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
-    background: #C89D56; /* Gold */
-    color: white;
+    background: white;
+    color: #0072b2;
     border-radius: 50px;
-    margin-top: 20px;
+    margin-top: 25px;
     transition: all 0.3s ease-in-out;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
 }
 
-.btn:hover {
-    background: #AD7C3B; /* Deeper Gold */
+.cta .btn:hover {
+    background: #cce7ff;
+    color: #005a8c;
     transform: translateY(-3px);
-}
-
-/* ========== Animation ========== */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.hero, .mission, .movement {
-    animation: fadeIn 1.2s ease-in-out;
 }
 
 /* ========== Responsive Design ========== */
@@ -140,9 +196,105 @@ body {
     .mission {
         flex-direction: column;
         text-align: center;
+        padding: 80px 5%;
     }
 
     .mission-left {
         padding-right: 0;
     }
+
+    .values-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .value-card {
+        width: 45%;
+    }
 }
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .hero .btn, .cta .btn {
+        font-size: 18px;
+        padding: 14px 28px;
+    }
+
+    .mission-left h2 {
+        font-size: 32px;
+    }
+
+    .mission-left p {
+        font-size: 16px;
+    }
+
+    .values h3 {
+        font-size: 30px;
+    }
+
+    .value-card {
+        width: 90%;
+    }
+
+    .cta h3 {
+        font-size: 30px;
+    }
+
+    .cta p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero h2 {
+        font-size: 20px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .hero .btn, .cta .btn {
+        font-size: 16px;
+        padding: 12px 24px;
+    }
+
+    .mission-left h2 {
+        font-size: 28px;
+    }
+
+    .mission-left p {
+        font-size: 14px;
+    }
+
+    .values h3 {
+        font-size: 26px;
+    }
+
+    .value-card {
+        width: 100%;
+    }
+
+    .cta h3 {
+        font-size: 26px;
+    }
+
+    .cta p {
+        font-size: 16px;
+    }
+} 

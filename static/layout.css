@@ -9,9 +9,10 @@ html, body {
   height: 100%;
   width: 100%;
   font-family: 'Poppins', sans-serif;
-  background-color: white; /* ✅ Full background white */
+  background-color: #f5f7fa; /* ✅ Soft Background */
   color: #333;
   line-height: 1.6;
+  scroll-behavior: smooth;
 }
 
 /* ✅ Ensure Body Fills Full Page */
@@ -19,23 +20,30 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh; /* ✅ Ensures it covers the full viewport */
+  min-height: 100vh; /* ✅ Ensures full viewport coverage */
 }
 
 /* ========== HEADER ========== */
 header {
-  background-color: #54a992;
+  background: rgba(0, 114, 178, 0.9); /* ✅ Glassmorphism Effect */
+  backdrop-filter: blur(8px);
   color: white;
   padding: 20px;
   text-align: center;
-  width: 100%; /* ✅ Ensures full width */
-  position: relative; /* ✅ Prevents collapse */
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
 
 /* ✅ Title Styling */
 header h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 /* ========== NAVIGATION ========== */
@@ -43,8 +51,10 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* ✅ Full width */
-  background-color: #54a992;
+  width: 100%;
+  background: rgba(0, 114, 178, 0.9); /* ✅ Glassmorphism */
+  backdrop-filter: blur(8px);
+  padding: 15px 0;
 }
 
 /* ✅ Navigation List */
@@ -52,10 +62,10 @@ nav ul {
   list-style-type: none;
   display: flex;
   justify-content: center;
-  gap: 40px; /* ✅ Spacing between links */
-  padding: 15px 0;
-  width: 100%; /* ✅ Ensure full width */
-  max-width: 1200px; /* ✅ Prevents excessive stretching */
+  gap: 40px;
+  padding: 0;
+  width: 100%;
+  max-width: 1200px;
 }
 
 /* ✅ Navigation Links */
@@ -63,37 +73,49 @@ nav ul li a {
   color: white;
   text-decoration: none;
   font-size: 1.2em;
-  padding: 8px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 30px;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(135deg, #005a8c, #0072b2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Navigation Hover Effect */
 nav ul li a:hover {
-  background-color: #a06645;
+  background: #a06645;
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* ========== MAIN SECTION ========== */
 main {
   flex: 1;
   width: 100%;
-  max-width: 1200px; /* ✅ Centers content without limiting full background */
-  margin: 0 auto;
-  background-color: white; /* ✅ Ensures full white page */
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 40px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Cool Hover Effect */
+main:hover {
+  transform: scale(1.02);
 }
 
 /* ========== FOOTER ========== */
 footer {
   text-align: center;
-  padding: 15px 0;
-  background-color: #E2DAD1;
+  padding: 20px 0;
+  background: rgba(226, 218, 209, 0.9); /* ✅ Soft Glass Effect */
+  backdrop-filter: blur(6px);
   color: black;
   font-size: 1em;
-  width: 100%; /* ✅ Ensures full width */
+  width: 100%;
   margin-top: auto;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* ========== LANGUAGE SELECTION ========== */
@@ -102,7 +124,7 @@ footer {
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 30px;
 }
 
 /* ✅ Language Option */
@@ -127,7 +149,8 @@ footer {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: #ddd;
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  box-shadow: 5px 5px 10px #b8b8b8, -5px -5px 10px #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,13 +201,16 @@ footer {
     flex-wrap: wrap;
     justify-content: center;
   }
+
+  nav ul {
+    gap: 20px;
+  }
 }
 
 @media (max-width: 768px) {
-  .languages-container {
+  nav ul {
     flex-direction: column;
     align-items: center;
-    gap: 20px;
   }
 
   .language-circle {
@@ -194,5 +220,29 @@ footer {
 
   .language-name {
     font-size: 1rem;
+  }
+
+  header h1 {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  .language-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .language-name {
+    font-size: 0.9rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
   }
 }
