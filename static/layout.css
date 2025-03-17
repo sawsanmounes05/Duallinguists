@@ -15,7 +15,7 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* ✅ Ensure Body Fills Full Page */
+/*  Ensure Body Fills Full Page */
 body {
   display: flex;
   flex-direction: column;
@@ -37,7 +37,7 @@ header {
   transition: all 0.3s ease-in-out;
 }
 
-/* ✅ Title Styling */
+/*  Title Styling */
 header h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
@@ -55,7 +55,7 @@ nav {
   padding: 15px 0;
 }
 
-/* ✅ Navigation List */
+/*  Navigation List */
 nav ul {
   list-style-type: none;
   display: flex;
@@ -66,7 +66,7 @@ nav ul {
   max-width: 1200px;
 }
 
-/* ✅ Navigation Links */
+/*  Navigation Links */
 nav ul li a {
   color: white;
   text-decoration: none;
@@ -97,12 +97,12 @@ main {
   transition: all 0.3s ease-in-out;
 }
 
-/* ✅ Ensuring Full Width for Login Background */
+/*  Ensuring Full Width for Login Background */
 main > .container {
   width: 100%; /* Ensures that the login background spans full width */
 }
 
-/* ✅ Cool Hover Effect */
+/*  Cool Hover Effect */
 main:hover {
   transform: scale(1.02);
 }
@@ -128,7 +128,7 @@ footer {
   padding: 30px;
 }
 
-/* ✅ Language Option */
+/*  Language Option */
 .language-option {
   display: flex;
   flex-direction: column;
@@ -137,7 +137,7 @@ footer {
   transition: all 0.3s ease-in-out;
 }
 
-/* ✅ Language Buttons */
+/*  Language Buttons */
 .language-button {
   background: none;
   border: none;
@@ -145,7 +145,7 @@ footer {
   text-align: center;
 }
 
-/* ✅ Language Circle */
+/*  Language Circle */
 .language-circle {
   width: 120px;
   height: 120px;
@@ -159,13 +159,13 @@ footer {
   transition: transform 0.3s ease-in-out;
 }
 
-/* ✅ Language Hover Effect */
+/*  Language Hover Effect */
 .language-circle:hover {
   transform: scale(1.1);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* ✅ Language Name */
+/*  Language Name */
 .language-name {
   font-size: 18px;
   font-weight: 600;
@@ -189,7 +189,7 @@ footer {
   animation: fadeIn 0.8s ease-in-out forwards;
 }
 
-/* ✅ Staggered Animations */
+/*  Staggered Animations */
 .language-option:nth-child(1) { animation-delay: 0.2s; }
 .language-option:nth-child(2) { animation-delay: 0.4s; }
 .language-option:nth-child(3) { animation-delay: 0.6s; }
