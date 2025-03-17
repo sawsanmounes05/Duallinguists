@@ -1,4 +1,4 @@
-/* ========== Global Styles ========== */
+/* ========== Global Reset ========== */
 * {
     margin: 0;
     padding: 0;
@@ -12,27 +12,30 @@ html, body {
     background-color: #F5F1E7; /* Beige background */
     color: #333;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 20px; /* Space for logo */
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px; /* Space for header */
 }
 
-/* ========== Quiz Container - Smaller for Logo Visibility ========== */
+/* ========== Blue Quiz Container - FULL HEIGHT FIX ========== */
 #quiz-container {
-    background: #D9E4CC; /* Green background */
+    background: #E0E7FF; /* Light blue background */
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-    width: 85%; /* Smaller width */
+    width: 85%;
     max-width: 900px;
-    min-height: 75vh; /* Reduced height */
+    min-height: 70vh;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* ========== Quiz Title ========== */
 h1 {
     font-size: 2rem;
-    color: #2E4B33; /* Dark green */
+    color: #0B3D91; /* Dark blue */
     margin-bottom: 20px;
 }
 
@@ -49,7 +52,7 @@ h1 {
 h2 {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #2E4B33;
+    color: #1E3A8A; /* Deep blue */
     margin-bottom: 10px;
 }
 
@@ -65,14 +68,14 @@ h2 {
     align-items: center;
     gap: 10px;
     padding: 12px;
-    border: 2px solid #C4C4C4;
+    border: 2px solid #B0C4DE;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
 
 .answer-option:hover {
-    background: #D3E0B5;
+    background: #C6D4FF; /* Soft blue */
 }
 
 .answer-text {
@@ -83,7 +86,7 @@ h2 {
 /* ========== Radio Buttons Styling ========== */
 input[type='radio'] {
     transform: scale(1.2);
-    accent-color: #4A6D45; /* Green selection */
+    accent-color: #1E3A8A; /* Deep blue selection */
 }
 
 /* ========== Submit Button ========== */
@@ -95,7 +98,7 @@ input[type='radio'] {
     font-size: 1.2rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(135deg, #4A6D45, #2E4B33);
+    background: linear-gradient(135deg, #0B3D91, #1E40AF); /* Dark blue gradient */
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -103,16 +106,39 @@ input[type='radio'] {
 }
 
 #submit-quiz:hover {
-    background: linear-gradient(135deg, #3D5B35, #243A24);
+    background: linear-gradient(135deg, #1E3A8A, #142850); /* Darker blue */
     transform: scale(1.05);
 }
 
-/* ========== Responsive Design ========== */
+/* ========== Back to Languages Button (FIXED) ========== */
+#back-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#back-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #1E3A8A, #142850);
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+#back-button:hover {
+    background: linear-gradient(135deg, #0B3D91, #1E40AF);
+    transform: scale(1.05);
+}
+
+/* ========== Responsive Design (Mobile Fixes) ========== */
 @media (max-width: 800px) {
     #quiz-container {
         padding: 20px;
         width: 95%;
-        min-height: 70vh;
+        min-height: 80vh;
     }
 
     h1 {
@@ -129,5 +155,10 @@ input[type='radio'] {
 
     #submit-quiz {
         font-size: 1rem;
+    }
+
+    #back-button {
+        font-size: 0.9rem;
+        padding: 10px 16px;
     }
 }

@@ -23,10 +23,15 @@ html, body {
     padding: 50px;
     border-radius: 12px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-    width: 90%;
-    max-width: 1200px;
+    width: 80%; /* Reduce width for better centering */
+    max-width: 1000px;
     text-align: center;
+    position: absolute; /* Absolute positioning for vertical centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers it perfectly */
 }
+
 
 /* Title Styling */
 h1 {

@@ -6,10 +6,10 @@
 }
 
 html, body {
-  height: 100%;
+  height: 120%;
   width: 100%;
   font-family: 'Poppins', sans-serif;
-  background-color: #f5f7fa; /* ✅ Soft Background */
+  background-color: #f7f7f7; /* Soft background color */
   color: #333;
   line-height: 1.6;
   scroll-behavior: smooth;
@@ -20,21 +20,20 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh; /* ✅ Ensures full viewport coverage */
+  min-height: 100vh; /* Ensures full viewport coverage */
 }
 
 /* ========== HEADER ========== */
 header {
-  background: rgba(0, 114, 178, 0.9); /* ✅ Glassmorphism Effect */
-  backdrop-filter: blur(8px);
+  background: #0072b2; /* Restoring the original blue color */
   color: white;
-  padding: 20px;
+  padding: 20px 0; /* Keeping the padding consistent */
   text-align: center;
   width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
 }
 
@@ -52,8 +51,7 @@ nav {
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: rgba(0, 114, 178, 0.9); /* ✅ Glassmorphism */
-  backdrop-filter: blur(8px);
+  background: #0072b2; /* Restoring the original blue color */
   padding: 15px 0;
 }
 
@@ -91,13 +89,17 @@ nav ul li a:hover {
 main {
   flex: 1;
   width: 100%;
-  max-width: 1200px;
   margin: 40px auto;
   background: white;
   padding: 40px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Ensuring Full Width for Login Background */
+main > .container {
+  width: 100%; /* Ensures that the login background spans full width */
 }
 
 /* ✅ Cool Hover Effect */
@@ -109,9 +111,8 @@ main:hover {
 footer {
   text-align: center;
   padding: 20px 0;
-  background: rgba(226, 218, 209, 0.9); /* ✅ Soft Glass Effect */
-  backdrop-filter: blur(6px);
-  color: black;
+  background: #f5f5f5; /* Light footer background */
+  color: #333;
   font-size: 1em;
   width: 100%;
   margin-top: auto;
@@ -167,7 +168,7 @@ footer {
 /* ✅ Language Name */
 .language-name {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
 }
 
