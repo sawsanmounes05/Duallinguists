@@ -19,10 +19,6 @@ app.use(express.json()); // Ensure JSON data is parsed
 
 // -------------------- ROUTES -------------------- //
 
-// Root Route
-app.get("/", function (req, res) {
-    res.send("Hello world!");
-});
 
 // Homepage
 app.get("/Homepage", (req, res) => {
@@ -31,16 +27,16 @@ app.get("/Homepage", (req, res) => {
 
 // -------------------- LANGUAGE SELECTION -------------------- //
 // Fetch User Profile Data
+// Fetch User Profile Data
+// Fetch User Profile Data
 app.get("/userprofile/:id", async (req, res) => {
     try {
         const sql = `
-            SELECT u.UserID, u.Name AS name, u.Email AS email, 
-                   u.PhoneNumber AS phone_number, u.Bio AS bio, 
-                   u.ProfilePicture AS profile_picture, u.CreatedAt AS created_at,
-                   COALESCE(l.Description, 'Not specified') AS learning_language
-            FROM Users u
-            LEFT JOIN LanguageDetail l ON u.UserID = l.DetailID
-            WHERE u.UserID = ? LIMIT 1
+            SELECT UserID, Name AS name, Email AS email, 
+                   PhoneNumber AS phone_number, Bio AS bio, 
+                   ProfilePicture AS profile_picture, CreatedAt AS created_at
+            FROM Users
+            WHERE UserID = ? LIMIT 1
         `;
 
         const users = await db.query(sql, [req.params.id]);
@@ -53,9 +49,11 @@ app.get("/userprofile/:id", async (req, res) => {
         res.render("userprofile", { user: users[0] });
     } catch (err) {
         console.error(" Database Error:", err);
-        res.status(500).send("Database query failed: " + err.message);
+        res.status(500). send("Database query failed: " + err.message);
     }
 });
+
+
 
 // -------------------- LOGIN -------------------- //
 app.get("/login", (req, res) => {
