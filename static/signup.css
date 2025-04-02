@@ -1,112 +1,147 @@
 /* ========== Global Reset ========== */
-* {
+.signup-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Adjusted to account for header/footer */
+    width: 100%;
+    padding: 20px; /* Added padding for spacing */
+    box-sizing: border-box;
+  }
+  
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-}
-
-/* ========== Background & Centering ========== */
-body {
-    background: linear-gradient(135deg, #2A9D8F, #264653);
+  }
+  
+  /* ========== Clean Background & Centering ========== */
+  body {
+    background: #ffffff; /* ✅ White background */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-}
-
-/* ========== Signup Container (Wider & Centered) ========== */
-#signup-container {
+    flex-direction: column; /* Ensure header/footer layout is preserved */
+  }
+  
+  /* ========== Signup Container ========== */
+  #signup-container {
     background: white;
-    padding: 50px;
-    border-radius: 12px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-    width: 1125px; /* ✅ Increased width */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.12);
+    width: 100%;
+    max-width: 600px;
     text-align: center;
     animation: fadeIn 0.8s ease-in-out;
-}
-
-/*  Smooth Animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========== Form Styling ========== */
-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    justify-content: center;
+  }
+  
+  /* ========== Smooth Animation ========== */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ========== Form Layout ========== */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     align-items: center;
-}
-
-/*  Input Fields */
-input, textarea {
     width: 100%;
-    padding: 12px;
+  }
+  
+  /* ========== Input & Textarea Styling ========== */
+  input,
+  textarea {
+    width: 100%;
+    padding: 16px;
     border: 2px solid #C4C4C4;
-    border-radius: 6px;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
     background: #F9F9F9;
-}
-
-/*  Input Focus Effect */
-input:focus, textarea:focus {
+  }
+  
+  /* ========== Focus Effect ========== */
+  input:focus,
+  textarea:focus {
     border-color: #4A6D45;
     outline: none;
-    box-shadow: 0px 0px 6px rgba(74, 109, 69, 0.4);
-}
-
-/*  Labels */
-label {
-    font-weight: bold;
+    box-shadow: 0px 0px 8px rgba(74, 109, 69, 0.3);
+  }
+  
+  /* ========== Labels ========== */
+  label {
+    font-weight: 700;
+    font-size: 1.6rem;
     text-align: left;
     width: 100%;
     color: #2E4B33;
-}
-
-/* ========== Signup Button ========== */
-button {
+  }
+  
+  /* ========== Button Styling ========== */
+  button {
     background: linear-gradient(135deg, #F4A261, #E76F51);
-    color: white;
-    padding: 14px;
+    padding: 16px;
     font-size: 1.2rem;
     font-weight: bold;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    width: 100%;
-}
-
-/*  Hover Effect */
-button:hover {
+    width: 30%;
+  }
+  
+  button:hover {
     transform: scale(1.05);
-    box-shadow: 0px 5px 12px rgba(244, 162, 97, 0.4);
-}
-
-/*  Sign-up Link */
-p {
-    margin-top: 15px;
-    font-size: 0.9rem;
-}
-
-p a {
+    box-shadow: 0px 6px 14px rgba(244, 162, 97, 0.3);
+  }
+  
+  /* ========== Footer Text & Link ========== */
+  p {
+    margin-top: 20px;
+    font-size: 1rem;
+  }
+  
+  p a {
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
     color: #E76F51;
     transition: color 0.3s ease-in-out;
-}
-
-p a:hover {
+  }
+  
+  p a:hover {
     color: #FF5733;
-}
-
-/*  Responsive for Mobile */
-@media (max-width: 500px) {
+  }
+  
+  /* ========== Responsive Mobile Layout ========== */
+  @media (max-width: 600px) {
     #signup-container {
-        width: 90%; /* ✅ Ensures good spacing */
-        padding: 40px;
+      width: 90%;
+      padding: 40px 20px;
     }
-}
+  
+    label {
+      font-size: 1rem;
+    }
+  
+    input,
+    textarea {
+      font-size: 1rem;
+    }
+  
+    button {
+      font-size: 1.1rem;
+    }
+  }

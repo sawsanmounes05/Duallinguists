@@ -3,41 +3,42 @@ extends layout
 block content
     link(rel='stylesheet', href='/homepage.css')
 
-    // Hero Section
-    section.hero
-        div.hero-container
-            div.hero-text
+    // Hero Section - Split Layout (with your custom image)
+    section.hero-split
+        .hero-container
+            .hero-image
+               img(src='https://img.freepik.com/free-vector/language-concept-with-speech-bubbles_23-2147888632.jpg', alt='People with speech bubbles illustration')
+            .hero-text
                 h1 Breaking Barriers, Building Bridges
                 h2 One Language at a Time.
-                p Join us in creating a world where communication has no limits.
-                
+               
 
     // Mission Section
     section.mission
-        div.mission-left
+        .mission-left
             h2 Our Mission
             p At Dualinguists, we believe that language is more than just words—it's the key to understanding, connection, and opportunity.
             p Our mission is to empower learners of all backgrounds to bridge cultures, break barriers, and embrace the global community.
-        div.mission-right
-            img(src='/images/mission.png', alt="Mission Image")
+        .mission-right
+            img(src='/images/mission.png', alt="Mission image showing global communication")
 
     // We Stand For Section
     section.values
         h3 We Stand For
-        div.values-container
-            div.value-card
+        .values-container
+            .value-card
                 h4 Accessibility
                 p Inclusive, engaging, and intuitive learning.
-            div.value-card
+            .value-card
                 h4 Cultural Understanding
                 p Celebrating diversity through meaningful connections.
-            div.value-card
+            .value-card
                 h4 Innovation
                 p Blending technology with effective methods.
-            div.value-card
+            .value-card
                 h4 Ethics & Inclusion
                 p Fair, respectful, and culturally sensitive education.
-            div.value-card
+            .value-card
                 h4 Global Opportunities
                 p Empowering learners for travel, careers, and growth.
 

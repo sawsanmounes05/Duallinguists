@@ -7,83 +7,153 @@
 }
 
 body {
-    background-color: #ffffff;
-    color: #2E2E2E;
+    background-color: #f9f9f9;
+    color: #222;
+    line-height: 1.6;
 }
 
-/* ========== Hero Section ========== */
-.hero {
-    background: linear-gradient(135deg, #0072b2, #005a8c);
+/* ========== Cute Split Hero Section ========== */
+.hero-split {
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
+    padding: 80px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    width: 100%;
+    gap: 40px;
+}
+
+.hero-image {
+    flex: 1;
     text-align: center;
-    padding: 120px 20px;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.hero h1 {
-    font-size: 50px;
-    font-weight: bold;
+.hero-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    aspect-ratio: 4 / 3;
 }
 
-.hero h2 {
-    font-size: 30px;
-    margin-top: 10px;
-    color: #cce7ff;
+
+.hero-image img:hover {
+    transform: scale(1.02);
 }
 
-.hero p {
-    font-size: 22px;
-    margin-top: 15px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
+.hero-text {
+    flex: 1;
+    min-width: 280px;
 }
 
-.hero .btn {
-    display: inline-block;
-    padding: 16px 32px;
-    font-size: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: white;
-    color: #0072b2;
-    border-radius: 50px;
-    margin-top: 25px;
-    transition: all 0.3s ease-in-out;
-    text-decoration: none;
+.hero-text h1 {
+    font-size: 40px;
+    color: #03045e;
+    margin-bottom: 20px;
+    font-weight: 800;
 }
 
-.hero .btn:hover {
-    background: #cce7ff;
-    color: #005a8c;
-    transform: translateY(-3px);
+.hero-text h2 {
+    font-size: 24px;
+    color: #0077b6;
+    margin-bottom: 15px;
+}
+
+.hero-text p {
+    font-size: 18px;
+    color: #333;
+    max-width: 500px;
+}
+
+/* ========== Responsive Fixes ========== */
+@media (max-width: 768px) {
+    .hero-split {
+        padding: 60px 5%;
+        flex-direction: column;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    .hero-text h1,
+    .hero-text h2,
+    .hero-text p {
+        text-align: center;
+    }
+
+    .hero-image {
+        order: -1;
+        margin-bottom: 20px;
+    }
+}
+/* ========== Responsive Fixes ========== */
+@media (max-width: 768px) {
+    .hero-split {
+        padding: 60px 5%;
+        flex-direction: column;
+    }
+
+    .hero-text h1 {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .hero-text p {
+        text-align: center;
+    }
+
+    .hero-text .btn {
+        display: block;
+        margin: 0 auto;
+    }
 }
 
 /* ========== Mission Section ========== */
 .mission {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 100px 10%;
-    background-color: #e0f0f6;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 80px 10%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 40px;
+    gap: 20px;
 }
 
 .mission-left {
     flex: 1;
-    padding-right: 50px;
+    padding-right: 20px;
 }
 
 .mission-left h2 {
-    font-size: 38px;
-    font-weight: bold;
-    color: #1E1E1E;
+    font-size: 32px;
+    font-weight: 700;
+    color: #023e8a;
+    margin-bottom: 15px;
 }
 
 .mission-left p {
-    font-size: 18px;
-    color: #4A4A4A;
-    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
 }
 
 .mission-right {
@@ -93,102 +163,106 @@ body {
 
 .mission-right img {
     max-width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
-/* ========== We Stand For Section ========== */
+/* ========== Values Section ========== */
 .values {
     text-align: center;
-    padding: 80px 10%;
-    background-color: white;
+    padding: 80px 5%; /* Adjusted padding for better spacing */
+    background-color: #f9f9f9;
 }
 
 .values h3 {
-    font-size: 36px;
-    font-weight: bold;
-    color: #0072b2;
+    font-size: 36px; /* Slightly larger heading */
+    font-weight: 700;
+    color: #0077b6;
+    margin-bottom: 30px; /* Increased spacing below heading */
 }
 
 .values-container {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 30px;
+    justify-content: space-between; /* Space between cards */
+    gap: 20px; /* Small gap between cards */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    margin-top: 40px; /* Added more spacing above the cards */
 }
 
 .value-card {
-    background: #e0f0f6;
-    padding: 25px;
-    border-radius: 10px;
-    width: 18%;
-    min-width: 180px;
+    background: #ffffff;
+    padding: 40px; /* Increased padding for a more spacious look */
+    border-radius: 16px;
+    width: 300px; /* Fixed width for consistent card size */
     text-align: center;
     transition: all 0.3s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Slightly stronger shadow for depth */
+    flex-shrink: 0; /* Prevent cards from shrinking */
 }
 
 .value-card h4 {
-    font-size: 22px;
+    font-size: 24px; /* Larger font size for the title */
     font-weight: bold;
-    margin-bottom: 10px;
-    color: #0072b2;
+    color: #0077b6;
+    margin-bottom: 20px; /* Increased spacing below the title */
 }
 
 .value-card p {
-    font-size: 16px;
+    font-size: 18px; /* Larger font size for readability */
     color: #555;
+    line-height: 1.8; /* Increased line height for better readability */
 }
 
 .value-card:hover {
-    background: #0072b2;
+    background: #0077b6;
     color: white;
-    transform: translateY(-5px);
+    transform: translateY(-10px); /* Slightly stronger hover effect */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 .value-card:hover h4 {
     color: white;
 }
-
-/* ========== Sign Up Today Section ========== */
+/* ========== Call To Action Section ========== */
 .cta {
     text-align: center;
-    padding: 100px 20px;
-    background: linear-gradient(135deg, #0072b2, #005a8c);
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #0077b6, #00b4d8);
     color: white;
+    border-radius: 12px;
+    margin-top: 60px;
 }
 
 .cta h3 {
-    font-size: 38px;
-    font-weight: bold;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
 }
 
 .cta p {
-    font-size: 22px;
-    margin-top: 15px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 18px;
+    margin-top: 10px;
+    max-width: 600px;
+    margin-inline: auto;
 }
 
 .cta .btn {
     display: inline-block;
-    padding: 16px 32px;
-    font-size: 20px;
+    padding: 14px 28px;
+    font-size: 16px;
     font-weight: bold;
-    text-transform: uppercase;
     background: white;
-    color: #0072b2;
+    color: #0077b6;
     border-radius: 50px;
-    margin-top: 25px;
-    transition: all 0.3s ease-in-out;
+    margin-top: 20px;
     text-decoration: none;
+    transition: 0.3s ease-in-out;
 }
 
 .cta .btn:hover {
-    background: #cce7ff;
-    color: #005a8c;
-    transform: translateY(-3px);
+    background: #caf0f8;
+    color: #023e8a;
+    transform: translateY(-4px);
 }
 
 /* ========== Responsive Design ========== */
@@ -196,16 +270,11 @@ body {
     .mission {
         flex-direction: column;
         text-align: center;
-        padding: 80px 5%;
+        gap: 30px;
     }
 
     .mission-left {
         padding-right: 0;
-    }
-
-    .values-container {
-        flex-wrap: wrap;
-        justify-content: center;
     }
 
     .value-card {
@@ -215,75 +284,16 @@ body {
 
 @media (max-width: 768px) {
     .hero h1 {
-        font-size: 40px;
-    }
-
-    .hero h2 {
-        font-size: 24px;
-    }
-
-    .hero p {
-        font-size: 18px;
-    }
-
-    .hero .btn, .cta .btn {
-        font-size: 18px;
-        padding: 14px 28px;
-    }
-
-    .mission-left h2 {
-        font-size: 32px;
-    }
-
-    .mission-left p {
-        font-size: 16px;
-    }
-
-    .values h3 {
-        font-size: 30px;
-    }
-
-    .value-card {
-        width: 90%;
-    }
-
-    .cta h3 {
-        font-size: 30px;
-    }
-
-    .cta p {
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: 32px;
+        font-size: 36px;
     }
 
     .hero h2 {
         font-size: 20px;
     }
 
-    .hero p {
+    .hero p,
+    .cta p {
         font-size: 16px;
-    }
-
-    .hero .btn, .cta .btn {
-        font-size: 16px;
-        padding: 12px 24px;
-    }
-
-    .mission-left h2 {
-        font-size: 28px;
-    }
-
-    .mission-left p {
-        font-size: 14px;
-    }
-
-    .values h3 {
-        font-size: 26px;
     }
 
     .value-card {
@@ -291,10 +301,6 @@ body {
     }
 
     .cta h3 {
-        font-size: 26px;
+        font-size: 28px;
     }
-
-    .cta p {
-        font-size: 16px;
-    }
-} 
+}

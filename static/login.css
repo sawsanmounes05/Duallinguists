@@ -1,90 +1,126 @@
-/* ========== Global Reset ========== */
+/* ====== Reset ====== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-}
-
-/* ========== Full-width Header Matching Homepage ========== */
-.hero {
-    background: #1B4965; /* Same as homepage */
+  }
+  
+  html, body {
+    height: 100%;
     width: 100%;
-    text-align: center;
-    padding: 50px 20px;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/*  Fix text color */
-.hero h1 {
-    color: #FFFFFF;
-    font-size: 2.5rem;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    font-style: italic;
-    opacity: 0.9;
-}
-
-/* ========== Background & Centered Layout ========== */
-body {
-    background: linear-gradient(135deg, #1B4965, #62B6CB);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  }
+  
+  /* ====== Full Background with Centered Overlay ====== */
+  .login-overlay {
+    background: url('https://thumbs.dreamstime.com/b/language-translator-banner-hand-draw-doodle-backgrou-background-concept-translating-agency-interpreting-129576040.jpg') no-repeat center center fixed;
+    background-size: cover;
     height: 100vh;
-    animation: fadeIn 1s ease-in-out;
-}
-
-/* ========== Smooth Fade-In Animation ========== */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* ========== Login Box (Glassmorphism) ========== */
-#login-container {
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+  }
+  
+  /* ====== Login Box ====== */
+  .login-wrapper {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 80px 70px; /* bigger padding */
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
     width: 100%;
-}
-
-.login-box {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
-    width: 800px;
+    max-width: 1200px; /* wider box */
     text-align: center;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    animation: slideIn 0.8s ease-in-out;
-}
-
-/*  Fix button background */
-.login-box button {
-    background: linear-gradient(135deg, #F4A261, #E76F51);
+  }
+  
+  /* ====== Heading ====== */
+  .login-wrapper h2 {
+    font-size: 3rem; /* bigger title */
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 2.5rem;
+  }
+  
+  /* ====== Form ====== */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+  
+  label {
+    text-align: left;
+    font-weight: 600;
+    color: #000000;
+    font-size: 2.7rem; /* bigger label */
+  }
+  
+  input {
+    padding: 18px;
+    font-size: 1.15rem;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #2C3E50;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #2C6E49;
+    box-shadow: 0 0 6px rgba(44, 110, 73, 0.3);
+  }
+  
+  /* ====== Button ====== */
+  button {
+    background-color: #2C6E49;
     color: white;
-    padding: 14px;
+    padding: 18px;
     font-size: 1.2rem;
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease-in-out;
-    margin-top: 15px;
-    width: 100%;
-}
-
-/*  Hover Effect */
-.login-box button:hover {
-    background: linear-gradient(135deg, #E76F51, #D84315);
-    transform: scale(1.08);
+    transition: background 0.3s ease;
+  }
   
-}
+  button:hover {
+    background-color: #1B4332;
+  }
+  
+  /* ====== Sign Up Text ====== */
+  .signup-link {
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    color: #000000;
+  }
+  
+  .signup-link a {
+    color: #2C6E49;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  
+  /* ====== Mobile Responsive ====== */
+  @media (max-width: 700px) {
+    .login-wrapper {
+      padding: 50px 25px;
+      max-width: 90%;
+    }
+  
+    .login-wrapper h2 {
+      font-size: 2.2rem;
+    }
+  
+    label, .signup-link {
+      font-size: 1rem;
+    }
+  
+    input, button {
+      font-size: 1rem;
+      padding: 14px;
+    }
+  }
+  

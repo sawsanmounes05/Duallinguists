@@ -12,9 +12,6 @@ html, body {
     background-color: #eef2f3;
     color: #333;
     line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* ========== Selection Container ========== */

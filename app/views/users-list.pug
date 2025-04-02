@@ -1,19 +1,22 @@
-extends layout 
+extends layout
 
 block content  
   h1 Users List
-  - console.log(users) // Debugging
+
   table(border='1')
     thead
       tr
         th Profile Picture
         th Name
         th Bio
-        th Learning Language
     tbody
       each user in users
-        tr
-          td: img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture', width='50')
-          td #{user.name}
-          td #{user.bio}
-          td #{user.learning_language}
+        if user
+          tr
+            td 
+              if user.profile_picture
+                img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture', width='50')
+              else
+                img(src='/uploads/default.png', alt='Default Profile', width='50')
+            td= user.name || 'No Name'
+            td= user.bio || 'No bio available'

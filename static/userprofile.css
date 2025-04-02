@@ -7,17 +7,16 @@
 }
 
 /* ======== Body Styling ======== */
-body {
+html, body {
     background: linear-gradient(135deg, #0A192F, #172A45);
     color: #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    height: 100%;
     padding: 0;
+    margin: 0;
 }
 
-/* ======== Profile Container (Full Page Centered) ======== */
+
+/* ======== Profile Container Scoped ======== */
 #profile-container {
     background: rgba(255, 255, 255, 0.95);
     padding: 50px;
@@ -25,51 +24,51 @@ body {
     box-shadow: 0px 10px 30px rgba(0, 150, 255, 0.3);
     width: 80%;
     max-width: 900px;
-    height: 90vh;  /* This makes it fill the page */
+    height: auto;
+    margin: 50px auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
 }
 
-/* ======== Profile Title ======== */
-h1 {
+/* ======== Profile Title (Scoped) ======== */
+#profile-container h1 {
     font-size: 2.5rem;
     color: #007ACC;
     margin-bottom: 20px;
     text-transform: uppercase;
 }
 
-/* ======== User Information Table ======== */
-.user-profile-table {
+/* ======== User Information Table (Scoped) ======== */
+#profile-container .user-profile-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
 }
 
-.user-profile-table th, 
-.user-profile-table td {
+#profile-container .user-profile-table th, 
+#profile-container .user-profile-table td {
     padding: 14px;
     text-align: left;
     font-size: 1.2rem;
-    color: #333; /* Ensures text is readable */
+    color: #333;
 }
 
-.user-profile-table th {
+#profile-container .user-profile-table th {
     background: rgba(0, 150, 255, 0.1);
     color: #007ACC;
     text-transform: uppercase;
     border-bottom: 2px solid #007ACC;
 }
 
-.user-profile-table td {
+#profile-container .user-profile-table td {
     background: rgba(255, 255, 255, 0.7);
     border-bottom: 1px solid #ddd;
 }
 
-/* ======== Back to Homepage Button ======== */
-a {
+/* ======== Back to Homepage Button (Scoped) ======== */
+#profile-container a {
     display: inline-block;
     margin-top: 25px;
     padding: 14px 30px;
@@ -82,31 +81,7 @@ a {
     transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
-a:hover {
-    background: linear-gradient(135deg, #005F99, #007ACC);
-    transform: scale(1.07);
+#profile-container a:hover {
+    background: linear-gradient(135deg, #005F99, #004C7A);
 }
-
-/* ======== Responsive Design ======== */
-@media (max-width: 768px) {
-    #profile-container {
-        padding: 40px;
-        width: 95%;
-        height: 95vh;  /* Adjusts height for smaller screens */
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .user-profile-table th,
-    .user-profile-table td {
-        font-size: 1rem;
-        padding: 10px;
-    }
-
-    a {
-        font-size: 1.1rem;
-        padding: 12px 25px;
-    }
-}
+    

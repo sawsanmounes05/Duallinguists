@@ -4,25 +4,31 @@ html
     title Dualinguist
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap', rel='stylesheet')
 
-    //  Ensuring correct CSS linking
-    link(rel='stylesheet', href='/layout.css')
-    link(rel='stylesheet', href='/styles.css')
+    block stylesheets
+      link(rel='stylesheet', href='/layout.css')
 
   body
     header
-      div.container
+      .container
         h1 Dualinguist
         nav
           ul
-            li: a(href='/homepage') Home
-            li: a(href='/language-list') Languages
+            li
+              a(href='/homepage') Home
+            li
+              a(href='/language-list') Languages
             if user
-              li: a(href=`/userprofile/${user.UserID}`) Profile
-              li: a(href='/logout') Logout
+              li
+                a(href=`/userprofile/${user.UserID}`) Profile
+              li
+                a(href='/logout') Logout
             else
-              li: a(href='/login') Login
-              li: a(href='/signup') Signup
+              li
+                a(href='/login') Login
+              li
+                a(href='/signup') Signup
 
     main
       block content

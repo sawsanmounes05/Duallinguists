@@ -1,42 +1,45 @@
 extends layout
 
-block content
+block stylesheets
+    link(rel='stylesheet', href='/layout.css')
     link(rel='stylesheet', href='/selection-list.css')
 
+block content
     section#selection-container
         h1 Selection List
-        p Selected Language: <strong id="selectedLanguage">Loading...</strong>
+        p Selected Language: 
+            strong#selectedLanguage Loading...
 
         form(action='/select', method='post')
             input(type="hidden", name="languageID", id="languageID")
 
             section#options-container
-                div.option-card.quiz
+                .option-card.quiz
                     input(type='radio', id='quiz', name='selection', value='quiz', required)
                     label(for='quiz')
-                        span.icon 
+                        span.icon
                         span.option-text Quiz
-                
-                div.option-card.assessment
+
+                .option-card.assessment
                     input(type='radio', id='assessment', name='selection', value='assessment')
                     label(for='assessment')
-                        span.icon 
+                        span.icon
                         span.option-text Assessment
-                
-                div.option-card.progress
+
+                .option-card.progress
                     input(type='radio', id='progress', name='selection', value='progress')
                     label(for='progress')
-                        span.icon 
+                        span.icon
                         span.option-text Progress Status
-                
-                div.option-card.cultural
+
+                .option-card.cultural
                     input(type='radio', id='cultural', name='selection', value='cultural')
                     label(for='cultural')
-                        span.icon 
+                        span.icon
                         span.option-text Cultural Insight
 
-            div.button-container
-                button(type='submit', id="continueBtn", disabled) Continue
+            .button-container
+                button(type='submit', id='continueBtn', disabled) Continue
 
     script.
         document.addEventListener("DOMContentLoaded", function() {

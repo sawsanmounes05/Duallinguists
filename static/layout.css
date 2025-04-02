@@ -6,244 +6,133 @@
 }
 
 html, body {
-  height: 120%;
-  width: 100%;
+  height: 100%;
   font-family: 'Poppins', sans-serif;
-  background-color: #f7f7f7; /* Soft background color */
-  color: #333;
-  line-height: 1.6;
+  background-color: #ffffff;
+  color: #222;
   scroll-behavior: smooth;
 }
 
-/*  Ensure Body Fills Full Page */
 body {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh; /* Ensures full viewport coverage */
+  min-height: 100vh;
 }
 
 /* ========== HEADER ========== */
+/* ========== HEADER ========== */
 header {
-  background: #0072b2; /* Restoring the original blue color */
-  color: white;
-  padding: 20px 0; /* Keeping the padding consistent */
-  text-align: center;
-  width: 100%;
-  position: sticky;
+  position: relative; /* Changed from sticky to relative */
   top: 0;
-  z-index: 1000;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  padding: 12px 0;
 }
 
-/*  Title Styling */
+header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 header h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #0077b6;
+  margin-bottom: 8px;
   letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
 /* ========== NAVIGATION ========== */
 nav {
   display: flex;
   justify-content: center;
-  align-items: center;
   width: 100%;
-  background: #0072b2; /* Restoring the original blue color */
-  padding: 15px 0;
 }
 
-/*  Navigation List */
 nav ul {
-  list-style-type: none;
+  list-style: none;
   display: flex;
-  justify-content: center;
-  gap: 40px;
+  gap: 32px;
   padding: 0;
-  width: 100%;
-  max-width: 1200px;
+  margin: 0;
+  flex-wrap: wrap;
 }
 
-/*  Navigation Links */
 nav ul li a {
-  color: white;
+  position: relative;
+  padding: 8px 4px;
+  font-size: 1.05em;
+  font-weight: 500;
+  color: #023e8a;
   text-decoration: none;
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 30px;
-  transition: all 0.3s ease-in-out;
-  background: linear-gradient(135deg, #005a8c, #0072b2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease;
+}
+
+nav ul li a::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: #00b4d8;
+  width: 0%;
+  transition: width 0.3s ease;
+  margin-top: 4px;
 }
 
 nav ul li a:hover {
-  background: #a06645;
-  transform: scale(1.1);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  color: #0077b6;
 }
 
-/* ========== MAIN SECTION ========== */
+nav ul li a:hover::after {
+  width: 100%;
+}
+
+/* ========== MAIN ========== */
 main {
   flex: 1;
   width: 100%;
-  margin: 40px auto;
-  background: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
-}
-
-/*  Ensuring Full Width for Login Background */
-main > .container {
-  width: 100%; /* Ensures that the login background spans full width */
-}
-
-/*  Cool Hover Effect */
-main:hover {
-  transform: scale(1.02);
+  padding-top: 20px;
 }
 
 /* ========== FOOTER ========== */
 footer {
   text-align: center;
-  padding: 20px 0;
-  background: #f5f5f5; /* Light footer background */
-  color: #333;
-  font-size: 1em;
-  width: 100%;
-  margin-top: auto;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+  font-size: 0.95em;
+  background-color: #f8f9fa;
+  color: #444;
+  border-top: 1px solid #e0e0e0;
 }
 
-/* ========== LANGUAGE SELECTION ========== */
-.languages-container {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
-  padding: 30px;
-}
-
-/*  Language Option */
-.language-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-/*  Language Buttons */
-.language-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-}
-
-/*  Language Circle */
-.language-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-  box-shadow: 5px 5px 10px #b8b8b8, -5px -5px 10px #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-/*  Language Hover Effect */
-.language-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
-}
-
-/*  Language Name */
-.language-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-}
-
-/* ========== ANIMATIONS ========== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.language-option {
-  opacity: 0;
-  animation: fadeIn 0.8s ease-in-out forwards;
-}
-
-/*  Staggered Animations */
-.language-option:nth-child(1) { animation-delay: 0.2s; }
-.language-option:nth-child(2) { animation-delay: 0.4s; }
-.language-option:nth-child(3) { animation-delay: 0.6s; }
-.language-option:nth-child(4) { animation-delay: 0.8s; }
-.language-option:nth-child(5) { animation-delay: 1s; }
-
-/* ========== RESPONSIVE DESIGN ========== */
-@media (max-width: 1024px) {
-  .languages-container {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  nav ul {
-    gap: 20px;
-  }
-}
-
+/* ========== Responsive Design ========== */
 @media (max-width: 768px) {
+  header .container {
+    padding: 0 16px;
+  }
+
   nav ul {
     flex-direction: column;
+    gap: 16px;
     align-items: center;
   }
 
-  .language-circle {
-    width: 100px;
-    height: 100px;
-  }
-
-  .language-name {
-    font-size: 1rem;
-  }
-
   header h1 {
-    font-size: 2em;
+    font-size: 1.5em;
   }
 }
 
 @media (max-width: 480px) {
   header h1 {
-    font-size: 1.8em;
-  }
-
-  .language-circle {
-    width: 80px;
-    height: 80px;
-  }
-
-  .language-name {
-    font-size: 0.9rem;
+    font-size: 1.3em;
   }
 
   nav ul {
-    flex-direction: column;
     gap: 10px;
   }
 }

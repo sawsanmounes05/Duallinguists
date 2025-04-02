@@ -17,7 +17,34 @@ const db = require('./services/db');
 app.use(express.urlencoded({ extended: true })); // Ensure form data is parsed
 app.use(express.json()); // Ensure JSON data is parsed
 
-// -------------------- ROUTES -------------------- //
+app.get("/users-list", async (req, res) => {
+    try {
+        const [users] = await db.query(
+            `SELECT 
+                UserID, 
+                ProfilePicture AS profile_picture, 
+                Name AS name, 
+                Email AS email, 
+                PhoneNumber AS phone_number, 
+                Bio AS bio, 
+                CreatedAt AS created_at
+             FROM Users
+             ORDER BY CreatedAt DESC`
+        );
+
+        if (!users || users.length === 0) {
+            return res.status(404).send("No users found in database.");
+        }
+
+        console.log("Fetched Users:", users);
+        res.render("users-list", { users });
+    } catch (err) {
+        console.error("Database Error:", err);
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+
 
 
 // Homepage

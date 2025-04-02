@@ -1,7 +1,11 @@
 extends layout
 
-block content  
+block stylesheets
+    link(rel='stylesheet', href='/layout.css')
     link(rel='stylesheet', href='/userprofile.css')
+
+block content
+    .profile-wrapper
 
     section#profile-container
         h1 User Profile
