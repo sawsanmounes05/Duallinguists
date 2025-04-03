@@ -3,8 +3,28 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 
 // Create express app
-var app = express();
+const app = express();
 
+// Add session middleware
+const session = require("express-session");
+// --------- SESSION --------- //
+app.use(session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // change to true if using HTTPS
+        sameSite: 'lax' // helps retain session on redirects
+    }
+}));
+
+// ---------session id--------- //
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
+
+// Add cookie parser middleware
 // Add static files location
 app.use(express.static("static"));
 
@@ -18,45 +38,67 @@ const db = require('./services/db');
 app.use(express.urlencoded({ extended: true })); // Ensure form data is parsed
 app.use(express.json()); // Ensure JSON data is parsed
 
-app.get("/users-list", async (req, res) => {
-    try {
-        const [users] = await db.query(
-            `SELECT 
-                UserID, 
-                ProfilePicture AS profile_picture, 
-                Name AS name, 
-                Email AS email, 
-                PhoneNumber AS phone_number, 
-                Bio AS bio, 
-                CreatedAt AS created_at
-             FROM Users
-             ORDER BY CreatedAt DESC`
-        );
+// -------------------- MIDDLEWARE -------------------- //
+function isAuthenticated(req, res, next) {
+    if (req.session.user) return next();
+    res.redirect("/login");
+}
 
-        if (!users || users.length === 0) {
-            return res.status(404).send("No users found in database.");
-        }
-
-        console.log("Fetched Users:", users);
-        res.render("users-list", { users });
-    } catch (err) {
-        console.error("Database Error:", err);
-        res.status(500).send(`Database query failed: ${err.message}`);
-    }
-});
-
-
-
+// -------------------- ROUTES -------------------- //
 
 // Homepage
 app.get("/Homepage", (req, res) => {
     res.render("homepage");
 });
 
-// -------------------- LANGUAGE SELECTION -------------------- //
-// Fetch User Profile Data
-// Fetch User Profile Data
-// Fetch User Profile Data
+// Login
+app.get("/login", (req, res) => res.render("login"));
+
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const users = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
+        if (users.length === 0 || !await bcrypt.compare(password, users[0].Password)) {
+            return res.status(400).send("Invalid email or password.");
+        }
+        req.session.user = { id: users[0].UserID, name: users[0].Name };
+        const redirectLanguageID = req.session.selectedLanguageID;
+        if (redirectLanguageID) return res.redirect(`/selection-list?languageID=${redirectLanguageID}`);
+        res.redirect(`/userprofile/${users[0].UserID}`);
+    } catch (err) {
+        res.status(500).send("Server error.");
+    }
+});
+
+// Signup
+app.get("/signup", (req, res) => res.render("signup"));
+
+app.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password, phone_number, bio } = req.body;
+        const existingUser = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
+        if (existingUser.length > 0) return res.status(400).send("Email already registered.");
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
+
+        await db.query(
+            `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
+             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+            [userId, name, email, hashedPassword, phone_number, bio]
+        );
+
+        res.redirect("/login");
+    } catch (err) {
+        res.status(500).send("Server error.");
+    }
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => res.redirect("/login"));
+});
+
 app.get("/userprofile/:id", async (req, res) => {
     try {
         const sql = `
@@ -80,186 +122,18 @@ app.get("/userprofile/:id", async (req, res) => {
         res.status(500). send("Database query failed: " + err.message);
     }
 });
-
-
-
-// -------------------- LOGIN -------------------- //
-app.get("/login", (req, res) => {
-    res.render("login");
-});
-
-app.post("/login", async (req, res) => {
+// Edit User Profile            
+// Users List
+app.get("/users-list", async (req, res) => {
     try {
-        const { email, password } = req.body;
-        console.log("🔹 Login Attempt:", email);
-
-        const users = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
-
-        if (users.length === 0) {
-            return res.status(400).send("Invalid email or password.");
-        }
-
-        const user = users[0];
-        const match = await bcrypt.compare(password, user.Password);
-
-        if (!match) {
-            return res.status(400).send("Invalid email or password.");
-        }
-
-        console.log(`Login successful. Redirecting to /userprofile/${user.UserID}`);
-        res.redirect(`/userprofile/${user.UserID}`);
+        const [users] = await db.query(`SELECT UserID, ProfilePicture, Name, Email, PhoneNumber, Bio, CreatedAt FROM Users ORDER BY CreatedAt DESC`);
+        if (!users.length) return res.status(404).send("No users found.");
+        res.render("users-list", { users });
     } catch (err) {
-        console.error("Login error:", err);
-        res.status(500).send("Server error.");
-    }
-});
-// -------------------- SIGNUP -------------------- //
-app.get("/signup", (req, res) => {
-    res.render("signup");
-});
-
-app.post("/signup", async (req, res) => {
-    try {
-        const { name, email, password, phone_number, bio } = req.body;
-        console.log("Signup Attempt:", email);
-
-        const existingUser = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
-        if (existingUser.length > 0) {
-            return res.status(400).send("Email already registered. Please log in.");
-        }
-
-        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        await db.query(
-            `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
-             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-            [userId, name, email, hashedPassword, phone_number, bio]
-        );
-
-        console.log(`User ${name} registered successfully.`);
-        res.redirect("/login");
-    } catch (err) {
-        console.error("Signup error:", err);
-        res.status(500).send("Server error.");
-    }
-});
-// -------------------- LOGOUT -------------------- //
-app.get("/logout", (req, res) => {
-    res.redirect("/login");
-});
-
-// -------------------- LANGUAGE SELECTION -------------------- //
-
-app.get("/language-list", async (req, res) => {
-    try {
-        const languages = await db.query("SELECT LanguageID, LanguageName FROM LanguageList");
-
-        if (!languages || languages.length === 0) {
-            return res.status(404).send("No languages found in database.");
-        }
-
-        console.log(" Fetched Languages:", languages);
-        res.render("language-list", { languages });
-    } catch (err) {
-        console.error(" Database Error:", err);
         res.status(500).send(`Database query failed: ${err.message}`);
     }
 });
-
-app.post("/select-language", (req, res) => {
-    const { languageID } = req.body;
-
-    if (!languageID) {
-        console.log(" No language selected.");
-        return res.status(400).send("No language selected.");
-    }
-
-    console.log(" Language Selected:", languageID);
-
-    // Redirect with `languageID` in the URL
-    res.redirect(`/selection-list?languageID=${languageID}`);
-});
-
-// -------------------- SELECTION LIST -------------------- //
-
-app.get("/selection-list", async (req, res) => {
-    const languageID = req.query.languageID;
-
-    if (!languageID) {
-        console.log(" Language ID missing! Redirecting to /language-list");
-        return res.redirect("/language-list");
-    }
-
-    try {
-        const options = await db.query("SELECT SelectionID, SelectionName, Description FROM SelectionOptions");
-
-        if (!options || options.length === 0) {
-            return res.status(404).send("No selection options found in database.");
-        }
-
-        console.log(" Fetched Selection Options:", options);
-        res.render("selection-list", { options, languageID });
-    } catch (err) {
-        console.error(" Database Error:", err);
-        res.status(500).send(`Database query failed: ${err.message}`);
-    }
-});
-
-app.post("/select", async (req, res) => {
-    try {
-        console.log(" Received POST request at /select");
-        console.log(" Full Request Body:", req.body); // Debug request data
-
-        const selectedOption = req.body.selection;
-        const languageID = req.body.languageID;
-
-        console.log(" Selected Option:", selectedOption);
-        console.log(" Language ID:", languageID);
-
-        if (!selectedOption) {
-            console.log(" Error: No option selected.");
-            return res.status(400).send("No option selected.");
-        }
-
-        if (!languageID) {
-            console.log(" Error: Missing Language ID.");
-            return res.status(400).send("Language ID is missing.");
-        }
-
-        let redirectUrl = "";
-
-        // Define selection-based redirects
-        switch (selectedOption) {
-            case "quiz":
-                redirectUrl = `/quizcategories?languageID=${languageID}`;
-                break;
-            case "assessment":
-                redirectUrl = `/assessment?languageID=${languageID}`;
-                break;
-            case "progress":
-                redirectUrl = `/progress-status?languageID=${languageID}`;
-                break;
-            case "cultural":
-                redirectUrl = `/cultural-insight?languageID=${languageID}`;
-                break;
-            default:
-                console.log(" Error: Invalid selection.");
-                return res.status(400).send("Invalid selection.");
-        }
-
-        console.log(` Redirecting to: ${redirectUrl}`);
-        res.redirect(redirectUrl);
-    } catch (err) {
-        console.error(" Error processing selection:", err);
-        res.status(500).send("Error processing selection.");
-    }
-});
-
-
-
-// -------------------- QUIZ CATEGORY SELECTION -------------------- //
+/ -------------------- QUIZ CATEGORY SELECTION -------------------- //
 
 app.get("/quizcategories", async (req, res) => {
     const languageID = req.query.languageID;
@@ -452,8 +326,103 @@ app.get("/student-quiz", async (req, res) => {
     }
 });
 
+app.post("/submit-student-quiz", async (req, res) => {  
+    try {
+        const userAnswers = req.body; // User's submitted answers
+        let score = 0;
+        let results = [];
 
-// -------------------- SERVER START -------------------- //
-app.listen(3000, function () {
-    console.log(`🚀 Server running at http://127.0.0.1:3000/`);
+        console.log(" User Quiz Submission:", userAnswers);
+
+        // Iterate over each question the user answered
+        for (let questionID in userAnswers) {
+            const answerID = userAnswers[questionID];
+
+            // Fetch correct answer from the database
+            const correctAnswer = await db.query(
+                "SELECT AnswerID, AnswerText, IsCorrect FROM QuizAnswers WHERE QuestionID = ? AND IsCorrect = 1",
+                [questionID]
+            );
+
+            if (correctAnswer.length > 0) {
+                const isCorrect = correctAnswer[0].AnswerID == answerID;
+                if (isCorrect) score++;
+
+                results.push({
+                    questionID: questionID,
+                    userAnswerID: answerID,
+                    userAnswerText: await db.query("SELECT AnswerText FROM QuizAnswers WHERE AnswerID = ?", [answerID]),
+                    correctAnswerID: correctAnswer[0].AnswerID,
+                    correctAnswerText: correctAnswer[0].AnswerText,
+                    isCorrect: isCorrect
+                });
+            }
+        }
+
+        console.log(` User scored ${score} correct answers.`);
+        console.log(" Answer Results:", results);
+
+        res.render("quiz-results", { score, results });
+    } catch (error) {
+        console.error(" Error processing quiz submission:", error);
+        res.status(500).send("Error processing quiz results.");
+    }
+}
+);
+// -------------------- ASSESSMENT -------------------- //      
+// Language List
+app.get("/language-list", async (req, res) => {
+    try {
+        const languages = await db.query("SELECT LanguageID, LanguageName FROM LanguageList");
+        res.render("language-list", { languages, user: req.session.user });
+    } catch (err) {
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+app.post("/select-language", (req, res) => {
+    const { languageID } = req.body;
+    if (!languageID) return res.status(400).send("No language selected.");
+    req.session.selectedLanguageID = languageID;
+    if (!req.session.user) return res.redirect("/login");
+    res.redirect(`/selection-list?languageID=${languageID}`);
+});
+
+// Selection List
+app.get("/selection-list", isAuthenticated, async (req, res) => {
+    const languageID = req.query.languageID;
+    if (!languageID) return res.redirect("/language-list");
+
+    try {
+        const options = await db.query("SELECT SelectionID, SelectionName, Description FROM SelectionOptions");
+        res.render("selection-list", { options, languageID });
+    } catch (err) {
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+app.post("/select", isAuthenticated, async (req, res) => {
+    const { selection, languageID } = req.body;
+    if (!selection || !languageID) return res.status(400).send("Missing data.");
+
+    const redirectMap = {
+        quiz: "/quizcategories",
+        assessment: "/assessment",
+        progress: "/progress-status",
+        cultural: "/cultural-insight"
+    };
+
+    if (!redirectMap[selection]) return res.status(400).send("Invalid selection.");
+    res.redirect(`${redirectMap[selection]}?languageID=${languageID}`);
+});
+
+// -------------------- SERVER -------------------- //
+app.listen(3000, () => console.log("🚀 Server running at http://127.0.0.1:3000/"));
+// -------------------- ERROR HANDLING -------------------- //
+app.use((req, res) => {
+    res.status(404).render("404");
+});
+app.use((err, req, res) => {
+    console.error(err.stack);
+    res.status(500).render("500");
 });

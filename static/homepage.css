@@ -80,6 +80,24 @@ body {
     max-width: 500px;
 }
 
+.hero-text .btn {
+    display: inline-block;
+    padding: 10px 20px; /* Reduced padding for a thinner look */
+    font-size: 14px; /* Slightly smaller font size */
+    font-weight: 600; /* Adjusted font weight for a sleeker appearance */
+    background: #0077b6; /* Keep the blue color */
+    color: white;
+    border-radius: 30px; /* Reduced border radius for a less bulky look */
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+    margin-top: 20px; /* Add spacing below the button */
+}
+
+.hero-text .btn:hover {
+    background: #00b4d8; /* Slightly lighter blue on hover */
+    color: #ffffff;
+    transform: translateY(-4px);
+}
 /* ========== Responsive Fixes ========== */
 @media (max-width: 768px) {
     .hero-split {
