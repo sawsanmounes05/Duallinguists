@@ -1,5 +1,6 @@
 // Import express.js
 const express = require("express");
+const bcrypt = require("bcryptjs");
 
 // Create express app
 var app = express();
@@ -92,26 +93,26 @@ app.post("/login", async (req, res) => {
         const { email, password } = req.body;
         console.log("🔹 Login Attempt:", email);
 
-        // Fetch user from database
-        const users = await db.query(
-            "SELECT * FROM Users WHERE Email = ? AND Password = ?",
-            [email, password]
-        );
+        const users = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
 
         if (users.length === 0) {
-            console.log(" Error: Invalid email or password.");
             return res.status(400).send("Invalid email or password.");
         }
 
         const user = users[0];
-        console.log(` Login successful. Redirecting to /userprofile/${user.UserID}`);
-        res.redirect(`/userprofile/${user.UserID}`); // Redirect to user profile
+        const match = await bcrypt.compare(password, user.Password);
+
+        if (!match) {
+            return res.status(400).send("Invalid email or password.");
+        }
+
+        console.log(`Login successful. Redirecting to /userprofile/${user.UserID}`);
+        res.redirect(`/userprofile/${user.UserID}`);
     } catch (err) {
         console.error("Login error:", err);
         res.status(500).send("Server error.");
     }
 });
-
 // -------------------- SIGNUP -------------------- //
 app.get("/signup", (req, res) => {
     res.render("signup");
@@ -120,33 +121,30 @@ app.get("/signup", (req, res) => {
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password, phone_number, bio } = req.body;
-        console.log(" Signup Attempt:", email);
+        console.log("Signup Attempt:", email);
 
-        // Check if email already exists
         const existingUser = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
         if (existingUser.length > 0) {
-            console.log(" Error: Email already registered.");
             return res.status(400).send("Email already registered. Please log in.");
         }
 
-        // Generate a unique UserID
         const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Insert new user into the database
         await db.query(
             `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
              VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-            [userId, name, email, password, phone_number, bio]
+            [userId, name, email, hashedPassword, phone_number, bio]
         );
 
-        console.log(` User ${name} registered successfully.`);
-        res.redirect("/login"); // Redirect to login after signup
+        console.log(`User ${name} registered successfully.`);
+        res.redirect("/login");
     } catch (err) {
-        console.error(" Signup error:", err);
+        console.error("Signup error:", err);
         res.status(500).send("Server error.");
     }
 });
-
 // -------------------- LOGOUT -------------------- //
 app.get("/logout", (req, res) => {
     res.redirect("/login");
