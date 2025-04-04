@@ -1,70 +1,61 @@
-// Import express.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const session = require("express-session");
 
-// Create express app
+const { userModel, quizModel, languageModel, selectionModel } = require("./models");
+
 const app = express();
 
-// Add session middleware
-const session = require("express-session");
-// --------- SESSION --------- //
+// SESSION SETUP
 app.use(session({
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: false, // change to true if using HTTPS
-        sameSite: 'lax' // helps retain session on redirects
-    }
+    cookie: { secure: false, sameSite: "lax" }
 }));
 
-// ---------session id--------- //
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
     next();
 });
 
-// Add cookie parser middleware
-// Add static files location
+// MIDDLEWARE & CONFIG
 app.use(express.static("static"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.set("view engine", "pug");
+app.set("views", "./app/views");
 
-// Use the Pug templating engine
-app.set('view engine', 'pug');
-app.set('views', './app/views');
-
-// Get the functions in the db.js file to use
-const db = require('./services/db');
-
-app.use(express.urlencoded({ extended: true })); // Ensure form data is parsed
-app.use(express.json()); // Ensure JSON data is parsed
-
-// -------------------- MIDDLEWARE -------------------- //
 function isAuthenticated(req, res, next) {
     if (req.session.user) return next();
     res.redirect("/login");
 }
 
-// -------------------- ROUTES -------------------- //
+// ROUTES
 
+// Homepage
+app.get("/", (req, res) => {
+    res.render("homepage");
+});
 // Homepage
 app.get("/Homepage", (req, res) => {
     res.render("homepage");
 });
-
 // Login
 app.get("/login", (req, res) => res.render("login"));
 
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const users = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
-        if (users.length === 0 || !await bcrypt.compare(password, users[0].Password)) {
+        const user = await userModel.getUserByEmail(email);
+        if (!user || !await bcrypt.compare(password, user.Password)) {
             return res.status(400).send("Invalid email or password.");
         }
-        req.session.user = { id: users[0].UserID, name: users[0].Name };
+
+        req.session.user = { id: user.UserID, name: user.Name };
         const redirectLanguageID = req.session.selectedLanguageID;
         if (redirectLanguageID) return res.redirect(`/selection-list?languageID=${redirectLanguageID}`);
-        res.redirect(`/userprofile/${users[0].UserID}`);
+        res.redirect(`/userprofile/${user.UserID}`);
     } catch (err) {
         res.status(500).send("Server error.");
     }
@@ -76,17 +67,20 @@ app.get("/signup", (req, res) => res.render("signup"));
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password, phone_number, bio } = req.body;
-        const existingUser = await db.query("SELECT * FROM Users WHERE Email = ?", [email]);
-        if (existingUser.length > 0) return res.status(400).send("Email already registered.");
+        const existingUser = await userModel.getUserByEmail(email);
+        if (existingUser) return res.status(400).send("Email already registered.");
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
 
-        await db.query(
-            `INSERT INTO Users (UserID, Name, Email, Password, PhoneNumber, Bio, CreatedAt) 
-             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-            [userId, name, email, hashedPassword, phone_number, bio]
-        );
+        await userModel.createUser({
+            userId,
+            name,
+            email,
+            hashedPassword,
+            phone_number,
+            bio
+        });
 
         res.redirect("/login");
     } catch (err) {
@@ -99,294 +93,36 @@ app.get("/logout", (req, res) => {
     req.session.destroy(() => res.redirect("/login"));
 });
 
+// User Profile
 app.get("/userprofile/:id?", async (req, res) => {
     try {
-        let userID = req.params.id;
+        let userID = req.params.id || req.session.user?.id;
+        if (!userID) return res.redirect("/login");
 
-        // ✅ If user is logged in but no ID in URL or it's 'undefined'
-        if ((!userID || userID === "undefined") && req.session.user && req.session.user.id) {
-            userID = req.session.user.id;
-        }
+        const user = await userModel.getUserById(userID);
+        if (!user) return res.status(404).send("User Not Found");
 
-        // ❌ If still no user ID, redirect to login
-        if (!userID) {
-            return res.redirect('/login'); // or show custom error
-        }
-
-        const sql = `
-            SELECT UserID, Name AS name, Email AS email, 
-                   PhoneNumber AS phone_number, Bio AS bio, 
-                   ProfilePicture AS profile_picture, CreatedAt AS created_at
-            FROM Users
-            WHERE UserID = ? LIMIT 1
-        `;
-
-        const users = await db.query(sql, [userID]);
-
-        if (!users || users.length === 0) {
-            return res.status(404).send("User Not Found");
-        }
-
-        res.render("userprofile", { user: users[0] });
+        res.render("userprofile", { user });
     } catch (err) {
-        console.error("Database Error:", err);
         res.status(500).send("Database query failed: " + err.message);
     }
 });
 
-
-// Edit User Profile            
 // Users List
 app.get("/users-list", async (req, res) => {
     try {
-        const [users] = await db.query(`SELECT UserID, ProfilePicture, Name, Email, PhoneNumber, Bio, CreatedAt FROM Users ORDER BY CreatedAt DESC`);
-        if (!users.length) return res.status(404).send("No users found.");
+        const users = await userModel.getAllUsers();
+        if (!users || users.length === 0) return res.status(404).send("No users found.");
         res.render("users-list", { users });
     } catch (err) {
         res.status(500).send(`Database query failed: ${err.message}`);
     }
 });
-/ -------------------- QUIZ CATEGORY SELECTION -------------------- //
 
-app.get("/quizcategories", async (req, res) => {
-    const languageID = req.query.languageID;
-
-    if (!languageID) {
-        console.log(" Language ID missing! Redirecting to /language-list");
-        return res.redirect("/language-list");
-    }
-
-    try {
-        const categories = await db.query(
-            "SELECT CategoryID, CategoryName, Description FROM QuizCategories WHERE CategoryID IN (1, 2)"
-        );
-
-        if (!categories || categories.length === 0) {
-            return res.status(404).send("No quiz categories found.");
-        }
-
-        console.log(" Retrieved Language ID:", languageID);
-        res.render("quizcategories", { categories, languageID });
-    } catch (err) {
-        console.error(" Database Error:", err);
-        res.status(500).send(`Database query failed: ${err.message}`);
-    }
-});
-
-
-// -------------------- QUIZ PAGES -------------------- //
-
-async function fetchQuizQuestions(categoryID, languageID) {
-    console.log("🔍 Fetching questions for Category:", categoryID, "Language:", languageID);
-
-    if (!languageID || !categoryID) {
-        console.log(" Error: Missing languageID or categoryID in fetchQuizQuestions.");
-        return [];
-    }
-
-    try {
-        const rows = await db.query(
-            `SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText, a.IsCorrect
-             FROM QuizQuestions q
-             LEFT JOIN QuizAnswers a ON q.QuestionID = a.QuestionID
-             WHERE q.LanguageID = ? AND q.CategoryID = ?
-             ORDER BY q.QuestionID, a.AnswerID`,
-            [languageID, categoryID]
-        );
-
-        if (!rows.length) {
-            console.log(` No questions found for Category ${categoryID} and Language ${languageID}`);
-            return [];
-        }
-
-        console.log(" Raw Data Fetched from Database:", rows);
-
-        // Format questions so that each question has a list of answers
-        const formattedQuestions = {};
-        rows.forEach(row => {
-            if (!formattedQuestions[row.QuestionID]) {
-                formattedQuestions[row.QuestionID] = {
-                    QuestionID: row.QuestionID,
-                    QuestionText: row.QuestionText,
-                    answers: []
-                };
-            }
-            formattedQuestions[row.QuestionID].answers.push({
-                AnswerID: row.AnswerID,
-                AnswerText: row.AnswerText,
-                IsCorrect: row.IsCorrect
-            });
-        });
-
-        console.log(" Formatted Questions:", Object.values(formattedQuestions));
-        return Object.values(formattedQuestions);
-    } catch (error) {
-        console.error(" Error fetching quiz questions:", error);
-        return [];
-    }
-}
-
-
-
-
-app.get("/regular-quiz", async (req, res) => {
-    const languageID = req.query.languageID;
-
-    if (!languageID) {
-        console.log(" Language ID missing, redirecting.");
-        return res.redirect("/language-list");
-    }
-
-    try {
-        const languageData = await db.query(
-            "SELECT LanguageName FROM LanguageList WHERE LanguageID = ?",
-            [languageID]
-        );
-
-        if (!languageData.length) {
-            console.log(" No language found for ID:", languageID);
-            return res.status(404).send("Language not found.");
-        }
-
-        const languageName = languageData[0].LanguageName;
-        console.log(` Language Retrieved: ${languageName}`);
-
-        // Fetch quiz questions for Regular Quiz (Category 1)
-        const questions = await fetchQuizQuestions(1, languageID);
-        console.log(" Questions Sent to Pug:", questions);
-
-        res.render("regular-quiz", { questions, languageID, languageName });
-    } catch (error) {
-        console.error(" Database Error:", error);
-        res.status(500).send("Error retrieving regular quiz questions.");
-    }
-});
-app.post("/submit-quiz", async (req, res) => {
-    try {
-        const userAnswers = req.body; // User's submitted answers
-        let score = 0;
-        let results = [];
-
-        console.log(" User Quiz Submission:", userAnswers);
-
-        // Iterate over each question the user answered
-        for (let questionID in userAnswers) {
-            const answerID = userAnswers[questionID];
-
-            // Fetch correct answer from the database
-            const correctAnswer = await db.query(
-                "SELECT AnswerID, AnswerText, IsCorrect FROM QuizAnswers WHERE QuestionID = ? AND IsCorrect = 1",
-                [questionID]
-            );
-
-            if (correctAnswer.length > 0) {
-                const isCorrect = correctAnswer[0].AnswerID == answerID;
-                if (isCorrect) score++;
-
-                results.push({
-                    questionID: questionID,
-                    userAnswerID: answerID,
-                    userAnswerText: await db.query("SELECT AnswerText FROM QuizAnswers WHERE AnswerID = ?", [answerID]),
-                    correctAnswerID: correctAnswer[0].AnswerID,
-                    correctAnswerText: correctAnswer[0].AnswerText,
-                    isCorrect: isCorrect
-                });
-            }
-        }
-
-        console.log(` User scored ${score} correct answers.`);
-        console.log(" Answer Results:", results);
-
-        res.render("quiz-results", { score, results });
-    } catch (error) {
-        console.error(" Error processing quiz submission:", error);
-        res.status(500).send("Error processing quiz results.");
-    }
-});
-
-
-
-app.get("/student-quiz", async (req, res) => {
-    const languageID = req.query.languageID;
-
-    if (!languageID) {
-        console.log(" Language ID missing, redirecting.");
-        return res.redirect("/language-list");
-    }
-
-    try {
-        const languageData = await db.query(
-            "SELECT LanguageName FROM LanguageList WHERE LanguageID = ?",
-            [languageID]
-        );
-
-        if (!languageData.length) {
-            console.log(" No language found for ID:", languageID);
-            return res.status(404).send("Language not found.");
-        }
-
-        const languageName = languageData[0].LanguageName;
-        console.log(` Language Retrieved: ${languageName}`);
-
-        // Fetch quiz questions for Student Quiz (Category 2)
-        const questions = await fetchQuizQuestions(2, languageID);
-        console.log(" Questions Sent to Pug:", questions);
-
-        res.render("student-quiz", { questions, languageID, languageName });
-    } catch (error) {
-        console.error(" Database Error:", error);
-        res.status(500).send("Error retrieving student quiz questions.");
-    }
-});
-
-app.post("/submit-student-quiz", async (req, res) => {  
-    try {
-        const userAnswers = req.body; // User's submitted answers
-        let score = 0;
-        let results = [];
-
-        console.log(" User Quiz Submission:", userAnswers);
-
-        // Iterate over each question the user answered
-        for (let questionID in userAnswers) {
-            const answerID = userAnswers[questionID];
-
-            // Fetch correct answer from the database
-            const correctAnswer = await db.query(
-                "SELECT AnswerID, AnswerText, IsCorrect FROM QuizAnswers WHERE QuestionID = ? AND IsCorrect = 1",
-                [questionID]
-            );
-
-            if (correctAnswer.length > 0) {
-                const isCorrect = correctAnswer[0].AnswerID == answerID;
-                if (isCorrect) score++;
-
-                results.push({
-                    questionID: questionID,
-                    userAnswerID: answerID,
-                    userAnswerText: await db.query("SELECT AnswerText FROM QuizAnswers WHERE AnswerID = ?", [answerID]),
-                    correctAnswerID: correctAnswer[0].AnswerID,
-                    correctAnswerText: correctAnswer[0].AnswerText,
-                    isCorrect: isCorrect
-                });
-            }
-        }
-
-        console.log(` User scored ${score} correct answers.`);
-        console.log(" Answer Results:", results);
-
-        res.render("quiz-results", { score, results });
-    } catch (error) {
-        console.error(" Error processing quiz submission:", error);
-        res.status(500).send("Error processing quiz results.");
-    }
-}
-);
-// -------------------- ASSESSMENT -------------------- //      
 // Language List
 app.get("/language-list", async (req, res) => {
     try {
-        const languages = await db.query("SELECT LanguageID, LanguageName FROM LanguageList");
+        const languages = await languageModel.getAllLanguages();
         res.render("language-list", { languages, user: req.session.user });
     } catch (err) {
         res.status(500).send(`Database query failed: ${err.message}`);
@@ -407,7 +143,7 @@ app.get("/selection-list", isAuthenticated, async (req, res) => {
     if (!languageID) return res.redirect("/language-list");
 
     try {
-        const options = await db.query("SELECT SelectionID, SelectionName, Description FROM SelectionOptions");
+        const options = await selectionModel.getAllSelectionOptions();
         res.render("selection-list", { options, languageID });
     } catch (err) {
         res.status(500).send(`Database query failed: ${err.message}`);
@@ -429,13 +165,121 @@ app.post("/select", isAuthenticated, async (req, res) => {
     res.redirect(`${redirectMap[selection]}?languageID=${languageID}`);
 });
 
-// -------------------- SERVER -------------------- //
+// Quiz Category Selection
+app.get("/quizcategories", async (req, res) => {
+    const languageID = req.query.languageID;
+    if (!languageID) return res.redirect("/language-list");
+
+    try {
+        const categories = await quizModel.getQuizCategories();
+        res.render("quizcategories", { categories, languageID });
+    } catch (err) {
+        res.status(500).send(`Database query failed: ${err.message}`);
+    }
+});
+
+// Regular Quiz
+app.get("/regular-quiz", async (req, res) => {
+    const languageID = req.query.languageID;
+    if (!languageID) return res.redirect("/language-list");
+
+    try {
+        const languageName = await languageModel.getLanguageName(languageID);
+        if (!languageName) return res.status(404).send("Language not found.");
+
+        const questions = await quizModel.getQuizQuestionsWithAnswers(1, languageID);
+        res.render("regular-quiz", { questions, languageID, languageName });
+    } catch (err) {
+        res.status(500).send("Error retrieving quiz.");
+    }
+});
+
+// Student Quiz
+app.get("/student-quiz", async (req, res) => {
+    const languageID = req.query.languageID;
+    if (!languageID) return res.redirect("/language-list");
+
+    try {
+        const languageName = await languageModel.getLanguageName(languageID);
+        if (!languageName) return res.status(404).send("Language not found.");
+
+        const questions = await quizModel.getQuizQuestionsWithAnswers(2, languageID);
+        res.render("student-quiz", { questions, languageID, languageName });
+    } catch (err) {
+        res.status(500).send("Error retrieving quiz.");
+    }
+});
+
+// Quiz Submission (Both Quiz Types)
+async function handleQuizSubmission(req, res) {
+    try {
+        const userAnswers = req.body;
+        let score = 0;
+        const results = [];
+
+        for (let questionID in userAnswers) {
+            const userAnswerID = userAnswers[questionID];
+            const correct = await quizModel.getCorrectAnswer(questionID);
+            const userAnswerText = await quizModel.getAnswerText(userAnswerID);
+
+            const isCorrect = correct && correct.AnswerID == userAnswerID;
+            if (isCorrect) score++;
+
+            results.push({
+                questionID,
+                userAnswerID,
+                userAnswerText,
+                correctAnswerID: correct?.AnswerID,
+                correctAnswerText: correct?.AnswerText,
+                isCorrect
+            });
+        }
+
+        res.render("quiz-results", { score, results });
+    } catch (err) {
+        res.status(500).send("Error processing quiz results.");
+    }
+}
+
+app.post("/submit-quiz", handleQuizSubmission);
+app.post("/submit-student-quiz", handleQuizSubmission);
+
+// Assessment
+app.get("/assessment", (req, res) => {
+    res.render("Assessment");
+});
+
+// Assessment Answers
+app.get("/assessment-answers", (req, res) => {
+    res.render("AssessmentAnswers");
+});
+
+// Cultural Insights
+app.get("/cultural-insights", (req, res) => {
+    res.render("CulturalInsights");
+});
+
+// Forums
+app.get("/forums", (req, res) => {
+    res.render("Forums", { users: [] }); // Placeholder for forum users
+});
+
+// Progress Status
+app.get("/progress-status", (req, res) => {
+    res.render("ProgressStatus");
+});
+
+// SERVER + ERROR HANDLING
 app.listen(3000, () => console.log("🚀 Server running at http://127.0.0.1:3000/"));
-// -------------------- ERROR HANDLING -------------------- //
+
 app.use((req, res) => {
     res.status(404).render("404");
 });
+
 app.use((err, req, res) => {
     console.error(err.stack);
     res.status(500).render("500");
 });
+
+
+
