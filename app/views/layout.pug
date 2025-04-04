@@ -21,7 +21,10 @@ html
               a(href='/language-list') Languages
             if user
               li
-                a(href=`/userprofile/${user.id}`) Profile
+                if user.id
+                  a(href=`/userprofile/${user.id}`) Profile
+                else
+                  a(href='/userprofile') Profile
               li
                 a(href='/logout') Logout
             else

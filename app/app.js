@@ -99,8 +99,20 @@ app.get("/logout", (req, res) => {
     req.session.destroy(() => res.redirect("/login"));
 });
 
-app.get("/userprofile/:id", async (req, res) => {
+app.get("/userprofile/:id?", async (req, res) => {
     try {
+        let userID = req.params.id;
+
+        // ✅ If user is logged in but no ID in URL or it's 'undefined'
+        if ((!userID || userID === "undefined") && req.session.user && req.session.user.id) {
+            userID = req.session.user.id;
+        }
+
+        // ❌ If still no user ID, redirect to login
+        if (!userID) {
+            return res.redirect('/login'); // or show custom error
+        }
+
         const sql = `
             SELECT UserID, Name AS name, Email AS email, 
                    PhoneNumber AS phone_number, Bio AS bio, 
@@ -109,19 +121,20 @@ app.get("/userprofile/:id", async (req, res) => {
             WHERE UserID = ? LIMIT 1
         `;
 
-        const users = await db.query(sql, [req.params.id]);
+        const users = await db.query(sql, [userID]);
 
         if (!users || users.length === 0) {
             return res.status(404).send("User Not Found");
         }
 
-        console.log(" Fetched User Profile:", users[0]);
         res.render("userprofile", { user: users[0] });
     } catch (err) {
-        console.error(" Database Error:", err);
-        res.status(500). send("Database query failed: " + err.message);
+        console.error("Database Error:", err);
+        res.status(500).send("Database query failed: " + err.message);
     }
 });
+
+
 // Edit User Profile            
 // Users List
 app.get("/users-list", async (req, res) => {
