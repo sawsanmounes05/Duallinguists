@@ -1,0 +1,111 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 36px;
+    color: #0077b6;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Welcome Section */
+#welcome {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0077b6, #00b4d8);
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#welcome h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Insights Section */
+#insights {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.insights-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.insight-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0; /* Initial state for animation */
+    transform: translateY(50px) scale(0.9); /* Initial state for animation */
+}
+
+.insight-card h2 {
+    font-size: 20px;
+    color: #0077b6;
+    margin-bottom: 10px;
+}
+
+.insight-card p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Back Button */
+#back {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0077b6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+    background: #005f8a;
+    transform: translateY(-3px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .insight-card {
+        width: 100%; /* Full width on smaller screens */
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    #welcome h1 {
+        font-size: 32px;
+    }
+}

@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/culturalInsights.css')
+
+    // Welcome Section
+    section#welcome
+        h1 Cultural Insights for #{language ? language.LanguageName : "Unknown Language"}
+
+    // Insights Section
+    section#insights
+        if language && language.insights && language.insights.length
+            div.insights-container
+                each insight, index in language.insights
+                    div.insight-card(style=`animation-delay: ${(index * 0.2)}s`)
+                        h2 Insight #{index + 1}
+                        p= insight
+        else
+            p No cultural insights available for this language.
+
+    // Back Button
+    section#back
+        a.back-button(href="/language-list") Back to Language List
+
+    script.
+        document.addEventListener("DOMContentLoaded", function () {
+            const insightCards = document.querySelectorAll(".insight-card");
+            insightCards.forEach((card, index) => {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(50px) scale(0.9)";
+                setTimeout(() => {
+                    card.style.opacity = "1";
+                    card.style.transform = "translateY(0) scale(1)";
+                }, index * 300); // Adds delay for each insight
+            });
+        });
