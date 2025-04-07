@@ -1,0 +1,78 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/regular-quiz.css')
+
+    section#quiz-container
+        h1 Regular Assessment - Language: #{languageName}
+
+        if questions.length === 0
+            p No assessment questions available.
+
+        else
+            form(action='/submit-assessment' method='POST')
+                // Hidden fields
+                input(type='hidden' name='languageID' value=`${languageID}`)
+                // If you want to store 'Regular' in the DB:
+                input(type='hidden' name='assessmentType' value='Regular')
+
+                each question in questions
+                    div.question
+                        h2 #{question.QuestionText}
+                        div.answers
+                            each answer in question.answers
+                                label.answer-option
+                                    input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
+                                    span.answer-text #{answer.AnswerText}
+
+                button(type='submit' id='submit-assessment') Submit Assessment
+
+            div#back-container
+                a#back-button(href='/selection-list') Back to Selection List
+
+            // Timer logic omitted for brevity
+
+            div#timer
+                p Time Remaining: <span id="time-remaining">60</span> seconds
+                script.
+                    let timeRemaining = 300; // 5 minutes in seconds
+                    const timerElement = document.getElementById('time-remaining');
+                    const timerInterval = setInterval(() => {
+                        if (timeRemaining <= 0) {
+                            clearInterval(timerInterval);
+                            document.querySelector('form').submit();
+                        } else {
+                            timeRemaining--;
+                            timerElement.textContent = timeRemaining;
+                        }
+                    }, 1000);
+            script.
+                const languageID = "#{languageID}";
+                function selectCategory(categoryID) {
+                    if (categoryID === '1') {
+                        window.location.href = "/regular-assessment?languageID=" + languageID;
+                    } else {
+                        window.location.href = "/student-assessment?languageID=" + languageID;
+                    }
+                }
+                function goBack() {
+                    window.history.back();
+                }
+                document.getElementById('back-button').addEventListener('click', goBack);
+                document.getElementById('submit-assessment').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const form = document.querySelector('form');
+                    const selectedAnswers = Array.from(form.elements).filter(input => input.checked);
+                    if (selectedAnswers.length === 0) {
+                        alert('Please select at least one answer before submitting.');
+                    } else {
+                        form.submit();
+                    }
+                });
+                document.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.addEventListener('change', function() {
+                        const questionID = this.name;
+                        const selectedAnswer = this.value;
+                        console.log(`Question ID: ${questionID}, Selected Answer: ${selectedAnswer}`);
+                    });
+                });     

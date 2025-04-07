@@ -1,0 +1,24 @@
+extends layout
+block stylesheets
+  link(rel='stylesheet', href='/layout.css')
+  link(rel='stylesheet', href='/ForumChat.css')
+block content
+  h1 🗣️ #{languageName} Forum Chat
+
+  .forum-wrapper
+    .messages
+      if !messages || messages.length === 0
+        p.no-messages No messages yet. Be the first to say hi!
+      else
+        each msg in messages
+          .message-box
+            .meta
+              span.sender 👤 #{msg.Sender}
+              span.time 🕒 #{msg.SentAt ? new Date(msg.SentAt).toLocaleString() : 'Just now'}
+            .text-message #{msg.MessageText}
+
+    form(action=`/groupchat/${languageID}/send`, method="POST").message-form
+      input(type="hidden", name="groupChatID", value=groupChatID)
+      textarea(name="messageText", rows="3", placeholder="Type your message..." required)
+      br
+      button.btn-send(type="submit") 🚀 Send Message

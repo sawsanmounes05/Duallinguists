@@ -11,6 +11,10 @@ block content
 
         else
             form(action='/submit-quiz', method='POST')
+                // Hidden fields
+                input(type='hidden' name='languageID' value=`${languageID}`)
+                input(type='hidden' name='quizID' value='2') // if Student Quiz is ID=2
+
                 each question in questions
                     div.question
                         h2 #{question.QuestionText}
@@ -18,10 +22,10 @@ block content
                             each answer in question.answers
                                 label.answer-option
                                     input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
+                                    | 
                                     span.answer-text #{answer.AnswerText}
 
                 button#submit-quiz(type='submit') Submit Quiz
 
-    // ✅ Corrected "Back to Languages" button
     div#back-container
         a#back-button(href='/language-list') Back to Languages

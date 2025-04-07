@@ -1,33 +1,34 @@
 extends layout
 
 block stylesheets
-    link(rel='stylesheet', href='/layout.css')
-    link(rel='stylesheet', href='/userprofile.css')
+  link(rel='stylesheet', href='/layout.css')
+  link(rel='stylesheet', href='/userprofile.css')
 
 block content
-    .profile-wrapper
-
+  .profile-wrapper
     section#profile-container
-        h1 User Profile
+      h1 User Profile
+
+      if user.profile_picture
+        img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture')
+
+      table.user-profile-table
+        tr
+          th Name:
+          td #{user.name}
+        tr
+          th Email:
+          td #{user.email}
+        tr
+          th Phone:
+          td #{user.phone_number}
+        tr
+          th Bio:
+          td #{user.bio}
+        tr
+          th Joined:
+          td #{user.created_at}
+
+      .edit-profile
         
-        if user.profile_picture
-            img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture')
-
-        table(class='user-profile-table')
-            tr
-                th Name:
-                td #{user.name}
-            tr
-                th Email:
-                td #{user.email}
-            tr
-                th Phone:
-                td #{user.phone_number}
-            tr
-                th Bio:
-                td #{user.bio}
-            tr
-                th Joined:
-                td #{user.created_at}
-
         a(href='/homepage') Back to Homepage

@@ -9,14 +9,22 @@ block content
         if questions.length === 0
             p No questions available for this language.
 
-        form(action='/submit-quiz', method='POST')
-            each question in questions
-                div.question
-                    h2= question.QuestionText
-                    div.answers
-                        each answer in question.answers
-                            label.answer-option
-                                input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
-                                span.answer-text= answer.AnswerText
+        else
+            // Add a hidden field for languageID and maybe quizID
+            form(action='/submit-quiz' method='POST')
+                input(type='hidden' name='languageID' value=`${languageID}`)
+                // If you have multiple quizzes, you can set quizID=1. Or pass this dynamically.
+                input(type='hidden' name='quizID' value='1')
 
-            button(type='submit' id='submit-quiz') Submit Quiz
+                each question in questions
+                    div.question
+                        h2= question.QuestionText
+                        div.answers
+                            each answer in question.answers
+                                label.answer-option
+                                    input(type='radio', name=`${question.QuestionID}`, value=`${answer.AnswerID}`)
+                                    span.answer-text= answer.AnswerText
+
+                button(type='submit' id='submit-quiz') Submit Quiz
+
+    // End of block content

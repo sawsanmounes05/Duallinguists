@@ -1,0 +1,14 @@
+extends layout
+block stylesheets
+  link(rel='stylesheet', href='/layout.css')
+  link(rel='stylesheet', href='/Forums.css')
+block content
+  h1 🌍 Select a Language Forum
+
+  form(action="/forums/select" method="POST")
+    select(name="languageID" required)
+      option(value="" disabled selected) -- Choose a Language --
+      each lang in languages
+        option(value=lang.LanguageID) #{lang.LanguageName}
+    br
+    button(type="submit") Join Forum

@@ -6,6 +6,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap', rel='stylesheet')
 
+    // Block for page-specific styles
     block stylesheets
       link(rel='stylesheet', href='/layout.css')
 
@@ -19,22 +20,29 @@ html
               a(href='/homepage') Home
             li
               a(href='/language-list') Languages
+
             if user
               li
-                if user.id
-                  a(href=`/userprofile/${user.id}`) Profile
-                else
-                  a(href='/userprofile') Profile
+                a(href="/forums") 🌍 Join a Language Forum
+              li
+                a(href=`/userprofile/${user.id}`) Profile
               li
                 a(href='/logout') Logout
             else
+              li
+                a(href='/language-list') Forums
               li
                 a(href='/login') Login
               li
                 a(href='/signup') Signup
 
     main
-      block content
+      .container
+        block content
 
     footer
-      p &copy; 2025 Dualinguist. All rights reserved.
+      .container
+        p &copy; 2025 Dualinguist. All rights reserved.
+
+    // Block for page-specific scripts
+    block scripts

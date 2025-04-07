@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/quiz-results.css')
+
+    section#results-container
+        h1 Assessment Results
+        p You scored #{score} points!
+
+        each result in results
+            div.result-card
+                h3 Question #{result.questionID}
+                p Your Answer: 
+                    span(class=result.isCorrect ? 'correct' : 'incorrect') #{result.userAnswerText}
+                if !result.isCorrect
+                    p.correct-answer Correct Answer: #{result.correctAnswerText}
+
+        a(href="/assessment-categories") Back to Assessment Categories

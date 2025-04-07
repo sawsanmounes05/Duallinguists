@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1 Your Progress
+  table
+    thead
+      tr
+        th Activity
+        th Title
+        th Score
+        th Date Taken
+    tbody
+      each progress in userProgress
+        tr
+          td= progress.ActivityType
+          td= progress.Title
+          td= progress.Score + "%"
+          td= new Date(progress.DateTaken).toLocaleString()
+    

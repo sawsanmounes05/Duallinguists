@@ -3,28 +3,29 @@ extends layout
 block content
   link(rel='stylesheet', href='/signup.css')
 
-  // ✅ This wrapper makes centering work
   .signup-wrapper
     section#signup-container
       h1 Sign Up
 
       form(action='/signup', method='POST')
         label(for='name') Name:
-        input(type='text', name='name', required)
+        input#name(type='text', name='name', required)
 
         label(for='email') Email:
-        input(type='email', name='email', required)
+        input#email(type='email', name='email', required)
 
         label(for='password') Password:
-        input(type='password', name='password', required)
+        input#password(type='password', name='password', required)
 
         label(for='phone_number') Phone Number:
-        input(type='text', name='phone_number')
+        input#phone_number(type='text', name='phone_number')
 
         label(for='bio') Bio:
-        textarea(name='bio')
+        textarea#bio(name='bio')
+
+        
 
         button(type='submit') Sign Up
-      
+
       p Already have an account?
         a(href='/login') Log in here

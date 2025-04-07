@@ -1,0 +1,30 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/quizcategories.css')
+
+    section#quiz-container
+        h1 Please select an assessment category
+
+        section#options-container
+            div.option-card.assessment
+                button.quiz-button(onclick="selectCategory('1')")
+                    span.icon
+                    span.option-text Regular Assessment
+                    p General understanding test.
+
+            div.option-card.student
+                button.quiz-button(onclick="selectCategory('2')")
+                    span.icon
+                    span.option-text Student Assessment
+                    p Assessment tailored for GCSEs.
+
+    script.
+        const languageID = "#{languageID}";
+        function selectCategory(categoryID) {
+            if (categoryID === '1') {
+                window.location.href = "/regular-assessment?languageID=" + languageID;
+            } else {
+                window.location.href = "/student-assessment?languageID=" + languageID;
+            }
+        }
