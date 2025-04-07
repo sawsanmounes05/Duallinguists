@@ -3,8 +3,8 @@ extends layout
 block content
   link(rel='stylesheet', href='/signup.css')
 
-  .signup-wrapper
-    section#signup-container
+  .signup-overlay
+    #signup-container
       h1 Sign Up
 
       form(action='/signup', method='POST')
@@ -22,8 +22,6 @@ block content
 
         label(for='bio') Bio:
         textarea#bio(name='bio')
-
-        
 
         button(type='submit') Sign Up
 

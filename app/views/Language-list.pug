@@ -1,54 +1,53 @@
 extends layout
 
 block content
-    link(rel='stylesheet', href='/language-list.css')
+  link(rel='stylesheet', href='/language-list.css')
 
-    // Welcome Section
-    section#welcome
-        h1 Please select a language below, #{user ? user.Name : "User"}!
+  // Welcome Section
+  section#welcome
+    h1 Please select a language below, #{user ? user.Name : "User"}!
 
-    // Language Selection Section
-    section#language-selection
-        div.languages-container
-            each language, index in languages
-                div.language-option(style=`animation-delay: ${(index * 0.2)}s`)
-                    button.language-button(
-                        data-language-id=language.LanguageID 
-                        data-language-name=language.LanguageName 
-                        onclick="selectLanguage(this)"
-                    )
-                        div.language-circle
-                            img(src=`/images/${language.LanguageID}.png`, alt=language.LanguageName)
-                        p.language-name= language.LanguageName
+  // Language Selection Section
+  section#language-selection
+    div.languages-container
+      each language, index in languages
+        - const languageClass = language.LanguageName.toLowerCase().replace(/\s+/g, '-')
+        div.language-option(style=`animation-delay: ${(index * 0.2)}s`)
+          button.language-button(
+            data-language-id=language.LanguageID 
+            data-language-name=language.LanguageName 
+            onclick="selectLanguage(this)"
+          )
+            div.language-circle(class=languageClass)
+              // background image will be set via CSS
+            p.language-name= language.LanguageName
 
-    script.
-        document.addEventListener("DOMContentLoaded", function () {
-            const languageOptions = document.querySelectorAll(".language-option");
-            languageOptions.forEach((option, index) => {
-                option.style.opacity = "0";
-                option.style.transform = "translateY(50px) scale(0.9)";
-                setTimeout(() => {
-                    option.style.opacity = "1";
-                    option.style.transform = "translateY(0) scale(1)";
-                }, index * 300); // Adds delay for each language
-            });
+  script.
+    document.addEventListener("DOMContentLoaded", function () {
+        const languageOptions = document.querySelectorAll(".language-option");
+        languageOptions.forEach((option, index) => {
+            option.style.opacity = "0";
+            option.style.transform = "translateY(50px) scale(0.9)";
+            setTimeout(() => {
+                option.style.opacity = "1";
+                option.style.transform = "translateY(0) scale(1)";
+            }, index * 300);
         });
+    });
 
-        function selectLanguage(button) {
-            const languageID = button.getAttribute("data-language-id");
-            const languageName = button.getAttribute("data-language-name");
+    function selectLanguage(button) {
+        const languageID = button.getAttribute("data-language-id");
+        const languageName = button.getAttribute("data-language-name");
 
-            if (!languageID) {
-                alert("Error: No language selected.");
-                return;
-            }
-
-            console.log(" Language Selected:", languageName, `(ID: ${languageID})`);
-
-            // Store in localStorage
-            localStorage.setItem("selectedLanguageID", languageID);
-            localStorage.setItem("selectedLanguageName", languageName);
-
-            // Redirect to selection list
-            window.location.href = "/selection-list?languageID=" + encodeURIComponent(languageID);
+        if (!languageID) {
+            alert("Error: No language selected.");
+            return;
         }
+
+        console.log(" Language Selected:", languageName, `(ID: ${languageID})`);
+
+        localStorage.setItem("selectedLanguageID", languageID);
+        localStorage.setItem("selectedLanguageName", languageName);
+
+        window.location.href = "/selection-list?languageID=" + encodeURIComponent(languageID);
+    }
