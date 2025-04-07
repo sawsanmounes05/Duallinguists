@@ -1,36 +1,55 @@
+//- Extends base layout
 extends layout
 
+//- Content block begins
 block content
+
+    //- Linking external stylesheet for cultural insights page
     link(rel='stylesheet', href='/Cultural-insights.css')
 
-    // Welcome Section
+    //- Welcome Section: Displays the heading with the language name
     section#welcome
         h1 Cultural Insights for #{language ? language.LanguageName : "Unknown Language"}
 
-    // Insights Section
+    //- Insights Section: Where individual cultural insights will appear
     section#insights
+
+        //- Check if the 'language' object and its 'insights' array exist and have content
         if language && language.insights && language.insights.length
+
+            //- Container for all insight cards
             div.insights-container
+
+                //- Loop through each insight and render it
                 each insight, index in language.insights
-                    div.insight-card(style=`animation-delay: ${(index * 0.2)}s`)
+
+                    //- Individual insight card with a dynamic class based on language name and index
+                    //- 'style' adds animation delay for staggered reveal effect
+                    div.insight-card(class=`${language.LanguageName.toLowerCase()}-${index + 1}`, style=`animation-delay: ${(index * 0.2)}s`)
                         h2 Insight #{index + 1}
                         p= insight
         else
+            //- Fallback message if no insights are available
             p No cultural insights available for this language.
 
-    // Back Button
+    //- Back Button Section: Link to go back to the main language list
     section#back
         a.back-button(href="/language-list") Back to Language List
 
+    //- JavaScript: Adds a staggered fade-in and scale-up animation to each insight card
     script.
         document.addEventListener("DOMContentLoaded", function () {
             const insightCards = document.querySelectorAll(".insight-card");
+            
             insightCards.forEach((card, index) => {
+                //- Start state: cards are invisible and slightly translated down and smaller
                 card.style.opacity = "0";
                 card.style.transform = "translateY(50px) scale(0.9)";
+
+                //- Animate into view with delay
                 setTimeout(() => {
                     card.style.opacity = "1";
                     card.style.transform = "translateY(0) scale(1)";
-                }, index * 300); // Adds delay for each insight
+                }, index * 300); //- Each card appears 300ms after the previous one
             });
         });
