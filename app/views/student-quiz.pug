@@ -6,14 +6,10 @@ block content
     section#quiz-container
         h1 Student Quiz - Language: #{languageName}
 
-        if questions.length === 0
+        questions.length === 0
             p No questions available for this language.
 
-        else
-            form(action='/submit-quiz', method='POST')
-                // Hidden fields
-                input(type='hidden' name='languageID' value=`${languageID}`)
-                input(type='hidden' name='quizID' value='2') // if Student Quiz is ID=2
+
 
                 each question in questions
                     div.question
