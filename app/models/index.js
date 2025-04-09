@@ -7,6 +7,9 @@ module.exports = {
     culturalInsightModel: require('./culturalInsightModel'),
     
     forumModel: require('./forumModel'),
+    progressStatusModel: require('./progressStatusModel'),
+    
+
     
     
   };

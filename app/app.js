@@ -16,7 +16,12 @@ const {
   selectionModel,
   assessmentModel,
   culturalInsightModel,
-  forumModel
+  forumModel,
+  progressModel,
+  
+  
+  
+
 } = require("./models");
 
 // USER PROGRESS FUNCTION (if needed)
@@ -661,7 +666,34 @@ app.get("/forums", isAuthenticated, async (req, res) => {
     
     
     
-    
+    // Route to get and display user's progress status (quiz and assessment scores) by language
+app.get("/progress-status", isAuthenticated, async (req, res) => {
+      try {
+          const userID = req.session.user.id;  // Get the user ID from session
+          const languageID = req.query.languageID || req.session.selectedLanguageID;  // Get languageID from query or session
+          
+          if (!languageID) {
+              return res.status(400).send("Language ID is required to view progress.");
+          }
+  
+          // Query the database to get quiz progress for the user and the selected language
+          const quizProgress = await progressModel.getUserQuizProgress(userID, languageID);
+          
+          // Query the database to get assessment progress for the user and the selected language
+          const assessmentProgress = await progressModel.getUserAssessmentProgress(userID, languageID);
+          
+          // Render the progress status page and pass quiz and assessment progress data to the view
+          res.render("ProgressStatus", {
+              quizProgress,
+              assessmentProgress,
+              user: req.session.user, // Pass the user object for use in the view (e.g., name, id)
+              languageID  // Pass the languageID to the view for possible use in language-related components
+          });
+      } catch (err) {
+          console.error("Progress Error:", err);
+          res.status(500).send("Unable to load progress.");
+      }
+  });
   
   // Error Pages
   app.use((req, res) => {
