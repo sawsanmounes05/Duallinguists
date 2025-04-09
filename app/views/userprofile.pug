@@ -3,119 +3,34 @@ extends layout
 block stylesheets
   link(rel='stylesheet', href='/layout.css')
   link(rel='stylesheet', href='/userprofile.css')
-  style.
-    .profile-wrapper {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .left-panel {
-      flex: 1;
-    }
-
-    .right-panel {
-      flex: 1;
-      display: none;
-      flex-direction: column;
-    }
-
-    .right-panel.active {
-      display: flex;
-    }
-
-    .user-list-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .user-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 1rem;
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .user-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.25rem;
-      color: #333;
-    }
-
-    .user-card p {
-      margin: 0;
-      color: #666;
-    }
-
-    .user-card a {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: #007bff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .find-people-btn {
-      margin: 1rem 0;
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', rel='stylesheet')
 
 block content
-  .profile-wrapper
-    .left-panel
-      h1 Profile Page
+  .profile-container
+    .top-banner
+      i.fas.fa-globe-americas.banner-icon
+      h1 Hello, #{user.name}!
+      span.typing-text#typing-text Learning: English 🇬🇧 | French 🇫🇷 | Italian 🇮🇹 | Spanish 🇪🇸 | Turkish 🇹🇷
 
-      if user && user.profile_picture
-        img(src=`/uploads/${user.profile_picture}`, alt='Profile Picture')
+    if user && user.profile_picture
+      img.profile-pic(src=`/uploads/${user.profile_picture}`, alt='Profile Picture')
 
-      if user
-        table.user-profile-table
-          tr
-            th Name:
-            td #{user.name}
-          tr
-            th Email:
-            td #{user.email}
-          tr
-            th Phone:
-            td #{user.phone_number}
-          tr
-            th Bio:
-            td #{user.bio}
-          tr
-            th Joined:
-            td #{user.created_at}
-        a(href="/homepage") Back to Homepage
-      else
-        p User data not found.
-
-      button.find-people-btn(onclick="toggleUserList()") 👥 Find People
-
-    .right-panel#userListPanel
-      h2 Other Users on Dualinguist
-
-      .user-list-wrapper
-        if users && users.length
-          each u in users
-            if !user || u.UserID !== user.UserID
-              .user-card
-                h3= u.Name || "No name provided"
-                p= u.Bio || "No bio provided."
-                a(href=`/userprofile/${u.UserID}`) View Profile →
-        else
-          p No other users found.
-
-block scripts
-  script.
-    function toggleUserList() {
-      const panel = document.getElementById('userListPanel');
-      panel.classList.toggle('active');
-    }
+    .profile-details
+      table.user-profile-table
+        tr
+          th Name:
+          td #{user.name}
+        tr
+          th Email:
+          td #{user.email}
+        tr
+          th Phone:
+          td #{user.phone_number}
+        tr
+          th Bio:
+          td #{user.bio}
+        tr
+          th Joined:
+          td #{user.created_at}
+    
+    a.back-button(href="/homepage") ← Back to Home
