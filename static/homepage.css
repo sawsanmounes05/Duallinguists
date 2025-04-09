@@ -176,12 +176,12 @@ body {
 
 .mission-right {
     flex: 1;
-    text-align: center;
+    text-align: right;
 }
 
 .mission-right img {
-    max-width: 100%;
-    border-radius: 12px;
+    max-width: 70%;
+    border-radius: 6px;
 }
 
 /* ========== Values Section ========== */

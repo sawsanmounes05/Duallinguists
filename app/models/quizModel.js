@@ -7,6 +7,38 @@ async function getQuizCategories() {
         WHERE CategoryID IN (1, 2)
     `);
 }
+async function getAnswerDetails(answerID) {
+    try {
+        // Get the selected answer's details
+        const [selected] = await db.query(
+            'SELECT AnswerText, IsCorrect, QuestionID FROM AssessmentAnswers WHERE AnswerID = ?',
+            [answerID]
+        );
+
+        if (!selected) {
+            throw new Error(`AnswerID ${answerID} not found`);
+        }
+
+        // Get the correct answer for this question
+        const [correct] = await db.query(
+            'SELECT AnswerText FROM AssessmentAnswers WHERE QuestionID = ? AND IsCorrect = 1',
+            [selected.QuestionID]
+        );
+
+        return {
+            isCorrect: selected.IsCorrect === 1,
+            answerText: selected.AnswerText,
+            correctAnswerText: correct ? correct.AnswerText : 'N/A'
+        };
+    } catch (error) {
+        console.error('Error fetching answer details:', error);
+        return {
+            isCorrect: false,
+            answerText: 'N/A',
+            correctAnswerText: 'N/A'
+        };
+    }
+}
 
 async function getQuizQuestionsWithAnswers(categoryID, languageID) {
     const rows = await db.query(`
@@ -46,13 +78,15 @@ async function getCorrectAnswer(questionID) {
 }
 
 async function getAnswerText(answerID) {
-    const [result] = await db.query("SELECT AnswerText FROM QuizAnswers WHERE AnswerID = ?", [answerID]);
-    return result?.AnswerText || "Unknown";
+    const [result] = await db.query("SELECT AnswerText FROM AssessmentAnswers WHERE AnswerID = ?", [answerID]);
+    return result?.AnswerText || "N/A";
 }
+
 
 module.exports = {
     getQuizCategories,
     getQuizQuestionsWithAnswers,
     getCorrectAnswer,
-    getAnswerText
+    getAnswerText,
+    getAnswerDetails,
 };

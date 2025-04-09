@@ -10,9 +10,11 @@ block content
         each result in results
             div.result-card
                 h3 Question #{result.questionID}
+                
                 p Your Answer: 
-                    span(class=result.isCorrect ? 'correct' : 'incorrect') #{result.userAnswerText[0].AnswerText}
+                    span(class=result.isCorrect ? 'correct' : 'incorrect') #{result.userAnswerText}
+                
                 if !result.isCorrect
                     p.correct-answer Correct Answer: #{result.correctAnswerText}
 
-        a(href="/quizcategories") Back to Languages 
+        a(href="/quizcategories") Back to Languages

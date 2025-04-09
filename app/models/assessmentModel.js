@@ -9,9 +9,10 @@ async function getAssessmentCategories() {
     `);
 }
 
+// Get Assessment Questions with Answers
 async function getAssessmentQuestionsWithAnswers(type, languageID) {
     const rows = await db.query(`
-        SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText, a.IsCorrect
+        SELECT q.QuestionID, q.QuestionText, a.AnswerID, a.AnswerText, a.IsCorrect, q.AssessmentType
         FROM AssessmentQuestions q
         LEFT JOIN AssessmentAnswers a ON q.QuestionID = a.QuestionID
         WHERE q.LanguageID = ? AND q.AssessmentType = ?
@@ -24,7 +25,8 @@ async function getAssessmentQuestionsWithAnswers(type, languageID) {
             formatted[row.QuestionID] = {
                 QuestionID: row.QuestionID,
                 QuestionText: row.QuestionText,
-                answers: []
+                answers: [],
+                assessmentType: row.AssessmentType // Add assessmentType here
             };
         }
         formatted[row.QuestionID].answers.push({
@@ -44,7 +46,7 @@ async function getCorrectAssessmentAnswer(questionID) {
         FROM AssessmentAnswers 
         WHERE QuestionID = ? AND IsCorrect = 1
     `, [questionID]);
-    return correct;
+    return correct || { AnswerText: "No correct answer available" };  // Default if no correct answer is found
 }
 
 // Get Answer Text by AnswerID
@@ -55,9 +57,42 @@ async function getAssessmentAnswerText(answerID) {
     return result?.AnswerText || "Unknown";
 }
 
+// Get All User Answers for an Assessment Attempt
+async function getUserAnswersForAssessment(attemptID) {
+    const rows = await db.query(`
+        SELECT q.QuestionID, ua.AnswerID
+        FROM UserAnswers ua
+        LEFT JOIN AssessmentQuestions q ON ua.QuestionID = q.QuestionID
+        WHERE ua.AttemptID = ?
+    `, [attemptID]);
+
+    const formatted = {};
+    rows.forEach(row => {
+        if (!formatted[row.QuestionID]) {
+            formatted[row.QuestionID] = [];
+        }
+        formatted[row.QuestionID].push(row.AnswerID);
+    });
+
+    return formatted;
+}
+// Make sure to export it properly
+
+
+// Save Assessment Results
+async function saveAssessmentProgress(userID, score, languageID) {
+    await db.query(`
+        INSERT INTO Assessments (UserID, Score, DateTaken, LanguageID)
+        VALUES (?, ?, NOW(), ?)
+    `, [userID, score, languageID]);
+}
+
 module.exports = {
     getAssessmentCategories,
     getAssessmentQuestionsWithAnswers,
     getCorrectAssessmentAnswer,
-    getAssessmentAnswerText
+    getAssessmentAnswerText,
+    getUserAnswersForAssessment,
+    saveAssessmentProgress,
+   
 };

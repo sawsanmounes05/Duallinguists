@@ -6,11 +6,10 @@ block content
     section#quiz-container
         h1 Student Quiz - Language: #{languageName}
 
-        questions.length === 0
+        if questions.length === 0
             p No questions available for this language.
-
-
-
+        else
+            form(method="POST", action="/submit-student-quiz")
                 each question in questions
                     div.question
                         h2 #{question.QuestionText}

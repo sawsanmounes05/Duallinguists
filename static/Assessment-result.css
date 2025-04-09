@@ -1,63 +1,99 @@
-/* Styles for Assessment Result Page */
-
-body {
-    font-family: Arial, sans-serif;
+/* General Styles */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    box-sizing: border-box;
 }
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 h1 {
     font-size: 2rem;
-    color: #4CAF50;
-    text-align: center;
     margin-bottom: 20px;
-}
-
-.result {
-    font-size: 1.5rem;
     text-align: center;
-    margin: 20px 0;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.score {
-    font-weight: bold;
-    color: #2196F3;
-}
-
-.button-container {
+section#results-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 800px;
+    margin: 20px;
     text-align: center;
-    margin-top: 30px;
 }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+p {
     font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+    color: #ddd;
 }
 
-button:hover {
-    background-color: #45a049;
+/* Result Card Styles */
+.result-card {
+    background: #333;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-footer {
-    text-align: center;
-    margin-top: 50px;
+.result-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: #ffdd57;
+}
+
+.result-card p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #f0f0f0;
+}
+
+.result-card span.correct {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.result-card span.incorrect {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.correct-answer {
     font-size: 0.9rem;
-    color: #777;
+    color: #ffeb3b;
+}
+
+/* Back Button Styles */
+a {
+    display: inline-block;
+    background-color: #2575fc;
+    color: #fff;
+    padding: 12px 30px;
+    margin-top: 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    background-color: #6a11cb;
+    transform: translateY(-2px);
+}
+
+a:active {
+    transform: translateY(1px);
 }
