@@ -1,24 +1,198 @@
 extends layout
-block stylesheets
-  link(rel='stylesheet', href='/layout.css')
-  link(rel='stylesheet', href='/ForumChat.css')
-block content
-  h1 🗣️ #{languageName} Forum Chat
 
-  .forum-wrapper
-    .messages
-      if !messages || messages.length === 0
-        p.no-messages No messages yet. Be the first to say hi!
-      else
-        each msg in messages
+block stylesheets
+  link(rel="stylesheet", href="/layout.css")
+  style.
+    .chat-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: #0077cc;
+      font-weight: bold;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    .messages {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+    .message-box {
+      background: #e6f0ff;
+      border-left: 4px solid #0077cc;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.8rem;
+      animation: fadeIn 0.3s ease-in;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #444;
+      margin-bottom: 0.4rem;
+    }
+    .message-text {
+      font-size: 1.05rem;
+      color: #222;
+    }
+    .message-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .message-form textarea {
+      flex-grow: 1;
+      resize: none;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .message-form button {
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .message-form button:hover {
+      background: #005fa3;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+block content
+  .chat-container
+    a.back-link(href="/forums") ← Back to Forums
+    h2 Chat Room: #{languageName} Forum
+
+    .messages#messageContainer
+      if messages && messages.length
+        each message in messages
           .message-box
             .meta
-              span.sender 👤 #{msg.Sender}
-              span.time 🕒 #{msg.SentAt ? new Date(msg.SentAt).toLocaleString() : 'Just now'}
-            .text-message #{msg.MessageText}
+              span.sender 👤 #{message.Sender || 'Anonymous'}
+              span.time 🕒 #{new Date(message.SentAt).toLocaleString()}
+            .message-text= message.MessageText
+      else
+        p No messages yet.
 
-    form(action=`/groupchat/${languageID}/send`, method="POST").message-form
+    form#postForm.message-form(method="POST", action=`/groupchat/${groupChatID}/send`)
       input(type="hidden", name="groupChatID", value=groupChatID)
-      textarea(name="messageText", rows="3", placeholder="Type your message..." required)
-      br
-      button.btn-send(type="submit") 🚀 Send Message
+      textarea(name="messageText", placeholder="Type your message...", required)
+      button(type="submit") Send
+
+block scripts
+  script(src="/socket.io/socket.io.js")
+  script.
+    const socket = io();
+    const roomID = "#{groupChatID}";
+    const userID = "#{user.id}";
+    const userName = "#{user.name}";  // Ensure userName is properly set here from session or context
+    const messageContainer = document.getElementById("messageContainer");
+    const messageForm = document.getElementById("postForm");
+    const textarea = messageForm.querySelector("textarea");
+
+    // Prevent sending the same message multiple times
+    let lastMessage = null;
+
+    function appendMessage({ sender, sentAt, messageText }) {
+      // Prevent duplicate messages
+      if (lastMessage === messageText) return;
+      lastMessage = messageText;
+
+      const box = document.createElement("div");
+      box.className = "message-box";
+      const formattedTime = new Date(sentAt).toLocaleString();
+      box.innerHTML = `
+        <div class="meta">
+          <span class="sender">👤 ${sender || 'Anonymous'}</span>
+          <span class="time">🕒 ${formattedTime}</span>
+        </div>
+        <div class="message-text">${messageText}</div>
+      `;
+      messageContainer.appendChild(box);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    // 🔁 Load old messages (fallback reload from API)
+    fetch(`/api/groupchat/${roomID}/messages`)
+      .then(res => res.json())
+      .then(messages => {
+        messageContainer.innerHTML = "";
+        if (messages.length === 0) {
+          messageContainer.innerHTML = "<p>No messages yet.</p>";
+        } else {
+          messages.forEach(appendMessage);
+        }
+      })
+      .catch(err => {
+        console.error("❌ Failed to fetch messages:", err);
+      });
+
+    // 🔗 Join chat room
+    socket.emit("joinRoom", roomID);
+
+    // ✉️ Form submission
+    messageForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const messageText = textarea.value.trim();
+      if (!messageText) return;
+
+      const messagePayload = {
+        groupChatID: roomID,
+        userID: userID,
+        messageText,
+        userName
+      };
+
+      socket.emit("newMessage", messagePayload);
+
+      // Save to DB
+      await fetch(`/groupchat/${roomID}/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(messagePayload)
+      });
+
+      appendMessage({
+        sender: "You",
+        sentAt: new Date().toISOString(),
+        messageText
+      });
+
+      textarea.value = "";
+    });
+
+    // ⏬ Receive broadcasted messages
+    socket.on("messageBroadcast", (data) => {
+      appendMessage(data);
+    });
+
+    // 🔔 Notify join
+    socket.on("userJoined", (username) => {
+      const box = document.createElement("div");
+      box.className = "message-box";
+      box.innerHTML = `<strong>${username} has joined the chat!</strong>`;
+      messageContainer.appendChild(box);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    });
