@@ -121,102 +121,79 @@ app.use(express.json());
 app.set("view engine", "pug");
 app.set("views", "./app/views");
 
-function isAuthenticated(req, res, next) {
-    if (req.session.user) return next();
-    res.redirect("/login");
-}
-// ROUTES
-// Home routes
-app.get("/", (req, res) => res.render("homepage"));
-app.get("/homepage", (req, res) => res.render("homepage"));
-
-
-// LOGIN ROUTES
+// Login
 app.get("/login", (req, res) => res.render("login"));
 
 app.post("/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await userModel.getUserByEmail(email);
-        if (!user || !await bcrypt.compare(password, user.Password)) {
-            return res.status(400).send("Invalid email or password.");
-        }
-        // Use the real DB user ID
-        console.log("✅ Logging in with DB user ID:", user.UserID);
-        req.session.user = { id: user.UserID, name: user.Name };
+    try {
+        const { email, password } = req.body;
+        const user = await userModel.getUserByEmail(email);
+        if (!user || !await bcrypt.compare(password, user.Password)) {
+            return res.status(400).send("Invalid email or password.");
+        }
 
-        // If a language was previously selected, redirect there; otherwise, to user profile
-        const redirectLanguageID = req.session.selectedLanguageID;
-        if (redirectLanguageID) {
-            return res.redirect(`/selection-list?languageID=${redirectLanguageID}`);
-        }
-        return res.redirect(`/userprofile/${user.UserID}`);
-    } catch (err) {
-        console.error("Login error:", err);
-        return res.status(500).send("Server error.");
-    }
+        req.session.user = { id: user.UserID, name: user.Name };
+        const redirectLanguageID = req.session.selectedLanguageID;
+        if (redirectLanguageID) return res.redirect(`/selection-list?languageID=${redirectLanguageID}`);
+        res.redirect(`/userprofile/${user.UserID}`);
+    } catch (err) {
+        res.status(500).send("Server error.");
+    }
 });
 
-// SIGNUP ROUTES
+// Signup
 app.get("/signup", async (req, res) => {
-    try {
-        const languages = await languageModel.getAllLanguages();
-        res.render("signup", { languages });
-    } catch (err) {
-        res.status(500).send("Error loading signup page.");
-    }
+    const languages = await languageModel.getAllLanguages();
+    res.render("signup", { languages });
 });
+
 
 app.post("/signup", async (req, res) => {
-    try {
-        const { name, email, password, phone_number, bio } = req.body;
-        console.log("🚀 SIGNUP BODY:", req.body);
+    try {
+        const { name, email, password, phone_number, bio } = req.body;
+        console.log("🚀 SIGNUP BODY:", req.body);
 
-        // Check if user already exists
-        const existingUser = await userModel.getUserByEmail(email);
-        if (existingUser) {
-            console.warn("⚠️ Email already exists:", email);
-            return res.status(400).send("Email already exists");
-        }
+        const existingUser = await userModel.getUserByEmail(email);
+        if (existingUser) {
+            console.warn("⚠️ Email already exists:", email);
+            return res.status(400).send("Email already exists");
+        }
 
-        // Generate a new user ID (ensure it's unique and consistent)
-        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
-        console.log("✅ Generated userID:", userId);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const userId = `U${Math.floor(1000 + Math.random() * 9000)}`;
+        console.log("✅ Generated userID:", userId);
 
-        // Hash the password and create the user in the DB
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await userModel.createUser({ userId, name, email, hashedPassword, phone_number, bio });
-        console.log("✅ User created successfully:", { userId, name, email });
+        await userModel.createUser({ userId, name, email, hashedPassword, phone_number, bio });
+        console.log("✅ User created successfully:", { userId, name, email });
 
-        // Set session with the newly created user
-        req.session.user = { id: userId, name };
-        // Redirect to language list after signup
-        res.redirect("/language-list");
-    } catch (err) {
-        console.error("❌ SIGNUP ERROR:", err);
-        res.status(500).send("Signup failed.");
-    }
+        req.session.user = { id: userId, name };
+        res.redirect("/forums");
+    } catch (err) {
+        console.error("❌ SIGNUP ERROR:", err);
+        res.status(500).send("Signup failed.");
+    }
 });
 
-// LOGOUT
+
+
+// Logout
 app.get("/logout", (req, res) => {
-    req.session.destroy(() => res.redirect("/login"));
+    req.session.destroy(() => res.redirect("/login"));
 });
+
+// User Profile
 app.get("/userprofile/:id?", async (req, res) => {
-  try {
-    let userID = req.params.id || req.session.user?.id;
-    if (!userID) return res.redirect("/login");
+    try {
+        let userID = req.params.id || req.session.user?.id;
+        if (!userID) return res.redirect("/login");
 
-    const user = await userModel.getUserById(userID);
-    const users = await userModel.getAllUsers();
-    const languages = await languageModel.getAllLanguages(); // 👈 Fetch languages
+        const user = await userModel.getUserById(userID);
+        if (!user) return res.status(404).send("User Not Found");
 
-    if (!user) return res.status(404).send("User Not Found");
-
-    res.render("userprofile", { user, users, languages }); // 👈 Pass languages
-  } catch (err) {
-    res.status(500).send("Database query failed: " + err.message);
-  }
+        res.render("userprofile", { user });
+    } catch (err) {
+        res.status(500).send("Database query failed: " + err.message);
+    }
 });
 
 
