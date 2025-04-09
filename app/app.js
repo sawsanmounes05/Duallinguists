@@ -120,7 +120,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set("view engine", "pug");
 app.set("views", "./app/views");
-
+// Homepage
+app.get("/", (req, res) => {
+  res.render("homepage");
+});
+app.get("/Homepage", (req, res) => {
+  res.render("homepage");
+});
 // Login
 app.get("/login", (req, res) => res.render("login"));
 
