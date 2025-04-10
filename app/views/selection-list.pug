@@ -1,65 +1,67 @@
 extends layout
 
 block stylesheets
-    link(rel='stylesheet', href='/layout.css')
-    link(rel='stylesheet', href='/selection-list.css')
+  link(rel='stylesheet', href='/layout.css')
+  link(rel='stylesheet', href='/selection-list.css')
 
 block content
-    section#selection-container
-        h1 Selection List
-        p Selected Language: 
-            strong#selectedLanguage Loading...
+  section#selection-container
+    h1 Selection 
+    p Selected Language: 
+      strong#selectedLanguage Loading...
 
-        form(action='/select', method='post')
-            input(type="hidden", name="languageID", id="languageID")
+    form(action='/select', method='post')
+      input(type="hidden", name="languageID", id="languageID")
 
-            section#options-container
-                .option-card.quiz
-                    input(type='radio', id='quiz', name='selection', value='quiz', required)
-                    label(for='quiz')
-                        span.icon
-                        span.option-text Quiz
+      section#options-container
+        .option-card.quiz
+          input(type='radio', id='quiz', name='selection', value='quiz', required)
+          label(for='quiz')
+            span.icon 📘
+            span.option-text Quiz
 
-                .option-card.assessment
-                    input(type='radio', id='assessment', name='selection', value='assessment')
-                    label(for='assessment')
-                        span.icon
-                        span.option-text Assessment
+        .option-card.assessment
+          input(type='radio', id='assessment', name='selection', value='assessment')
+          label(for='assessment')
+            span.icon 📝
+            span.option-text Assessment
 
-                .option-card.progress
-                    input(type='radio', id='progress', name='selection', value='progress')
-                    label(for='progress')
-                        span.icon
-                        span.option-text Progress Status
+       
 
-                .option-card.cultural
-                    input(type='radio', id='cultural', name='selection', value='cultural')
-                    label(for='cultural')
-                        span.icon
-                        span.option-text Cultural Insight
+        .option-card.cultural
+          input(type='radio', id='cultural', name='selection', value='cultural')
+          label(for='cultural')
+            span.icon 🎭
+            span.option-text Cultural Insight
 
-            .button-container
-                button(type='submit', id='continueBtn', disabled) Continue
+      .button-container
+        button(type='submit', id='continueBtn', disabled) Continue
 
-    script.
-        document.addEventListener("DOMContentLoaded", function() {
-            const selectedLanguageID = localStorage.getItem("selectedLanguageID");
-            const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
+  script.
+    document.addEventListener("DOMContentLoaded", function() {
+      // Load selected language from localStorage
+      const selectedLanguageID = localStorage.getItem("selectedLanguageID");
+      const selectedLanguageName = localStorage.getItem("selectedLanguageName") || "None";
 
-            if (!selectedLanguageID) {
-                alert("⚠ No language selected! Redirecting...");
-                window.location.href = "/language-list";
-                return;
-            }
+      if (!selectedLanguageID) {
+        alert("⚠ No language selected! Redirecting...");
+        window.location.href = "/language-list";
+        return;
+      }
 
-            console.log("🔹 Language Loaded:", selectedLanguageName, `(ID: ${selectedLanguageID})`);
+      document.getElementById("selectedLanguage").innerText = selectedLanguageName;
+      document.getElementById("languageID").value = selectedLanguageID;
 
-            document.getElementById("selectedLanguage").innerText = selectedLanguageName;
-            document.getElementById("languageID").value = selectedLanguageID;
+      // Enable and activate continue button on card selection
+      const cards = document.querySelectorAll('.option-card input[type="radio"]');
+      const continueBtn = document.getElementById('continueBtn');
+
+      cards.forEach(card => {
+        card.addEventListener('change', () => {
+          if (document.querySelector('.option-card input[type="radio"]:checked')) {
+            continueBtn.classList.add('active');
+            continueBtn.disabled = false;
+          }
         });
-
-        document.querySelectorAll('input[name="selection"]').forEach(radio => {
-            radio.addEventListener("change", () => {
-                document.getElementById("continueBtn").disabled = false;
-            });
-        });
+      });
+    });

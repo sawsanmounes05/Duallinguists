@@ -2,83 +2,9 @@ extends layout
 
 block stylesheets
   link(rel="stylesheet", href="/layout.css")
-  style.
-    .chat-container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: linear-gradient(to right, #f0f8ff, #e6f7ff);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      color: #0077cc;
-      font-weight: bold;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-    .messages {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      background: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      transition: background 0.2s;
-    }
-    .message-box {
-      background: #e6f0ff;
-      border-left: 4px solid #0077cc;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.8rem;
-      animation: fadeIn 0.3s ease-in;
-    }
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: #444;
-      margin-bottom: 0.4rem;
-    }
-    .message-text {
-      font-size: 1.05rem;
-      color: #222;
-    }
-    .message-form {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .message-form textarea {
-      flex-grow: 1;
-      resize: none;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    .message-form button {
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      background: #0077cc;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .message-form button:hover {
-      background: #005fa3;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  link(rel="stylesheet", href="/forum-chat.css")
+
+ 
 
 block content
   .chat-container

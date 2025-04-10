@@ -1,84 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 /* ========== General Layout ========== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #d1e4e6, #ffffff);
-    background-attachment: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: #000000;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
-    text-align: center;
+  background: linear-gradient(135deg, #d1e4e6, #ffffff);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #1c1c1c;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 /* ========== Welcome Section ========== */
 #welcome {
-    padding-top: 120px;
+  padding-top: 100px;
+  margin-bottom: 40px;
 }
 
 #welcome h1 {
-    font-size: 3rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #1d1c1c;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 1s ease-in-out;
+  font-size: 3.2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #023047;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-in-out;
 }
 
 /* ========== Language Selection Section ========== */
 #language-selection {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 60vh;
-    padding: 40px 20px;
-    margin-top: -40px;
-    transition: background 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  transition: background 0.5s ease;
 }
 
 #language-selection:hover {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(2px);
-    border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
 }
 
 .languages-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 100px;
-    padding: 0 40px;
-    max-width: 100%;
-    scroll-behavior: smooth;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 80px;
+  padding: 20px 40px;
+  width: 100%;
+  max-width: 100%;
+  scroll-behavior: smooth;
 }
 
 .language-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-    min-width: 220px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-in-out forwards;
-    flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-width: 240px;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+  animation: fadeInUp 0.8s ease-in-out forwards;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .language-option:hover {
-    transform: translateY(-12px) scale(1.03);
-    filter: brightness(1.08);
+  transform: translateY(-12px) scale(1.05);
+  filter: brightness(1.08);
 }
 
 .language-option:nth-child(1) { animation-delay: 0.2s; }
@@ -88,101 +90,100 @@ body {
 .language-option:nth-child(5) { animation-delay: 1s; }
 
 .language-button {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    text-align: center;
-    outline: none;
-    width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+  width: 100%;
 }
 
-/* ========== Language Circle ========== */
+/* ========== Language Circles ========== */
 .language-circle {
-    width: 350px;
-    height: 350px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(29, 29, 29, 0.2);
-    backdrop-filter: blur(10px);
-    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.25);
-    transition: all 0.35s ease;
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(0);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
 }
 
 .language-circle::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 0;
-    border-radius: 50%;
-    transition: background 0.3s, box-shadow 0.3s;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  z-index: 0;
 }
 
 .language-circle:hover {
-    transform: scale(1.15);
-    box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.35);
+  transform: scale(1.1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
 }
 
 .language-circle:hover::before {
-    background: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.15);
 }
 
 /* ========== Language Name ========== */
 .language-name {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #171616;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-    position: relative;
-    z-index: 1;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1c1c1c;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 16px;
 }
 
-/* ========== Landmark Background Images ========== */
-
+/* ========== Landmark Backgrounds ========== */
 .language-circle.english {
-    background-image: url('https://images.pexels.com/photos/29895167/pexels-photo-29895167/free-photo-of-big-ben-illuminated-at-night-with-colorful-lights.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-    background-size: cover;
-    background-position: center;
+  background-image: url('https://images.pexels.com/photos/29895167/pexels-photo-29895167/free-photo-of-big-ben-illuminated-at-night-with-colorful-lights.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
-
 .language-circle.french {
-    background-image: url('https://images.pexels.com/photos/1530259/pexels-photo-1530259.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-    background-size: cover;
-    background-position: center;
+  background-image: url('https://images.pexels.com/photos/1530259/pexels-photo-1530259.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
-
 .language-circle.spanish {
-    background-image: url('https://images.pexels.com/photos/2567935/pexels-photo-2567935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-    background-size: cover;
-    background-position: center;
+  background-image: url('https://images.pexels.com/photos/2567935/pexels-photo-2567935.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
-
 .language-circle.italian {
-    background-image: url('https://images.pexels.com/photos/1144276/pexels-photo-1144276.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-    background-size: cover;
-    background-position: center;
+  background-image: url('https://images.pexels.com/photos/1144276/pexels-photo-1144276.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
-
 .language-circle.turkish {
-    background-image: url('https://images.pexels.com/photos/14420295/pexels-photo-14420295.jpeg?auto=compress&cs=tinysrgb&w=1600');
-    background-size: cover;
-    background-position: center;
+  background-image: url('https://images.pexels.com/photos/14420295/pexels-photo-14420295.jpeg?auto=compress&cs=tinysrgb&w=1600');
 }
 
 /* ========== Animations ========== */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(50px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(50px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  #welcome h1 {
+    font-size: 2.2rem;
+  }
+
+  .languages-container {
+    gap: 60px;
+    padding: 0 20px;
+  }
+
+  .language-circle {
+    width: 240px;
+    height: 240px;
+  }
+
+  .language-name {
+    font-size: 1.3rem;
+  }
 }

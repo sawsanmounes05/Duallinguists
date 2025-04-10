@@ -41,13 +41,13 @@ const getUserProgress = async (userID) => {
 };
 
 app.use(session({
-  secret: "your-secret-key", // change in production to a strong secret
+  secret: "your-secret-key",
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // Session lasts for 7 days
   }
 }));
 
@@ -208,16 +208,7 @@ app.get("/userprofile/:id?", async (req, res) => {
 });
 
 
-// Users List
-app.get("/users-list", async (req, res) => {
-    try {
-        const users = await userModel.getAllUsers();
-        if (!users || users.length === 0) return res.status(404).send("No users found.");
-        res.render("users-list", { users });
-    } catch (err) {
-        res.status(500).send(`Database query failed: ${err.message}`);
-    }
-});
+
 
 // Language List
 app.get("/language-list", async (req, res) => {

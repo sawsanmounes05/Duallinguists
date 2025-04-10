@@ -1,220 +1,244 @@
 /* ========== Global Styles ========== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
-    height: 100%;
-    width: 100%;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #d1e4e6, #ffffff);
-    color: #333;
-    line-height: 1.6;
-    scroll-behavior: smooth;
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #d1e4e6, #ffffff);
+  color: #1c1c1c;
+  line-height: 1.6;
+  scroll-behavior: smooth;
 }
 
 /* ========== Container ========== */
 #selection-container {
-    background: #ffffffee;
-    backdrop-filter: blur(8px);
-    padding: 80px 60px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    max-width: 2200px;
-    min-height: 1000px;
-    width: 95%;
-    margin: 80px auto;
-    text-align: center;
-    transition: all 0.3s ease-in-out;
+  background: #ffffffee;
+  backdrop-filter: blur(8px);
+  padding: 80px 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  max-width: 2200px;
+  min-height: 1000px;
+  width: 95%;
+  margin: 80px auto;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
 }
 
 /* ========== Title ========== */
 h1 {
-    font-size: 4.2rem;
-    color: #222;
-    margin-bottom: 30px;
+  font-size: 4.2rem;
+  color: #1c1c1c;
+  margin-bottom: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 p {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 50px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 50px;
 }
 
 /* ========== Cards Layout ========== */
 #options-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 40px;
-    margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 40px;
 }
 
 /* ========== Cards ========== */
 .option-card {
-    width: 280px;
-    height: 300px;
-    border-radius: 20px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    position: relative;
+  width: 280px;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid #ccc;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  position: relative;
 }
 
 .option-card:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .option-card input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 2;
-    cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  cursor: pointer;
 }
 
-/* Label inside */
+/* Label inside card */
 .option-card label {
-    height: 100%;
-    width: 100%;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-    border-radius: 20px;
-    text-align: center;
-    color: white;
-    transition: all 0.3s ease;
-    z-index: 1;
+  height: 100%;
+  width: 100%;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  border-radius: 20px;
+  text-align: center;
+  color: #1c1c1c;
+  background: transparent;
+  transition: all 0.3s ease;
+  z-index: 1;
+  font-weight: 500;
 }
 
-/* Checked state */
+/* ✅ Selected state – glow only */
 .option-card input[type="radio"]:checked + label {
-    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.6), 0 10px 30px rgba(0,0,0,0.4);
-    transform: scale(1.06);
-    background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.04);
+  box-shadow:
+    0 0 0 4px rgba(0, 191, 255, 0.35),
+    0 8px 25px rgba(0, 191, 255, 0.3),
+    0 0 30px rgba(0, 191, 255, 0.2);
+  animation: pulseGlow 0.4s ease;
 }
 
-/* Accessibility */
+/* Accessibility focus */
 .option-card input[type="radio"]:focus + label {
-    outline: 3px solid #009688;
+  outline: 3px solid #004d66;
 }
 
-/* Icon + Text */
+/* Icon and Text Styling */
 .icon {
-    font-size: 4.5rem;
-    margin-bottom: 16px;
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  color: #005f73;
+  opacity: 0.85;
 }
 
 .option-text {
-    font-size: 1.8rem;
-    font-weight: bold;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #1c1c1c;
 }
 
-/* ========== Option Card Backgrounds ========== */
-.quiz { background: linear-gradient(135deg, #4caf50, #2e7d32); }
-.assessment { background: linear-gradient(135deg, #2196f3, #1565c0); }
-.progress { background: linear-gradient(135deg, #fb8c00, #ef6c00); }
-.cultural { background: linear-gradient(135deg, #9c27b0, #6a1b9a); }
+/* ========== Color-Blind Friendly Gradients ========== */
+.quiz {
+  background: linear-gradient(135deg, #6EE7B7, #3B82F6);
+}
+.assessment {
+  background: linear-gradient(135deg, #FDE68A, #F59E0B);
+}
+.progress {
+  background: linear-gradient(135deg, #C4B5FD, #6366F1);
+}
+.cultural {
+  background: linear-gradient(135deg, #FBCFE8, #EC4899);
+}
 
 /* ========== Continue Button ========== */
 .button-container {
-    margin-top: 60px;
-    display: flex;
-    justify-content: center;
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
 }
 
 #continueBtn {
-    padding: 25px 80px;
-    font-size: 1.8rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #00897b, #00695c);
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 25px 80px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  background: #ccc;
+  color: #fff;
+  cursor: not-allowed;
+  transition: all 0.4s ease;
+  box-shadow: none;
+  opacity: 0.6;
+  font-family: 'Poppins', sans-serif;
 }
 
-#continueBtn:disabled {
-    background: #bbb;
-    cursor: not-allowed;
-    box-shadow: none;
+#continueBtn.active {
+  background: linear-gradient(135deg, #006d77, #003d40);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  opacity: 1;
 }
 
-#continueBtn:hover:not(:disabled) {
-    transform: scale(1.07);
-    background: linear-gradient(135deg, #00695c, #004d40);
+#continueBtn.active:hover {
+  transform: scale(1.07);
+  background: linear-gradient(135deg, #004d4d, #002b30);
 }
 
 /* ========== Responsive ========== */
 @media (max-width: 1200px) {
-    .option-card {
-        width: 40%;
-    }
+  .option-card {
+    width: 40%;
+  }
 }
 
 @media (max-width: 800px) {
-    #selection-container {
-        padding: 60px 30px;
-    }
+  #selection-container {
+    padding: 60px 30px;
+  }
 
-    .option-card {
-        width: 100%;
-        max-width: 400px;
-        height: 260px;
-    }
+  .option-card {
+    width: 100%;
+    max-width: 400px;
+    height: 260px;
+  }
 
-    h1 {
-        font-size: 3.2rem;
-    }
+  h1 {
+    font-size: 3.2rem;
+  }
 
-    p {
-        font-size: 1.6rem;
-    }
+  p {
+    font-size: 1.6rem;
+  }
 
-    #continueBtn {
-        padding: 20px 60px;
-        font-size: 1.6rem;
-    }
+  #continueBtn {
+    padding: 20px 60px;
+    font-size: 1.6rem;
+  }
 }
 
-/* ========== 🔥 USER INTERACTION BOOSTS (CSS Only) ========== */
-
-/* Extra animation when selected */
-@keyframes pulseSelected {
-    0% { transform: scale(1.03); }
-    50% { transform: scale(1.07); }
-    100% { transform: scale(1.06); }
+/* ========== Animations & Focus Effects ========== */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 191, 255, 0);
+  }
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(0, 191, 255, 0.35),
+      0 8px 25px rgba(0, 191, 255, 0.3),
+      0 0 30px rgba(0, 191, 255, 0.2);
+  }
 }
 
-.option-card input[type="radio"]:checked + label {
-    animation: pulseSelected 0.25s ease;
-}
-
-/* Hover label interaction */
 .option-card:hover label {
-    transform: scale(1.03);
-    filter: brightness(1.05);
+  transform: scale(1.03);
+  filter: brightness(1.05);
 }
 
-/* Smooth transition always on label */
 .option-card label {
-    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Focus style when navigating via keyboard */
 .option-card input[type="radio"]:focus-visible + label {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.4), 0 0 12px rgba(0, 229, 255, 0.6);
-    transform: scale(1.07);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.4),
+              0 0 12px rgba(0, 229, 255, 0.6);
+  transform: scale(1.07);
 }

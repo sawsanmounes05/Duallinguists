@@ -1,140 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 /* ================== Base Styles ================== */
 html, body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    color: #333;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #d1e4e6, #ffffff);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  color: #1c1c1c;
 }
 
 /* ================== Welcome Section ================== */
 #welcome {
-    padding: 5rem 2rem;
-    background: linear-gradient(120deg, #7cb6df, #005fa3);
-    color: white;
-    text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(120deg, #6EE7B7, #3B82F6);
+  color: white;
+  text-align: center;
 }
 
 #welcome h1 {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: bold;
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 /* ================== Insights Section ================== */
 #insights {
-    min-height: calc(100vh - 200px);
-    padding: 2rem;
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
 }
 
 .insights-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-    gap: 2rem;
-    justify-items: center;
-    align-items: start;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  align-items: start;
 }
 
 /* ================== Card Styles ================== */
 .insight-card {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    transition: all 0.4s ease;
-    opacity: 0;
-    transform: translateY(30px);
-    text-align: center;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    color: white;
-    width: 100%;
-    max-width: 660px;
-    height: 1200px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  width: 100%;
+  max-width: 660px;
+  height: 1000px;
 }
 
 .insight-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 0;
-    border-radius: 20px;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
+  border-radius: 20px;
 }
 
 .insight-card > * {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .insight-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
 }
 
 .insight-card h2 {
-    margin-top: 0.5rem;
-    font-size: 1.6rem;
-    color: #fff;
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .insight-card p {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-    color: #eaeaea;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #f0f0f0;
 }
 
-/* ================== Back Button Section ================== */
+/* ================== Back Button ================== */
 #back {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3rem 1rem;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  text-align: center;
 }
 
 .back-button {
-    display: inline-block;
-    padding: 4rem 8rem;
-    background-color: #0077b6;
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    border-radius: 40px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+  padding: 1.5rem 4rem;
+  background: linear-gradient(135deg, #3B82F6, #0077b6);
+  color: white;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .back-button:hover {
-    background-color: #005fa3;
-    transform: scale(1.05);
+  background: linear-gradient(135deg, #0077b6, #005f73);
+  transform: scale(1.05);
 }
 
 .back-button:active {
-    transform: scale(0.97);
+  transform: scale(0.97);
 }
 
 /* ================== Fade-In Animation ================== */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .insight-card {
-    animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .insight-card:nth-child(1) { animation-delay: 0.1s; }
@@ -151,52 +156,51 @@ html, body {
 /* ================== 🌍 Background Images Per Language ================== */
 /* 🇬🇧 English */
 .english-1 {
-    background-image: url('https://images.pexels.com/photos/9381640/pexels-photo-9381640.jpeg');
+  background-image: url('https://images.pexels.com/photos/9381640/pexels-photo-9381640.jpeg');
 }
 .english-2 {
-    background-image: url('https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg');
+  background-image: url('https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg');
 }
 .english-3 {
-    background-image: url('https://images.pexels.com/photos/1560101/pexels-photo-1560101.jpeg');
+  background-image: url('https://images.pexels.com/photos/1560101/pexels-photo-1560101.jpeg');
 }
-
 
 .french-1 {
-    background-image: url('https://images.pexels.com/photos/18416960/pexels-photo-18416960/free-photo-of-escargot-snails-with-filling.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/18416960/pexels-photo-18416960/free-photo-of-escargot-snails-with-filling.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .french-2 {
-    background-image: url('https://images.pexels.com/photos/2344/cars-france-landmark-lights.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/2344/cars-france-landmark-lights.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .french-3 {
-    background-image: url('https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 
 .italian-1 {
-    background-image: url('https://images.pexels.com/photos/30417077/pexels-photo-30417077/free-photo-of-scenic-view-of-matera-s-historic-stone-cityscape.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/30417077/pexels-photo-30417077/free-photo-of-scenic-view-of-matera-s-historic-stone-cityscape.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .italian-2 {
-    background-image: url('https://images.pexels.com/photos/13814644/pexels-photo-13814644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/13814644/pexels-photo-13814644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .italian-3 {
-    background-image: url('https://www.pope2you.net/wp-content/uploads/2020/01/st-peters-basilica-vatican-city-rome-italy.jpg');
+  background-image: url('https://www.pope2you.net/wp-content/uploads/2020/01/st-peters-basilica-vatican-city-rome-italy.jpg');
 }
 
 .spanish-1 {
-    background-image: url('https://images.pexels.com/photos/14576260/pexels-photo-14576260.jpeg');
+  background-image: url('https://images.pexels.com/photos/14576260/pexels-photo-14576260.jpeg');
 }
 .spanish-2 {
-    background-image: url('https://images.pexels.com/photos/54097/spain-flag-flutter-spanish-54097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/54097/spain-flag-flutter-spanish-54097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .spanish-3 {
-    background-image: url('https://images.firstpost.com/wp-content/uploads/2015/08/417.jpg?height=654&impolicy=website&width=1060');
+  background-image: url('https://images.firstpost.com/wp-content/uploads/2015/08/417.jpg?height=654&impolicy=website&width=1060');
 }
 
 .turkish-1 {
-    background-image: url('https://tilln.com/wp-content/uploads/2021/02/gobekli-tepe-2048x1152.jpg');
+  background-image: url('https://tilln.com/wp-content/uploads/2021/02/gobekli-tepe-2048x1152.jpg');
 }
 .turkish-2 {
-    background-image: url('https://images.pexels.com/photos/1075960/pexels-photo-1075960.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/1075960/pexels-photo-1075960.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
 .turkish-3 {
-    background-image: url('https://images.pexels.com/photos/11961343/pexels-photo-11961343.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-image: url('https://images.pexels.com/photos/11961343/pexels-photo-11961343.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }

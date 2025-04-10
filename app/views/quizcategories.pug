@@ -2,7 +2,6 @@ extends layout
 
 block content
     // Include only the necessary stylesheet
-    
     link(rel='stylesheet', href='/quizcategories.css')
 
     section#quiz-container
@@ -11,19 +10,17 @@ block content
         section#options-container
             div.option-card.quiz
                 button.quiz-button(onclick=`selectCategory('1', '${languageID}')`)
-                    span.icon 
+                    span.icon 📘
                     span.option-text Regular Quiz
                     p Standard quiz for general practice.
 
             div.option-card.student
                 button.quiz-button(onclick=`selectCategory('2', '${languageID}')`)
-                    span.icon
+                    span.icon 🎓
                     span.option-text Student Quiz
                     p Quiz designed for GCSEs.
-
 
     script.
         function selectCategory(categoryID, languageID) {
             window.location.href = categoryID === '1' ? "/regular-quiz?languageID=" + languageID : "/student-quiz?languageID=" + languageID;
         }
-

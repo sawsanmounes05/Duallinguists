@@ -1,107 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* ========== Global Reset & Font ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    background: linear-gradient(145deg, #a1c4fd, #c2e9fb);
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    animation: bgFloat 20s infinite alternate ease-in-out;
-  }
-  
-  @keyframes bgFloat {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
-  }
-  
-  .profile-container {
-    max-width: 1700px;
-    margin: 350px auto;
-    padding: 60px;
-    border-radius: 25px;
-    background: #ffffffdd;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    animation: fadeIn 0.7s ease-out;
-    backdrop-filter: blur(10px);
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  .top-banner {
-    margin-bottom: 40px;
-  }
-  
-  .banner-icon {
-    font-size: 50px;
-    color: #2d89ef;
-    margin-bottom: 10px;
-  }
-  
-  .typing-text {
-    font-size: 1.2rem;
-    color: #333;
-    font-weight: 600;
-    display: block;
-    height: 24px;
-  }
-  
-  .profile-pic {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 5px solid #2d89ef;
-    margin: 30px auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  }
-  
-  .user-profile-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 12px;
-    font-size: 1.1rem;
-    margin-top: 20px;
-    text-align: left;
-  }
-  
-  .user-profile-table th,
-  .user-profile-table td {
-    padding: 14px 20px;
-    background: #eef3f7;
-  }
-  
-  .user-profile-table th {
-    background: #d6e4f0;
-    text-transform: uppercase;
-    color: #2d3748;
-    border-radius: 10px 0 0 10px;
-  }
-  
-  .user-profile-table td {
-    border-radius: 0 10px 10px 0;
-    background: #f9fafb;
-  }
-  
-  .user-profile-table tr:hover td {
-    background: #def0ff;
-    transition: all 0.2s ease;
-    transform: scale(1.05);
-  }
-  
-  .back-button {
-    display: inline-block;
-    margin-top: 50px;
-    padding: 12px 30px;
-    background: linear-gradient(to right, #74b3c2, #74b3c2);
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 30px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-  }
-  
-  .back-button:hover {
-    transform: scale(1.05) translateY(-3px);
-  }
-  
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #d1e4e6, #ffffff);
+  min-height: 100vh;
+  color: #1c1c1c;
+  animation: bgFloat 20s infinite alternate ease-in-out;
+  scroll-behavior: smooth;
+}
+
+@keyframes bgFloat {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* ========== Profile Container ========== */
+.profile-container {
+  max-width: 1200px;
+  margin: 6rem auto;
+  padding: 4rem;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.7s ease-out;
+  backdrop-filter: blur(12px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Top Banner ========== */
+.top-banner {
+  margin-bottom: 40px;
+}
+
+.banner-icon {
+  font-size: 3rem;
+  color: #0077b6;
+  margin-bottom: 0.5rem;
+}
+
+.top-banner h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #023047;
+}
+
+.typing-text {
+  font-size: 1.2rem;
+  color: #555;
+  font-weight: 500;
+  margin-top: 0.4rem;
+}
+
+/* ========== Profile Picture ========== */
+.profile-pic {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid #00b4d8;
+  margin: 2rem auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== Profile Table ========== */
+.user-profile-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  font-size: 1.15rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.user-profile-table th,
+.user-profile-table td {
+  padding: 1rem 1.5rem;
+}
+
+.user-profile-table th {
+  background: #caf0f8;
+  color: #023047;
+  text-transform: uppercase;
+  font-size: 1rem;
+  border-radius: 12px 0 0 12px;
+  width: 30%;
+}
+
+.user-profile-table td {
+  background: #f1fcff;
+  border-radius: 0 12px 12px 0;
+  font-weight: 500;
+}
+
+.user-profile-table tr:hover td {
+  background: #e0f4ff;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+/* ========== Back Button ========== */
+.back-button {
+  display: inline-block;
+  margin-top: 3rem;
+  padding: 14px 40px;
+  background: linear-gradient(to right, #3B82F6, #0077b6);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 50px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.back-button:hover {
+  transform: scale(1.05) translateY(-2px);
+  background: linear-gradient(to right, #0077b6, #005f73);
+}
